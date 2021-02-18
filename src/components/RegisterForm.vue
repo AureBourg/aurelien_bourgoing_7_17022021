@@ -1,10 +1,10 @@
 <template>
   <div class="form">
-    <input class="username" type="text" id="firstname" name="firstname" placeholder="First Name" required>
-    <input class="username" type="text" id="lastname" name="lastname" placeholder="Last Name" required>
-    <input type="text" id="password" name="password" placeholder="Password" required>
+    <input class="username" type="text" id="firstname" name="firstname" placeholder="Prénom" required>
+    <input class="username" type="text" id="lastname" name="lastname" placeholder="Nom" required>
+    <input type="text" id="password" name="password" placeholder="Mot de passe" required>
     <input type="text" id="mail" name="mail" placeholder="Adresse mail" required>
-    <button>Créer un compte</button>
+    <button class="SignUpButton">Créer un compte</button>
   </div>
 </template>
 
@@ -13,7 +13,14 @@
 </script>
 
 <style scoped lang="scss">
+
+@font-face {
+  font-family: "Overpass";
+  src: url(../font/Overpass/Overpass-SemiBold.ttf);
+}
+
 .form{
+    font-family: "Overpass";
     display: flex;
     flex-direction: column;
     text-align: center;
@@ -22,6 +29,7 @@
     margin: auto;
 }
 input{
+    font-size: 1.1em;
     margin-bottom: 20px;
     height: 40px;
     border-radius: 4px;
@@ -31,16 +39,19 @@ input{
     margin-left: auto;
     margin-right: auto;
 }
-button{
-    font-size: 1.1em;
+.SignUpButton{
+    font-size: 1.2em;
     color: white;
-    background-color:rgb(253,45,1);
-    border-radius: 15px;
-    width: 150px;
-    padding: 10px;
+    background-color:rgb(66,183,42);
+    border-radius: 25px;
+    width: 200px;
+    padding: 15px;
     text-align: center;
     border: rgb(255,215,215);
-    margin: auto;
+    margin-right: auto;
+    margin-left: auto;
+    margin-top: 50px;
+    cursor: pointer;
 }
 p{
     font-size: 0.8em;
