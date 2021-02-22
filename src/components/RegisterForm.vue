@@ -2,14 +2,21 @@
   <div class="form">
     <input class="username" type="text" id="firstname" name="firstname" placeholder="Prénom" required>
     <input class="username" type="text" id="lastname" name="lastname" placeholder="Nom" required>
-    <input type="text" id="password" name="password" placeholder="Mot de passe" required>
+    <input type="password" id="password" name="password" placeholder="Mot de passe" required>
     <input type="text" id="mail" name="mail" placeholder="Adresse mail" required>
-    <button class="SignUpButton">Créer un compte</button>
+    <button class="SignUpButton" v-on:click='GoToFeed()'>Créer un compte</button>
   </div>
 </template>
 
 <script>
-
+export default {
+  name: "CreateAccount",
+  methods: {
+    GoToFeed () {
+      this.$router.push("userFeed")
+    }
+  }
+}
 </script>
 
 <style scoped lang="scss">

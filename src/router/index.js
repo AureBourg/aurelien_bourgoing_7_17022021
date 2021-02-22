@@ -15,5 +15,10 @@ export default new VueRouter({
     path: "/registerUser",
     component: () => import("@/views/Register.vue")
   },
+  {
+    name: "feed",
+    path: "/userFeed",
+    component: () => import("@/views/UserFeed.vue")
+  }
   ]
 });

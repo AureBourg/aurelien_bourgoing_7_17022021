@@ -20,11 +20,6 @@ export default {
 </script>
 
 <style>
-@font-face {
-  font-family: "Overpass";
-  src: url(../font/Overpass/Overpass-SemiBold.ttf);
-}
-
 .register{
   display: flex;
   width:100%;

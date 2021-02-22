@@ -1,6 +1,6 @@
 <template>
   <div class="groupo">
-  <img class="logo" alt="Groupomania logo" src="@/assets/icon-left-font-monochrome-black.png" width="50%" height="auto">
+  <img class="logoGroupo" alt="Groupomania logo" src="@/assets/icon-left-font.png" width="50%" height="auto">
   <p>Créez un compte pour pouvoir partager avec vos collègues !</p>
   </div>
 </template>
@@ -9,7 +9,7 @@
 
 </script>
 
-<style>
+<style lang="scss">
 @font-face {
   font-family: "Overpass";
   src: url(../font/Overpass/Overpass-SemiBold.ttf);
@@ -21,7 +21,7 @@
   width: 50%;
   height: 100%;
 }
-.logo{
+.logoGroupo{
   margin: auto;
   width: 100%;
   box-sizing: border-box;
