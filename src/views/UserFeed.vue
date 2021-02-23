@@ -1,8 +1,12 @@
 <template>
   <div class="userFeed">
     <Header/>
-    <div class="feed">
+    <div class="homeFeed">
       <SearchAside/>
+      <div class="feed">
+        <UserCreateArticle/>
+        <UserArticles/>
+      </div>
       <UserFriendAside/>
     </div>
   </div>
@@ -12,6 +16,9 @@
 import Header from "@/components/Header";
 import SearchAside from "@/components/SearchAside";
 import UserFriendAside from "@/components/UserFriendAside";
+import UserCreateArticle from "@/components/UserCreateArticle";
+import UserArticles from "@/components/UserArticles";
+
 
 
 // @ is an alias to /src
@@ -20,7 +27,9 @@ export default {
   components: {
     Header,
     SearchAside,
-    UserFriendAside
+    UserFriendAside,
+    UserCreateArticle,
+    UserArticles
   }
 }
 </script>
@@ -29,7 +38,7 @@ export default {
 .userFeed{
   width:100%;
 }
-.feed{
+.homeFeed{
   display: flex;
   justify-content: space-between;
   background-color: rgb(230, 230, 230);

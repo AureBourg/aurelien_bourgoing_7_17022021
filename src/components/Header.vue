@@ -27,7 +27,7 @@ export default {
 .header{
   display: flex;
   border-bottom: lightgrey 1px solid;
-  padding: 10px 40px 15px 0px;
+  padding: 0px 40px 10px 0px;
 }
 .headerLogo{
   margin: auto;
@@ -51,6 +51,12 @@ export default {
 .cardUserNav{
   display: flex;
   align-items: center;
+  justify-content: center;
+  padding: 8px;
+  border-radius: 2px;
   cursor: pointer;
+  &:hover{
+        box-shadow: 1px 1px 4px lightgrey;
+    }
 }
 </style>

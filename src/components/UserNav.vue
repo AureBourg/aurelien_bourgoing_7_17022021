@@ -30,7 +30,7 @@ export default {
   src: url(../font/Overpass/Overpass-Light.ttf);
 }
 .userNav{
-    //visibility: hidden;
+    visibility: hidden;
     display: flex;
     flex-direction: column;
     width: 190px;
@@ -72,12 +72,18 @@ export default {
     & .fa-times{
         color: rgb(231,82,70);
     }
+    &:hover{
+        box-shadow: 0px 1px 5px rgb(231,82,70);
+    }
 }
 .userLinks{
     display: flex;
     padding: 10px;
     justify-content: space-evenly;
     cursor: pointer;
+    &:hover{
+        box-shadow: 1px 1px 4px lightgrey;
+    }
 }
 .userLinkSettings{
     display: flex;

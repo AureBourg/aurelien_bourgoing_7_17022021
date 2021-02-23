@@ -68,11 +68,14 @@ export default {
     & p{
         margin: 0px 0px 0px 10px;
     }
+    &:hover{
+        box-shadow: 1px 1px 4px lightgrey;
+    }
 }
 .fa-users{
     color: rgb(32,78,138);
 }
 .fa-heart{
-        color: rgb(231,82,70);
+    color: rgb(231,82,70);
 }
 </style>

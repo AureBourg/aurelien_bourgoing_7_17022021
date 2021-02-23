@@ -4,37 +4,14 @@
             <p>Collègues connectés</p>
         </div>
         <div class="userFriends">
+
+        <!--PARTIE VARIABLE-->
             <div class="userFriend">
-                <div class="userPhoto"></div>
+                <div class="friendPhoto"></div>
                 <div class="userConnected"></div>
                 <p>Nom Prénom</p>
-            </div>
-            <div class="userFriend">
-                <div class="userPhoto"></div>
-                <div class="userConnected"></div>
-                <p>Nom Prénom</p>
-            </div>
-            <div class="userFriend">
-                <div class="userPhoto"></div>
-                <div class="userConnected"></div>
-                <p>Nom Prénom</p>
-            </div>
-            <div class="userFriend">
-                <div class="userPhoto"></div>
-                <div class="userConnected"></div>
-                <p>Nom Prénom</p>
-            </div>
-            <div class="userFriend">
-                <div class="userPhoto"></div>
-                <div class="userConnected"></div>
-                <p>Nom Prénom</p>
-            </div>
-            <div class="userFriend">
-                <div class="userPhoto"></div>
-                <div class="userConnected"></div>
-                <p>Nom Prénom</p>
-            </div>
-            
+            </div> 
+        <!--..........................-->          
         </div>   
     </div>
 </template>
@@ -54,7 +31,7 @@ export default {
     display: flex;
     flex-direction: column;
     width: 300px;
-    height: 360px;
+    height: 500px;
     font-family: "Overpass";
     box-shadow: 2px 1px 5px lightgrey;
     font-size: 1em;
@@ -96,7 +73,7 @@ export default {
     }
     
 }
-.userPhoto{
+.friendPhoto{
   width: 35px;
   height: 35px;
   border-radius: 20px;
