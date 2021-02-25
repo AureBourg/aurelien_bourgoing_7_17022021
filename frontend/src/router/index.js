@@ -7,7 +7,7 @@ export default new VueRouter({
   routes:[
   {
     name: "home",
-    path: "",   
+    path: "/",   
     component: () => import("@/views/Home.vue")
   },
   {
@@ -19,6 +19,11 @@ export default new VueRouter({
     name: "feed",
     path: "/userFeed",
     component: () => import("@/views/UserFeed.vue")
+  },
+  {
+    name: "profile",
+    path: "/userProfile",
+    component: () => import("@/views/UserProfile.vue")
   }
   ]
 });

@@ -4,18 +4,13 @@
     <input class="username" type="text" id="lastname" name="lastname" placeholder="Nom" required>
     <input type="password" id="password" name="password" placeholder="Mot de passe" required>
     <input type="text" id="mail" name="mail" placeholder="Adresse mail" required>
-    <button class="SignUpButton" v-on:click='GoToFeed()'>Créer un compte</button>
+    <router-link to="/userfeed"><button class="SignUpButton">Créer un compte</button></router-link>
   </div>
 </template>
 
 <script>
 export default {
-  name: "CreateAccount",
-  methods: {
-    GoToFeed () {
-      this.$router.push("userFeed")
-    }
-  }
+  name: "CreateAccount"
 }
 </script>
 

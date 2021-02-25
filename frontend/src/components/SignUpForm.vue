@@ -1,25 +1,17 @@
 <template>
   <div class="form">
-    <input type="text" id="name" name="name" placeholder="Username" required>
-    <input type="password" id="password" name="password" placeholder="Password" required>
-    <button class="LoginButton" v-on:click='GoToFeed()'>Connexion</button>
+    <input type="text" id="name" name="name" placeholder="Adresse mail" required>
+    <input type="password" id="password" name="password" placeholder="Mot de passe" required>
+    <button class="LoginButton"><router-link to="/userfeed">Connexion</router-link></button>
     <a href="">Mot de passe oublié ?</a>
-    <button class="SignUpButton" v-on:click='GoToRegister()'>S'inscrire</button>
+    <button class="SignUpButton"><router-link to="/registerUser">S'inscrire</router-link></button>
   </div>
 </template>
 
 <script>
 
 export default {
-  name: "GoToRegister",
-  methods: {
-    GoToRegister () {
-      this.$router.push("registerUser")
-    },
-    GoToFeed () {
-      this.$router.push("userFeed")
-    }
-  }
+  name: "GoToRegister"
 }
 </script>
 

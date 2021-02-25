@@ -1,13 +1,18 @@
 <template>
-    <div class="createArticle">
-        <div class="userLink userPostPhoto">
-            <i class="fas fa-image"></i> <p>Photo</p>
+    <div class="createArticle col-md-8 col-12">
+        <div class="createArticleTitle">
+            <span>Partagez ce que vous voulez avec vos collègues !</span>
         </div>
-        <div class="userLink userPostPost">
-            <i class="fas fa-comment-dots"></i> <p>Post</p>
-        </div>
-        <div class="userLink userPostVideo">
-            <i class="fas fa-video"></i> <p>Vidéo</p>
+        <div class="createArticleLinks">
+            <div class="userLink userPostPhoto col-4">
+                <i class="fas fa-image"></i> Photo
+            </div>
+            <div class="userLink userPostPost col-4">
+                <i class="fas fa-comment-dots"></i> Post
+            </div>
+            <div class="userLink userPostVideo col-4">
+                <i class="fas fa-video"></i> Vidéo
+            </div>
         </div>
     </div>
 </template>
@@ -26,14 +31,21 @@ export default {
 
 .createArticle{
     display: flex;
+    flex-direction: column;
     font-family: "Overpass";
-    width: 700px;
-    height: 60px;
-    margin: 5px 15px 25px 15px;
     background-color: white;
     box-shadow: 2px 2px 5px lightgrey;
     border-radius: 10px;
-    padding: 5px;
+    margin: auto;
+    margin-bottom: 20px;
+}
+.createArticleTitle{
+    display: flex;
+    justify-content: center;
+    padding: 12px;
+}
+.createArticleLinks{
+    display: flex;
     justify-content: space-evenly;
     align-items: center;
 }
@@ -42,9 +54,9 @@ export default {
     justify-content: center;
     align-items: center;
     cursor: pointer;
-    width: 100px;
+    padding: 12px;
     &:hover{
-        box-shadow: 1px 1px 4px lightgrey;
+        box-shadow: 0px 0px 5px lightgrey;
     }
 }
 .userPostPhoto{

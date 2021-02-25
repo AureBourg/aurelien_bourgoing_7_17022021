@@ -3,60 +3,86 @@
     <div class="headerLogo">
         <img class="logo" alt="Groupomania logo" src="@/assets/icon-left-font-monochrome-black.svg">
     </div>
-    <div class="cardUserNav">
-      <div class="userPhoto">
+    <div class="headerNav">
+      <div class="userProfil">
+        <div class="userPhoto"></div>
+        <router-link to="/userprofile">
+          <span>Mon profil</span>
+        </router-link>
       </div>
-      <i class="fas fa-sort-down"></i>
+      <router-link to="/">
+        <span class="userLogout">Se déconnecter</span>
+      </router-link>
     </div>
-    <UserNav/>
+    
   </div>
 </template>
 
 <script>
-import UserNav from "@/components/UserNav";
-
 export default {
-  name: "Header",
-  components: {
-    UserNav
-  }
+  name: "Header"
 };
 </script>
 
 <style lang="scss">
+@font-face {
+  font-family: "Overpass";
+  src: url(../font/Overpass/Overpass-Regular.ttf);
+}
 .header{
   display: flex;
   border-bottom: lightgrey 1px solid;
-  padding: 0px 40px 10px 0px;
+  padding: 10px 40px 10px 0px;
+  font-family: "Overpass";
+  font-size: 0.93em;
 }
 .headerLogo{
   margin: auto;
   height: 40px;
-  justify-content: center;
 }
 .logo{
-  margin: auto;
   height: 100%;
 }
-.userPhoto{
-  width: 35px;
-  height: 35px;
-  border-radius: 20px;
-  justify-content: end;
+.headerNav{
+  display: flex;
+  position: absolute;
+  right: 0px;
+  top: 0px;
   align-items: center;
+  justify-content: center;
+  padding: 8px;
+}
+.userPhoto{
+  width: 25px;
+  height: 25px;
+  border-radius: 20px;
   margin-right: 10px;
   background: url(../assets/background.png);
   background-size: cover;
 }
-.cardUserNav{
+.userProfil{
   display: flex;
   align-items: center;
-  justify-content: center;
-  padding: 8px;
+  padding: 10px;
+  border-right: solid 1px lightgrey;
   border-radius: 2px;
   cursor: pointer;
   &:hover{
-        box-shadow: 1px 1px 4px lightgrey;
+        box-shadow: 0px 0px 4px lightgrey;
+    }
+  & span{
+    text-decoration: none;
+    color: black;
+  }
+}
+.userLogout{
+  padding: 15px;
+  border-radius: 2px;
+  cursor: pointer;
+  text-decoration: none;
+  color: black;
+  &:hover{
+        box-shadow: 0px 0px 4px lightgrey;
     }
 }
 </style>
