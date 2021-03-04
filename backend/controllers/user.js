@@ -15,15 +15,18 @@ exports.signup = (req, res, next) => {
         const firstname = req.body.firstname;
         const lastname = req.body.lastname;
         const password = hash;
-        mysql.query({
-            sql: 'INSERT INTO user VALUES (NULL, ?, ?, ?, ?, NULL, NULL, NOW())',
-            values: [email, password, firstname, lastname]
-            }, function (error, result) {
-                if (error) {
-                    return res.status(500).json(error.message);
+
+        let sql = 'INSERT INTO user VALUES (NULL, ?, ?, ?, ?, NULL, NULL, NOW())';
+        let values = [email, password, firstname, lastname];
+
+        mysql.query(sql, values, 
+            function (err, result) {
+                if (err) {
+                    return res.status(500).json(err.message);
                 }
                 res.status(201).json({ message: "Utilisateur créé !" });
-        });
+            }
+        );
     })
     .catch(error => res.status(500).json({ error }));
 };
@@ -32,17 +35,20 @@ exports.signup = (req, res, next) => {
 exports.login = (req, res, next) => {
     const email = req.body.email;
     const password = req.body.password;
-    mysql.query({
-        sql: 'SELECT id, password FROM user WHERE email = ?',
-        values: [email]
-        }, function (error, result) {
+
+    let sql = 'SELECT id, password FROM user WHERE email = ?';
+    let values = [email];
+
+    mysql.query(sql, values, 
+        function (error, result) {
             if (error) {
                 return res.status(500).json(error.message);
             }
             if (result.length===0) {
                 return res.status(401).json({ error: "L'utilisateur n'existe pas. Veuillez vous inscrire d'abord !" });
               }
-    });
+        }
+    );
     bcrypt.compare(password, result.password)
     .then(valid => {
         if (!valid) {
