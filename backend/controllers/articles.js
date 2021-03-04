@@ -4,10 +4,12 @@ const fs = require("fs");
 
 //Route GET pour afficher tous les articles de la base de donnée
 exports.getAllArticles = (req, res, next) => {
-    mysql.query({
-        sql: 'SELECT * FROM articles',
-        values: []
-        }, function (error, result) {
+
+    let sql = 'SELECT * FROM articles';
+    let values = [];
+
+    mysql.query(sql, values, 
+        function (error, result) {
             if (error) {
                 return res.status(500).json(error.message);
             }
@@ -15,7 +17,8 @@ exports.getAllArticles = (req, res, next) => {
                 return res.status(400).json({ message: "Aucun article à afficher !" });
             }
             res.status(200).json(result);
-    });
+        }
+    );
 };
 
 // Middleware pour créer les articles

@@ -12,7 +12,7 @@ const auth = require('../middleware/auth');
 const multer = require('../middleware/multer-config');
 
 //Ajout du format de mot de passe attendu
-const validatePassword = require('../middleware/validatePassword');
+//const validatePassword = require('../middleware/validatePassword');
 
 // Création des différentes routes de l'API
 router.post("/signup", userCtrl.signup); //validatePassword

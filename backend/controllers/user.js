@@ -28,7 +28,7 @@ exports.signup = (req, res, next) => {
             }
         );
     })
-    .catch(error => res.status(500).json({ error }));
+    .catch(e => res.status(500).json({ e }));
 };
 
 // Middleware pour la connexion d'un utilisateur existant
@@ -69,10 +69,12 @@ exports.login = (req, res, next) => {
 exports.deleteUser = (req, res, next) => {
     const id = res.locals.id;
     const password = req.body.password;
-    mysql.query({
-        sql: 'SELECT password, photo_profile FROM user WHERE id = ?',
-        values: [id]
-        }, function (error, result) {
+
+    let sql = 'SELECT password, photo_profile FROM user WHERE id = ?';
+    let values = [id];
+
+    mysql.query(sql, values, 
+        function (error, result) {
             if (error) {
                 return res.status(500).json(error.message);
             }
@@ -80,30 +82,35 @@ exports.deleteUser = (req, res, next) => {
                 return res.status(401).json({ error: "Utilisateur non trouvé" });
             }
 
-        const filename = result.photo_profile.split('/images/')[1];
-        fs.unlink(`images/${filename}`, (e) => {
-            if (e) {
-                console.log(e);
-            }
-        });
-
-        bcrypt.compare(password, result.password)
-        .then(valid => {
-            if (!valid) {
-            return res.status(401).json({ error: 'Mot de passe incorrect !' });
-            }
-            mysql.query({
-                sql: 'DELETE FROM user WHERE id=?',
-                values: [id]
-                }, function (error, result) {
-                    if (error) {
-                        return res.status(500).json(error.message);
-                    }
-                res.status(201).json({ message: "Utilisateur supprimé !" });
+            const filename = result.photo_profile.split('/images/')[1];
+            fs.unlink(`images/${filename}`, (e) => {
+                if (e) {
+                    console.log(e);
+                }
             });
-        })
-        .catch(error => res.status(500).json({ error }));
-    });
+            
+
+            bcrypt.compare(password, result.password)
+            .then(valid => {
+                if (!valid) {
+                return res.status(401).json({ error: 'Mot de passe incorrect !' });
+                }
+
+                let sql = 'DELETE FROM user WHERE id=?';
+                let values = [id];
+
+                mysql.query(sql, values, 
+                    function (error, result) {
+                        if (error) {
+                            return res.status(500).json(error.message);
+                        }
+                        res.status(201).json({ message: "Utilisateur supprimé !" });
+                    }
+                );
+            })
+            .catch(error => res.status(500).json({ error }));
+        }
+    );
 };
 
 //Middleware pour modifier un utilisateur et le renvoyer dans la base de donnée
