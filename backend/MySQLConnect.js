@@ -6,12 +6,13 @@ require('dotenv').config();
 
 // Connection à la base de donnée
 let connection = mysql.createConnection({
-    host     : process.env.DB_HOST,
-    user     : process.env.DB_USER,
-    password : process.env.DB_PW,
-    database : process.env.DB_DATABASE
-    //timezone : 'local',
-    //charset : 'utf8mb4'
-  });
+    host     : 'localhost',
+    user     : 'root',
+    password : 'aurelien95370',
+    database : 'GroupomaniaDB'
+});
 
-connection.connect();
+connection.connect(function(err) {
+  if (err) throw err;
+  console.log("Connected!");
+});

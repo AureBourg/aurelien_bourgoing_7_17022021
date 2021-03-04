@@ -15,12 +15,12 @@ const multer = require('../middleware/multer-config');
 const validatePassword = require('../middleware/validatePassword');
 
 // Création des différentes routes de l'API
-router.post("/signup", validatePassword, userCtrl.signup);
+router.post("/signup", userCtrl.signup); //validatePassword
 router.post("/login", userCtrl.login);
-router.delete("/delete", auth, userCtrl.delete);
-router.get("/:id/profile", auth, userCtrl.profile);
-router.get("/role", userCtrl.role);
-router.put("/modify", auth, multer, userCtrl.modify);
+router.delete("/deleteUser", auth, userCtrl.deleteUser);
+router.get("/:id/userProfil", auth, userCtrl.displayProfil);
+//router.get("/role", userCtrl.role);
+router.put("/updateUser", auth, multer, userCtrl.updateUser);
 
 // Exportation du router
 module.exports = router;

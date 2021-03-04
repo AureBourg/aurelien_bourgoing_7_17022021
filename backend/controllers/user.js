@@ -12,8 +12,8 @@ exports.signup = (req, res, next) => {
     bcrypt.hash(req.body.password, 10)
     .then(hash => {
         const email = req.body.email;
-        const firstname = req.body.firstName;
-        const lastname = req.body.lastName;
+        const firstname = req.body.firstname;
+        const lastname = req.body.lastname;
         const password = hash;
         mysql.query({
             sql: 'INSERT INTO user VALUES (NULL, ?, ?, ?, ?, NULL, NULL, NOW())',
@@ -22,7 +22,7 @@ exports.signup = (req, res, next) => {
                 if (error) {
                     return res.status(500).json(error.message);
                 }
-            res.status(201).json({ message: "Utilisateur créé !" });
+                res.status(201).json({ message: "Utilisateur créé !" });
         });
     })
     .catch(error => res.status(500).json({ error }));
@@ -131,7 +131,7 @@ exports.updateUser = (req, res, next) => {
 };
 
 //Middleware pour afficher le profil d'un utilisateur
-exports.displayUser = (req, res, next) => {
+exports.displayProfil = (req, res, next) => {
     const id = req.params.id;
     const email = req.body.email;
     const firstname = req.body.firstName;

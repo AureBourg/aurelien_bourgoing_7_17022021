@@ -1,20 +1,20 @@
 <template>
   <div class="home">
     <GroupomaniaPresentation/>
-    <SignUpForm/>
+    <LoginForm/>
   </div>
 </template>
 
 <script>
 // @ is an alias to /src
 import GroupomaniaPresentation from '../components/GroupomaniaPresentation.vue'
-import SignUpForm from '../components/SignUpForm.vue'
+import LoginForm from '../components/LoginForm.vue'
 
 export default {
   name: 'Home',
   components: {
     GroupomaniaPresentation,
-    SignUpForm
+    LoginForm
   }
 }
 </script>

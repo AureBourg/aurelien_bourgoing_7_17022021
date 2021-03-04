@@ -1,16 +1,17 @@
 <template>
   <div class="form">
-    <input class="username" type="text" id="firstname" name="firstname" placeholder="Prénom" required>
-    <input class="username" type="text" id="lastname" name="lastname" placeholder="Nom" required>
+    <input type="text" id="name" name="name" placeholder="Adresse mail" required>
     <input type="password" id="password" name="password" placeholder="Mot de passe" required>
-    <input type="text" id="mail" name="mail" placeholder="Adresse mail" required>
-    <router-link to="/userfeed"><button class="SignUpButton">Créer un compte</button></router-link>
+    <button class="LoginButton"><router-link to="/userfeed">Connexion</router-link></button>
+    <a href="">Mot de passe oublié ?</a>
+    <button class="SignUpButton"><router-link to="/signup">S'inscrire</router-link></button>
   </div>
 </template>
 
 <script>
+
 export default {
-  name: "CreateAccount"
+  name: "GoToRegister"
 }
 </script>
 
@@ -20,7 +21,10 @@ export default {
   font-family: "Overpass";
   src: url(../font/Overpass/Overpass-SemiBold.ttf);
 }
-
+@font-face {
+  font-family: "Overpass-Light";
+  src: url(../font/Overpass/Overpass-Light.ttf);
+}
 .form{
     font-family: "Overpass";
     display: flex;
@@ -41,13 +45,25 @@ input{
     margin-left: auto;
     margin-right: auto;
 }
+.LoginButton{
+    font-size: 1.1em;
+    color: white;
+    background-color:rgb(9,31,67);
+    border-radius: 20px;
+    width: 150px;
+    padding: 10px;
+    text-align: center;
+    border: rgb(255,215,215);
+    margin: auto;
+    cursor: pointer;
+}
 .SignUpButton{
     font-size: 1.2em;
     color: white;
     background-color:rgb(66,183,42);
-    border-radius: 25px;
+    border-radius: 12px;
     width: 200px;
-    padding: 15px;
+    padding: 10px;
     text-align: center;
     border: rgb(255,215,215);
     margin-right: auto;
@@ -55,9 +71,10 @@ input{
     margin-top: 50px;
     cursor: pointer;
 }
-p{
+a{
+    font-family: "Overpass-Light";
     font-size: 0.8em;
     color: black;
+    margin-top: 10px;
 }
 </style>
-

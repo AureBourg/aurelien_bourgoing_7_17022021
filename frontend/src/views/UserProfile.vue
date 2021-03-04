@@ -26,9 +26,16 @@ export default {
     };
   },
   methods: {
-    updateMessage(variable) {
-      this.childData = variable;
-    }
+      getUser() {
+        this.$axios
+          .get(`user/${this.$route.params.id}/profile`)
+          .then((data) => {
+            this.user = data.data[0];
+          })
+          .catch(function (error) {
+            console.log(error);
+          });
+      }
   }
 }
 </script>
