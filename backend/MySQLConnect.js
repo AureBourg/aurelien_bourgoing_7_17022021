@@ -5,14 +5,10 @@ const mysql = require('mysql');
 require('dotenv').config();
 
 // Connection à la base de donnée
-let connection = mysql.createConnection({
+exports.connection = mysql.createPool({
     host     : 'localhost',
     user     : 'root',
     password : 'aurelien95370',
-    database : 'GroupomaniaDB'
-});
-
-connection.connect(function(err) {
-  if (err) throw err;
-  console.log("Connected!");
+    database : 'GroupomaniaDB',
+    port     : 3306
 });

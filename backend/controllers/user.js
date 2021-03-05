@@ -1,5 +1,5 @@
 // Importation des modules
-const mysql = require('../MySQLConnect').connection;
+const connection = require('../MySQLConnect').connection;
 const bcrypt = require('bcrypt');
 const jwt = require("jsonwebtoken");
 const fs = require("fs");
@@ -19,7 +19,7 @@ exports.signup = (req, res, next) => {
         let sql = 'INSERT INTO user VALUES (NULL, ?, ?, ?, ?, NULL, NULL, NOW())';
         let values = [email, password, firstname, lastname];
 
-        mysql.query(sql, values, 
+        connection.query(sql, values, 
             function (err, result) {
                 if (err) {
                     return res.status(500).json(err.message);
@@ -30,7 +30,7 @@ exports.signup = (req, res, next) => {
     })
     .catch(e => res.status(500).json({ e }));
 };
-
+/*
 // Middleware pour la connexion d'un utilisateur existant
 exports.login = (req, res, next) => {
     const email = req.body.email;
@@ -162,4 +162,4 @@ exports.displayProfil = (req, res, next) => {
             }
             res.status(200).json(result);
     });
-};
+};*/

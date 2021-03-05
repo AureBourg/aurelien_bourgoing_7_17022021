@@ -40,15 +40,13 @@ app.use(session({
 }));*/
 
 // Middleware qui permet de parser les requêtes envoyées par le client, on peut y accéder grâce à req.body
-app.use(bodyParser.urlencoded({
-    extended: true
-  }));
+app.use(bodyParser.urlencoded({ extended: true }));
 
 // Module qui permet de protéger l'application de certaines des vulnérabilités bien connues du Web en configurant de manière appropriée des en-têtes HTTP.
 //app.use(helmet());
 
 // Utilisation de bodyParser pour transforme les données arrivant de la requête POST en objet JSON
-app.use(bodyParser.json());
+app.use(bodyParser.json({ type: 'application/json' }));
 
 // Middleware qui protège contre les failles XSS
 //app.use(expresssanitizer());

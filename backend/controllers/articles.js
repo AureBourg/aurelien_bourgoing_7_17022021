@@ -1,5 +1,5 @@
 // Importation des modules
-const mysql = require('../MySQLConnect').connection;
+const connection = require('../MySQLConnect').connection;
 const fs = require("fs");
 
 //Route GET pour afficher tous les articles de la base de donnée
@@ -8,7 +8,7 @@ exports.getAllArticles = (req, res, next) => {
     let sql = 'SELECT * FROM articles';
     let values = [];
 
-    mysql.query(sql, values, 
+    connection.query(sql, values, 
         function (error, result) {
             if (error) {
                 return res.status(500).json(error.message);
@@ -20,13 +20,13 @@ exports.getAllArticles = (req, res, next) => {
         }
     );
 };
-
+/*
 // Middleware pour créer les articles
 exports.createArticle = (req, res, next) => {
     const id = res.locals.id;
     const articlebody = req.body.body;
     const mediaUrl = `${req.protocol}://${req.get("host")}/images/${req.file.filename}`;
-    mysql.query({
+    connection.query({
         sql: 'INSERT INTO articles VALUES (NULL, ?, ?, ?, NULL, NULL, NOW())',
         values: [id, articlebody, mediaUrl]
         }, function (error, result) {
@@ -108,4 +108,4 @@ exports.likeDislikeArticle = (req, res, next) => {
             }
             res.status(201).json({ message: "Like ou dislike ajouté !" });
     });
-};
+};*/
