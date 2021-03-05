@@ -16,7 +16,7 @@ exports.signup = (req, res, next) => {
         const lastname = req.body.lastname;
         const password = hash;
 
-        let sql = 'INSERT INTO user VALUES (NULL, ?, ?, ?, ?, NULL, NULL, NOW())';
+        let sql = 'INSERT INTO Users VALUES (NULL, ?, ?, ?, ?, NULL, NULL, NOW())';
         let values = [email, password, firstname, lastname];
 
         connection.query(sql, values, 

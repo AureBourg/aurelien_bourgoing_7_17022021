@@ -5,7 +5,7 @@ const fs = require("fs");
 //Route GET pour afficher tous les articles de la base de donnée
 exports.getAllArticles = (req, res, next) => {
 
-    let sql = 'SELECT * FROM articles';
+    let sql = 'SELECT * FROM Articles';
     let values = [];
 
     connection.query(sql, values, 
