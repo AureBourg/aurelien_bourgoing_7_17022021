@@ -3,7 +3,11 @@
     <Header/>  
     <div class="feed">
       <UserCreateArticle/>
-      <UserArticles/>
+      <UserArticles v-for="article in articles" :key="article.articleId">
+      <template v-slot:text>{{ article.text }}</template>
+      <template v-slot:mediaUrl>{{ article.mediaUrl }}</template>
+      <template v-slot:dateCreation>{{ article.dateCreation }}</template>
+      </UserArticles>
     </div>
   </div>
 </template>
@@ -20,6 +24,32 @@ export default {
     Header,
     UserCreateArticle,
     UserArticles
+  },
+  data: () => {
+      return {
+          articles: []
+      }
+  },
+  methods: {
+    get() {
+      // Récupère les posts
+      this.$axios({
+        method: 'get',
+        url: 'articles'
+      })
+        .then((data) => {
+          this.articles = data.data;
+        })
+        .catch(function (error) {
+          //On traite ici les erreurs éventuellement survenues
+          console.log(error);
+      });
+    }
+  },
+  mounted() {
+  // Récupère les posts et défini le titre
+    this.get();
+    document.title = "Mon fil d'actualité | Groupomania";
   }
 }
 </script>

@@ -2,7 +2,7 @@
 const connection = require('../MySQLConnect').connection;
 const fs = require("fs");
 
-//Route GET pour afficher tous les articles de la base de donnée
+//Middleware pour afficher tous les articles de la base de donnée
 exports.getAllArticles = (req, res, next) => {
 
     let sql = 'SELECT * FROM Articles';
@@ -20,88 +20,137 @@ exports.getAllArticles = (req, res, next) => {
         }
     );
 };
-/*
+
+//Middleware pour afficher un article
+exports.getOneArticle = (req, res, next) => {
+
+    const articleId = req.params.id;
+
+    let sql = 'SELECT userId, text, mediaUrl, dateCreation FROM Articles WHERE articleId = ?';
+    let values = [articleId];
+
+    connection.query(sql, values, 
+        function (err, result) {
+            if (err) {
+                return res.status(500).json(err.message);
+            }
+            res.status(200).json(result);
+        }
+    );
+};
+
 // Middleware pour créer les articles
 exports.createArticle = (req, res, next) => {
-    const id = res.locals.id;
-    const articlebody = req.body.body;
+
+    const userId = res.locals.userId;
+    const text = req.body.text;
     const mediaUrl = `${req.protocol}://${req.get("host")}/images/${req.file.filename}`;
-    connection.query({
-        sql: 'INSERT INTO articles VALUES (NULL, ?, ?, ?, NULL, NULL, NOW())',
-        values: [id, articlebody, mediaUrl]
-        }, function (error, result) {
+
+    let sql = 'INSERT INTO Articles VALUES (NULL, ?, ?, ?, NOW())';
+    let values = [userId, text, mediaUrl];
+
+    connection.query(sql, values,
+        function (error, result) {
             if (error) {
                 return res.status(500).json(error.message);
             }
-            res.status(201).json({ message: "Article crée !" });
-    });
+            res.status(201).json({ message: "Article crée !"});
+        }
+    );
 };
+
 
 // Middleware pour supprimer un article
 exports.deleteArticle = (req, res, next) => {
-    const id = res.locals.id;
+
+    const userId = res.locals.userId;
     const articleId = req.params.id;
 
-    mysql.query({
-        sql: 'SELECT mediaUrl FROM articles WHERE articleId = ?',
-        values: [articleId]
-        }, function (error, result) {
+    let sql = 'SELECT mediaUrl FROM Articles WHERE articleId = ?';
+    let values = [articleId];
+
+    connection.query(sql, values, 
+        function (error, result) {
             if (result > 0) {
-                const filename = result[0].gifUrl.split("/images/")[1];
+
+                const filename = result.mediaUrl.split("/images/")[1];
+
                 fs.unlink(`images/${filename}`, () => {
-                    mysql.query({
-                        sql: 'DELETE FROM articles WHERE id=? AND articleId=?',
-                        values: [id, articleId]
-                        }, function (error, result) {
+
+                    let sql = 'DELETE FROM Articles WHERE userId = ? AND articleId = ?';
+                    let values = [userId, articleId];
+
+                    connection.query(sql, values, 
+                        function (error, result) {
                             if (error) {
                                 return res.status(500).json(error.message);
                             }
-                            res.status(200).json({ message: "Post supprimé !" });
+                            res.status(200).json({ message: "Article supprimé !" });
                         }
                     );
                 });               
             } else {
-                mysql.query({
-                    sql: 'DELETE FROM articles WHERE id=? AND articleId=?',
-                    values: [id, articleId]
-                    }, function (error, result) {
+
+                let sql = 'DELETE FROM Articles WHERE userId = ? AND articleId = ?';
+                let values = [userId, articleId];
+
+                connection.query(sql, values, 
+                    function (error, result) {
                         if (error) {
                             return res.status(500).json(error.message);
                         }
-                        res.status(200).json({ message: "Post supprimé !" });
-                });
+                        res.status(200).json({ message: "Article supprimé !" });
+                    }
+                );
+
+                let sql = 'DELETE FROM Comments WHERE userId = ? AND articleId = ?';
+                let values = [userId, articleId];
+
+                connection.query(sql, values, 
+                    function (error, result) {
+                        if (error) {
+                            return res.status(500).json(error.message);
+                        }
+                        res.status(200).json({ message: "Commentaires supprimé !" });
+                    }
+                );
             }
             if (error) {
                 return res.status(500).json(error.message);
             }
-    });
+        }
+    );
 };
 
 // Middleware pour créer un commentaire
 exports.createComment = (req, res, next) => {
-    const articleId = req.params.articleId;
-    const id = res.locals.id;
-    const commentbody = req.body.commentbody;
-    const commentId = req.body.commentbody;
-    mysql.query({
-        sql: 'INSERT INTO articles VALUES (?, ?, NULL, NULL, ?, ?, NOW())',
-        values: [articleId, id, commentId, commentbody]
-        }, function (error, result) {
+
+    const articleId = req.params.id;
+    const userId = res.locals.userId;
+    const text = req.body.text;
+    const commentId = req.body.commentId;
+
+    let sql = 'INSERT INTO Comments VALUES (?, ?, ?, ?, NOW())';
+    let values = [commentId, userId, articleId, text];
+
+    connection.query(sql, values, 
+        function (error, result) {
             if (error) {
                 return res.status(500).json(error.message);
             }
-            res.status(201).json({ message: "Article crée !" });
-    });
+            res.status(201).json({ message: "Commentaire crée !" });
+        }
+    );
 };
-
+/*
 // Middleware pour liker ou disliker les articles
 exports.likeDislikeArticle = (req, res, next) => {
-    const id = res.locals.userID;
-    const likedislike = req.body.reaction;
+    const userId = res.locals.userId;
+    const like = req.body.like;
     const articleId = req.params.id;
     mysql.query({
-        sql: 'INSERT INTO likedislike VALUES (?, ?, ?, NOW())',
-        values: [articleId, id, likedislike]
+        sql: 'INSERT INTO Likes VALUES (?, ?, ?, NOW())',
+        values: [userId, articleId, like]
         }, function (error, result) {
             if (error) {
                 return res.status(500).json(error.message);

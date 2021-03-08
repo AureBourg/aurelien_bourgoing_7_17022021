@@ -3,15 +3,16 @@
         <div class="article col-md-8 col-12">
             <div class="friendInfo">
                 <div class="friendPhoto"></div>
-                <span class="friendName">Nom Prénom</span>
+                <slot name="mediaUrl"></slot>
             </div>
             <div class="articlePost">
-                <p>Ceci est un article écrit par un utilisateur de l'application Ceci est un article écrit par un utilisateur de l'application Ceci est un article écrit par un utilisateur de l'application</p>
+                <slot name="text"></slot>
             </div>
             <div class="articleMedia">
                 <img src="../assets/background.png"/>
             </div>
             <div class="articlePlus">
+                <slot name="dateCreation"></slot>
                 <div class="articleLikes">
                     <i class="fas fa-thumbs-up"></i>
                     <i class="fas fa-thumbs-down"></i>

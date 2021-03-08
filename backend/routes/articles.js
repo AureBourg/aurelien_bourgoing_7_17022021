@@ -8,14 +8,15 @@ const router = express.Router();
 const articlesCtrl = require('../controllers/articles');
 
 // Ajout des middlewares auth et multer
-//const auth = require('../middleware/auth');
-//const multer = require('../middleware/multer-config');
+const auth = require('../middleware/auth');
+const multer = require('../middleware/multer-config');
 
 // Création des différentes routes de l'API
-router.get("/", articlesCtrl.getAllArticles);//auth, 
-//router.post("/", auth, multer, articlesCtrl.createArticle);
-//router.delete("/:id", auth, articlesCtrl.deleteArticle);
-//router.post("/:id/comment", auth, articlesCtrl.createComment);
+router.get("/", auth, articlesCtrl.getAllArticles);
+router.get("/:id", auth, articlesCtrl.getOneArticle);
+router.post("/", auth, multer, articlesCtrl.createArticle); 
+router.delete("/:id", auth, articlesCtrl.deleteArticle);
+router.post("/:id/comment", auth, articlesCtrl.createComment);
 //router.post("/:id/likeDislike", auth, articlesCtrl.likeDislikeArticle);
 
 // Exportation du router
