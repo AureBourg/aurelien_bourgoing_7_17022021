@@ -103,15 +103,15 @@ exports.deleteArticle = (req, res, next) => {
                     }
                 );
 
-                let sql = 'DELETE FROM Comments WHERE userId = ? AND articleId = ?';
-                let values = [userId, articleId];
+                let sql2 = 'DELETE FROM Comments WHERE userId = ? AND articleId = ?';
+                let values2 = [userId, articleId];
 
-                connection.query(sql, values, 
+                connection.query(sql2, values2, 
                     function (error, result) {
                         if (error) {
                             return res.status(500).json(error.message);
                         }
-                        res.status(200).json({ message: "Commentaires supprimé !" });
+                        res.status(200).json({ message: "Article et Commentaires supprimés !" });
                     }
                 );
             }

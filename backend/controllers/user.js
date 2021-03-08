@@ -47,22 +47,23 @@ exports.login = (req, res, next) => {
             if (result.length===0) {
                 return res.status(401).json({ error: "L'utilisateur n'existe pas. Veuillez vous inscrire d'abord !" });
               }
+        
+            bcrypt.compare(password, result[0].password)
+            .then(valid => {
+                if (!valid) {
+                return res.status(401).json({ error: 'Mot de passe incorrect !' });
+                }
+                res.status(200).json({
+                    token: jwt.sign(
+                        { userId: result.userId },
+                        process.env.TOK_SECRET,
+                        { expiresIn: '24h' }
+                    )
+                });
+            })
+            .catch(error => res.status(500).json({ error }));
         }
     );
-    bcrypt.compare(password, result.password)
-    .then(valid => {
-        if (!valid) {
-        return res.status(401).json({ error: 'Mot de passe incorrect !' });
-        }
-        res.status(200).json({
-            token: jwt.sign(
-                { userId: result.userId },
-                process.env.TOK_SECRET,
-                { expiresIn: '24h' }
-            )
-        });
-    })
-    .catch(error => res.status(500).json({ error }));
 };
 
 // Middleware pour supprimer un utilisateur
@@ -82,16 +83,17 @@ exports.deleteUser = (req, res, next) => {
                 return res.status(401).json({ error: "Utilisateur non trouvé" });
             }
 
-            const filename = result.photoProfil.split('/images/')[1];
+            if (result[0].photoProfil != null){
+                const filename = result[0].photoProfil.split('/images/')[1];
 
-            fs.unlink(`images/${filename}`, (e) => {
-                if (e) {
-                    console.log(e);
-                }
-            });
-            
+                fs.unlink(`images/${filename}`, (e) => {
+                    if (e) {
+                        console.log(e);
+                    }
+                });
+            }
 
-            bcrypt.compare(password, result.password)
+            bcrypt.compare(password, result[0].password)
             .then(valid => {
                 if (!valid) {
                 return res.status(401).json({ error: 'Mot de passe incorrect !' });

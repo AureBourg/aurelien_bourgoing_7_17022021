@@ -12,11 +12,11 @@ const auth = require('../middleware/auth');
 const multer = require('../middleware/multer-config');
 
 // Création des différentes routes de l'API
-router.get("/", auth, articlesCtrl.getAllArticles);
-router.get("/:id", auth, articlesCtrl.getOneArticle);
-router.post("/", auth, multer, articlesCtrl.createArticle); 
-router.delete("/:id", auth, articlesCtrl.deleteArticle);
-router.post("/:id/comment", auth, articlesCtrl.createComment);
+router.get("/", articlesCtrl.getAllArticles); //auth, 
+router.get("/:id", articlesCtrl.getOneArticle); //auth,
+router.post("/", multer, articlesCtrl.createArticle); //auth,
+router.delete("/:id", articlesCtrl.deleteArticle); //auth,
+router.post("/:id/comment", articlesCtrl.createComment); //auth,
 //router.post("/:id/likeDislike", auth, articlesCtrl.likeDislikeArticle);
 
 // Exportation du router
