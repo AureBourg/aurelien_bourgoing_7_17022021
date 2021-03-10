@@ -13,7 +13,7 @@
         <div>
           <input v-model="email" type="text" id="email" name="email" placeholder="Adresse mail" required>
         </div>
-        <input v-on:click="sendData()" class="SignUpButton" type="button" value="Créer un compte">
+        <input v-on:click="sendDataSignup()" class="SignUpButton" type="button" value="Créer un compte">
     </form>
   </div>
 </template>
@@ -30,16 +30,17 @@ export default {
     };
   },
   methods: {
-    sendData() { // Envois des données au parent pour traiter l'envois à l'API
+    sendDataSignup() { // Envois des données au parent pour traiter l'envois à l'API
+      const emailValid = document.getElementById("email").checkValidity();
+      const passwordValid = document.getElementById("password").checkValidity();
       const firstnameValid = document.getElementById("firstname").checkValidity();
       const lastnameValid = document.getElementById("lastname").checkValidity();
-      const passwordValid = document.getElementById("password").checkValidity();
-      const emailValid = document.getElementById("email").checkValidity();
-      if (firstnameValid && lastnameValid && passwordValid && emailValid) {
-        this.$emit("data-sent", this.$data);
+
+      if (emailValid && passwordValid && lastnameValid && firstnameValid) {
+        this.$emit("signup-form", this.$data);
       }
-      console.log(this.$data)
-    },
+        
+    }
   }
 }
 </script>

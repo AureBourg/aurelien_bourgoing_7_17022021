@@ -46,22 +46,23 @@ exports.login = (req, res, next) => {
             }
             if (result.length===0) {
                 return res.status(401).json({ error: "L'utilisateur n'existe pas. Veuillez vous inscrire d'abord !" });
-              }
+            }
         
             bcrypt.compare(password, result[0].password)
             .then(valid => {
                 if (!valid) {
-                return res.status(401).json({ error: 'Mot de passe incorrect !' });
+                    return res.status(401).json({ error: 'Mot de passe incorrect !'});
                 }
                 res.status(200).json({
+                    userId: result[0].userId,
                     token: jwt.sign(
-                        { userId: result.userId },
+                        { userId: result[0].userId },
                         process.env.TOK_SECRET,
                         { expiresIn: '24h' }
                     )
                 });
             })
-            .catch(error => res.status(500).json({ error }));
+            .catch(error => res.status(500).json({ error : result[0].userId }));
         }
     );
 };

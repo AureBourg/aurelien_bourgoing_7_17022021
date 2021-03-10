@@ -16,14 +16,15 @@ export default new VueRouter({
     component: () => import("@/views/Signup.vue")
   },
   {
-    name: "feed",
-    path: "/userFeed",
+    name: "userFeed",
+    path: "/userfeed/:id",
     component: () => import("@/views/UserFeed.vue")
   },
   {
-    name: "profile",
-    path: "/userProfile",
+    name: "userProfile",
+    path: "/userprofil/:id",
     component: () => import("@/views/UserProfile.vue")
   }
-  ]
+  ],
+  mode: "history"
 });

@@ -1,9 +1,17 @@
 <template>
   <div class="form">
-    <input type="text" id="name" name="name" placeholder="Adresse mail" required>
-    <input type="password" id="password" name="password" placeholder="Mot de passe" required>
-    <button class="LoginButton"><router-link to="/userfeed">Connexion</router-link></button>
+    <form id="loginForm" name="loginForm">
+      <div>
+        <input v-model="email" type="text" id="email" name="email" placeholder="Adresse mail" required>
+      </div>
+      <div>
+        <input v-model="password" type="password" id="password" name="password" placeholder="Mot de passe" required>
+      </div>
+      <input v-on:click="sendDataLogin()" class="LoginButton" type="button" value="Connexion">
+    </form>
+
     <a href="">Mot de passe oublié ?</a>
+
     <button class="SignUpButton"><router-link to="/signup">S'inscrire</router-link></button>
   </div>
 </template>
@@ -11,7 +19,25 @@
 <script>
 
 export default {
-  name: "GoToRegister"
+  name: "GoToRegister",
+  data: () => {
+    return {
+      password: "",
+      email: ""
+    };
+  },
+  methods: {
+    sendDataLogin() { // Envois des données au parent pour traiter l'envois à l'API
+      const emailValid = document.getElementById("email").checkValidity();
+      const passwordValid = document.getElementById("password").checkValidity();
+
+      if (emailValid && passwordValid) {
+        this.$emit("login-form", this.$data);
+      } else {
+        alert("Vérifiez les informations que vous avez renseigné");
+      }
+    }
+  }
 }
 </script>
 

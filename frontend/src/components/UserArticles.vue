@@ -1,9 +1,9 @@
 <template>
-    <div class="articles">
+    <div class="articles" :id="idArticle">
         <div class="article col-md-8 col-12">
             <div class="friendInfo">
                 <div class="friendPhoto"></div>
-                <slot name="mediaUrl"></slot>
+                <slot name="username"></slot>
             </div>
             <div class="articlePost">
                 <slot name="text"></slot>
@@ -54,7 +54,8 @@
 
 <script>
 export default {
-  name: "UserArticles"
+  name: "UserArticles",
+  props: ["idArticle", "idUser"],
 };
 </script>
 

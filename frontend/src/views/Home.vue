@@ -4,7 +4,7 @@
       <img class="logo" alt="Groupomania logo" src="@/assets/icon-left-font-monochrome-white.png" width="50%" height="auto">
       <p>Votre réseau social <br/>d'entreprise pour <br/>partager et <br/>rester en contact <br/>avec vos collègues !</p>
     </div>
-    <LoginForm/>
+    <LoginForm v-on:login-form="login"/>
   </div>
 </template>
 
@@ -16,6 +16,42 @@ export default {
   name: 'Home',
   components: {
     LoginForm
+  },
+  data: () => {
+    return {
+      email: "",
+      password: ""
+    };
+  },
+  methods: {
+    login(payload){
+      this.email = payload.email;
+      this.password = payload.password;
+
+      this.$axios({
+        method: 'post',
+        url: 'user/login',
+        data: this.$data
+      })
+      .then((response) => {
+          sessionStorage.setItem("token", response.data.token);
+          this.$axios.defaults.headers.common["Authorization"] = "Bearer " + response.data.token;
+
+          this.$router.push("/userFeed/" + response.data.userId);
+      })
+      .catch((error) => {
+          if (error.response.status === 500) {
+            alert(error);
+          }
+          if (error.response.status === 401) {
+            alert(error);
+          }
+          sessionStorage.removeItem("token");
+      });
+    }    
+  },
+  mounted() {
+    document.title = "Connexion | Groupomania";
   }
 }
 </script>

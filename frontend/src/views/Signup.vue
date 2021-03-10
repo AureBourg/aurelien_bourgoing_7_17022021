@@ -4,7 +4,7 @@
       <img class="logoGroupo" alt="Groupomania logo" src="@/assets/icon-left-font.png" width="50%" height="auto">
       <p>Créez un compte pour pouvoir partager avec vos collègues !</p>
     </div>
-    <SignupForm v-on:data-sent="signup"/>
+    <SignupForm v-on:signup-form="signup"/>
   </div>
 </template>
 
@@ -19,34 +19,59 @@ export default {
   },
   data: () => {
     return {
-      email: "fgnn",
-      password: "nfdngfd",
-      firstname: "ndfngfgdn",
-      lastname: "nfgfn",
+      email: "",
+      password: "",
+      firstname: "",
+      lastname: "",
     };
   },
   methods: {
-    signup(){
+    signup(payload){
+      this.firstname = payload.firstname;
+      this.lastname = payload.lastname;
+      this.email = payload.email;
+      this.password = payload.password;
+
       this.$axios({
         method: 'post',
         url: 'user/signup',
         data: this.$data
       })
-      .then(function (response) {
-          //On traite la suite une fois la réponse obtenue 
-          console.log(response);
-          //this.$router.push("userFeed")
+      .then(() => {
+          this.$axios({
+            method: 'post',
+            url: 'user/login',
+            data: this.$data
+          })
+          .then((response) => {
+              console.log(response);
+
+              sessionStorage.setItem("token", response.data.token);
+              this.$axios.defaults.headers.common["Authorization"] = "Bearer " + response.data.token;
+
+              this.$router.push("/userFeed/" + response.data.userId);
+          })
+          .catch((error) => {
+              if (error.response.status === 500) {
+                alert("Connexion impossible : Erreur serveur");
+              }
+          });
       })
-      .catch(function (error) {
-          //On traite ici les erreurs éventuellement survenues
-          console.log(error);
+      .catch((error) => {
+          if (error.response.status === 500) {
+            alert("Inscription impossible : Erreur serveur");
+          }
+          sessionStorage.removeItem("token");
       });
     }    
+  },
+  mounted() {
+    document.title = "Inscription | Groupomania";
   }
 }
 </script>
 
-<style lang="scss">
+<style scoped lang="scss">
 @font-face {
   font-family: "Overpass";
   src: url(../font/Overpass/Overpass-SemiBold.ttf);

@@ -4,12 +4,12 @@
         <img class="logo" alt="Groupomania logo" src="@/assets/icon-left-font-monochrome-black.svg">
     </div>
     <div class="headerNav">
-      <div class="userProfil">
-        <div class="userPhoto"></div>
-        <router-link to="/userprofile">
+      <router-link :to="{ name: 'userProfile', params: {id: 'yourProfile' } }">
+        <div class="userProfil">
+          <div class="userPhoto"></div>
           <span>Mon profil</span>
-        </router-link>
-      </div>
+        </div>
+      </router-link>
       <router-link to="/">
         <span class="userLogout">Se déconnecter</span>
       </router-link>
@@ -24,7 +24,7 @@ export default {
 };
 </script>
 
-<style lang="scss">
+<style scoped lang="scss">
 @font-face {
   font-family: "Overpass";
   src: url(../font/Overpass/Overpass-Regular.ttf);

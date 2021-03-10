@@ -5,7 +5,7 @@ const fs = require("fs");
 //Middleware pour afficher tous les articles de la base de donnée
 exports.getAllArticles = (req, res, next) => {
 
-    let sql = 'SELECT * FROM Articles';
+    let sql = 'SELECT * FROM Articles LEFT JOIN Users ON articles.userId = users.userId';
     let values = [];
 
     connection.query(sql, values, 

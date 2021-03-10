@@ -40,7 +40,7 @@ export default {
 }
 </script>
 
-<style>
+<style scoped lang="scss">
 .register{
   width:100%;
 }
