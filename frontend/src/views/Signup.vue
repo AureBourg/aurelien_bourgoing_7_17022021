@@ -34,13 +34,13 @@ export default {
 
       this.$axios({
         method: 'post',
-        url: 'user/signup',
+        url: 'http://localhost:3000/api/user/signup',
         data: this.$data
       })
       .then(() => {
           this.$axios({
             method: 'post',
-            url: 'user/login',
+            url: 'http://localhost:3000/api/user/login',
             data: this.$data
           })
           .then((response) => {
@@ -49,7 +49,7 @@ export default {
               sessionStorage.setItem("token", response.data.token);
               this.$axios.defaults.headers.common["Authorization"] = "Bearer " + response.data.token;
 
-              this.$router.push("/userFeed/" + response.data.userId);
+              this.$router.push("/userfeed/" + response.data.userId);
           })
           .catch((error) => {
               if (error.response.status === 500) {

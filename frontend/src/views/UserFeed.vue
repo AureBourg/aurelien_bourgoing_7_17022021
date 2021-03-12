@@ -1,18 +1,42 @@
 <template>
   <div class="userFeed">
-    <Header/>  
+    <Header>
+      <template v-slot:photoProfil>
+        <img :src="user.photoProfil" class="userPhoto" alt="Photo de profil" />
+      </template>
+      <template v-slot:username>{{ user.firstname }} {{ user.lastname }}</template>
+    </Header>
+
     <div class="feed">
-      <UserCreateArticle/>
+
+      <div class="createArticle col-md-8 col-12">
+        <div class="createArticleTitle">
+            <span>Partagez ce que vous voulez avec vos collègues !</span>
+        </div>
+        <div class="createArticleLinks">
+            <div class="userLink userPostPhoto col-4">
+                <i class="fas fa-image"></i> Photo
+            </div>
+            <div class="userLink userPostPost col-4">
+                <i class="fas fa-comment-dots"></i> Post
+            </div>
+            <div class="userLink userPostVideo col-4">
+                <i class="fas fa-video"></i> Vidéo
+            </div>
+        </div>
+      </div>
+
       <UserArticles 
         v-for="article in articles" 
         :key="article.articleId" 
         :idArticle="article.articleId" 
         :idUser="article.userId"
       >
-      <template v-slot:text>{{ article.text }}</template>
-      <template v-slot:mediaUrl>{{ article.mediaUrl }}</template>
-      <template v-slot:username>{{ article.firstname + ' ' + article.lastname }}</template>
-      <template v-slot:dateCreation>{{ article.dateCreation }}</template>
+      <template v-slot:articleText>{{ article.text }}</template>
+      <template v-slot:articleUserPhotoProfil>{{ article.photoProfil }}</template>
+      <template v-slot:articleMediaUrl>{{ article.mediaUrl }}</template>
+      <template v-slot:articleUsername>{{ article.firstname }} {{article.lastname}}</template>
+      <template v-slot:articleDateCreation>{{ article.dateCreation }}</template>
       </UserArticles>
     </div>
   </div>
@@ -20,7 +44,6 @@
 
 <script>
 import Header from "@/components/Header";
-import UserCreateArticle from "@/components/UserCreateArticle";
 import UserArticles from "@/components/UserArticles";
 
 // @ is an alias to /src
@@ -28,33 +51,44 @@ export default {
   name: 'UserFeed',
   components: {
     Header,
-    UserCreateArticle,
     UserArticles
   },
   data: () => {
-      return {
-          articles: []
-      }
+    return {
+      articles: [],
+      user:{}
+    }
   },
   methods: {
     getArticles() {
-      // Récupère les posts
       this.$axios({
         method: 'get',
-        url: 'articles'
+        url: 'http://localhost:3000/api/articles/'
       })
+      .then((payload) => {
+        this.articles = payload.data;
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+    },
+    getUser() {
+        this.$axios({
+          method: 'get',
+          url: `http://localhost:3000/api/user/${this.$route.params.id}/profile`
+        })
         .then((payload) => {
-          this.articles = payload.data;
+          this.user = payload.data[0];
+          console.log(payload.data[0])
         })
         .catch(function (error) {
-          //On traite ici les erreurs éventuellement survenues
           console.log(error);
-      });
-    }
+        });
+      }
   },
   mounted() {
-  // Récupère les posts et défini le titre
     this.getArticles();
+    this.getUser();
     document.title = "Mon fil d'actualité | Groupomania";
   }
 }
@@ -69,5 +103,59 @@ export default {
   flex-direction: column;
   background-color: rgb(230, 230, 230);
   padding: 10px;
+}
+.userPhoto{
+  width: 25px;
+  height: 25px;
+  border-radius: 20px;
+  margin-right: 10px;
+}
+.createArticle{
+    display: flex;
+    flex-direction: column;
+    font-family: "Overpass";
+    background-color: white;
+    box-shadow: 2px 2px 5px lightgrey;
+    border-radius: 10px;
+    margin: auto;
+    margin-bottom: 20px;
+}
+.createArticleTitle{
+    display: flex;
+    justify-content: center;
+    padding: 12px;
+}
+.createArticleLinks{
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+}
+.userLink{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    padding: 12px;
+    &:hover{
+        box-shadow: 0px 0px 5px lightgrey;
+    }
+}
+.userPostPhoto{
+    & .fas{
+        color: rgb(231,82,70);
+        margin-right: 10px;
+    }
+}
+.userPostPost{
+    & .fas{
+        color: rgb(32,78,138);
+        margin-right: 10px;
+    }
+}
+.userPostVideo{
+    & .fas{
+        color: rgb(248,244,60);
+        margin-right: 10px;
+    }
 }
 </style>

@@ -2,17 +2,17 @@
     <div class="articles" :id="idArticle">
         <div class="article col-md-8 col-12">
             <div class="friendInfo">
-                <div class="friendPhoto"></div>
-                <slot name="username"></slot>
+                <slot name="articleUserPhotoProfil"></slot>
+                <slot name="articleUsername"></slot>
             </div>
             <div class="articlePost">
-                <slot name="text"></slot>
+                <slot name="articleText"></slot>
             </div>
             <div class="articleMedia">
-                <img src="../assets/background.png"/>
+                <slot name="articleMediaUrl"></slot>
             </div>
             <div class="articlePlus">
-                <slot name="dateCreation"></slot>
+                <slot name="articleDateCreation"></slot>
                 <div class="articleLikes">
                     <i class="fas fa-thumbs-up"></i>
                     <i class="fas fa-thumbs-down"></i>

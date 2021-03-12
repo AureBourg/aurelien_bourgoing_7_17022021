@@ -39,7 +39,6 @@ export default {
       if (emailValid && passwordValid && lastnameValid && firstnameValid) {
         this.$emit("signup-form", this.$data);
       }
-        
     }
   }
 }

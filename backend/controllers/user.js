@@ -62,14 +62,14 @@ exports.login = (req, res, next) => {
                     )
                 });
             })
-            .catch(error => res.status(500).json({ error : result[0].userId }));
+            .catch(error => res.status(500).json({ error : 'Erreur serveur' }));
         }
     );
 };
 
 // Middleware pour supprimer un utilisateur
 exports.deleteUser = (req, res, next) => {
-    const userId = res.locals.userId;
+    const userId = req.params.id;
     const password = req.body.password;
 
     let sql = 'SELECT password, photoProfil FROM Users WHERE userId = ?';
@@ -83,10 +83,9 @@ exports.deleteUser = (req, res, next) => {
             if (result.length===0) {
                 return res.status(401).json({ error: "Utilisateur non trouvé" });
             }
-
-            if (result[0].photoProfil != null){
-                const filename = result[0].photoProfil.split('/images/')[1];
-
+            
+            const filename = result[0].photoProfil.split('/images/')[1];
+            if (filename !== "photoProfil_default.jpg") {
                 fs.unlink(`images/${filename}`, (e) => {
                     if (e) {
                         console.log(e);
@@ -119,9 +118,10 @@ exports.deleteUser = (req, res, next) => {
 
 //Middleware pour modifier un utilisateur et le renvoyer dans la base de donnée
 exports.updateUser = (req, res, next) => {
-    const userId = res.locals.userId;
+    const userId = req.params.id;
     const email = req.body.email;
     const bio = req.body.bio;
+    const password = req.body.password;/*
     const photoProfil = `${req.protocol}://${req.get("host")}/images/${req.file.filename}`;
 
     let sql = 'UPDATE Users SET photoProfil = ? WHERE userId = ?';
@@ -137,9 +137,9 @@ exports.updateUser = (req, res, next) => {
             }
         );
     } else {
-
-        let sql = 'UPDATE Users SET email = ?, bio = ? WHERE userId = ?';
-        let values = [email, bio, userId];
+*/
+        let sql = 'UPDATE Users SET email = ?, bio = ?, password = ? WHERE userId = ?';
+        let values = [email, bio, password, userId];
 
         connection.query(sql, values, 
             function (error, result) {
@@ -149,14 +149,14 @@ exports.updateUser = (req, res, next) => {
                 res.status(200).json({ message: "Informations de l'utilisateur modifiées !" });
             }
         );
-    }
+    //}
 };
 
 //Middleware pour afficher le profil d'un utilisateur
 exports.displayProfil = (req, res, next) => {
     const userId = req.params.id;
 
-    let sql = 'SELECT firstname, lastname, email, bio, photoProfil FROM Users WHERE userId = ?';
+    let sql = 'SELECT userId, firstname, lastname, email, bio, photoProfil, dateCreation, role FROM Users WHERE userId = ?';
     let values = [userId];
 
     connection.query(sql, values, 
@@ -173,7 +173,7 @@ exports.displayProfil = (req, res, next) => {
 };
 
 exports.userRole = (req, res, next) => {
-    const userId = res.locals.userId;
+    const userId = req.params.id;
 
     let sql = 'SELECT role FROM Users WHERE userId = ?';
     let values = [userId];

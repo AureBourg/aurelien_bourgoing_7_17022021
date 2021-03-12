@@ -9,7 +9,6 @@
 </template>
 
 <script>
-// @ is an alias to /src
 import LoginForm from '../components/LoginForm.vue'
 
 export default {
@@ -30,14 +29,14 @@ export default {
 
       this.$axios({
         method: 'post',
-        url: 'user/login',
+        url: 'http://localhost:3000/api/user/login',
         data: this.$data
       })
       .then((response) => {
           sessionStorage.setItem("token", response.data.token);
           this.$axios.defaults.headers.common["Authorization"] = "Bearer " + response.data.token;
 
-          this.$router.push("/userFeed/" + response.data.userId);
+          this.$router.push("/userfeed/" + response.data.userId);
       })
       .catch((error) => {
           if (error.response.status === 500) {

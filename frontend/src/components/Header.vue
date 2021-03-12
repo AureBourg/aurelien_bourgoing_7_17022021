@@ -4,10 +4,10 @@
         <img class="logo" alt="Groupomania logo" src="@/assets/icon-left-font-monochrome-black.svg">
     </div>
     <div class="headerNav">
-      <router-link :to="{ name: 'userProfile', params: {id: 'yourProfile' } }">
+      <router-link :to="{ name: 'userProfile', params: {id: this.$route.params.id } }">
         <div class="userProfil">
-          <div class="userPhoto"></div>
-          <span>Mon profil</span>
+          <slot name="photoProfil"></slot>
+          <slot name="username"></slot>
         </div>
       </router-link>
       <router-link to="/">
@@ -51,14 +51,10 @@ export default {
   align-items: center;
   justify-content: center;
   padding: 8px;
-}
-.userPhoto{
-  width: 25px;
-  height: 25px;
-  border-radius: 20px;
-  margin-right: 10px;
-  background: url(../assets/background.png);
-  background-size: cover;
+  & a{
+    text-decoration: none;
+    color: black;
+  }
 }
 .userProfil{
   display: flex;
@@ -66,13 +62,10 @@ export default {
   padding: 10px;
   border-right: solid 1px lightgrey;
   border-radius: 2px;
+  color: black;
   cursor: pointer;
   &:hover{
-        box-shadow: 0px 0px 4px lightgrey;
-    }
-  & span{
-    text-decoration: none;
-    color: black;
+    box-shadow: 0px 0px 4px lightgrey;
   }
 }
 .userLogout{
