@@ -79,7 +79,6 @@ export default {
         })
         .then((payload) => {
           this.user = payload.data[0];
-          console.log(payload.data[0])
         })
         .catch(function (error) {
           console.log(error);

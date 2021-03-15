@@ -121,35 +121,108 @@ exports.updateUser = (req, res, next) => {
     const userId = req.params.id;
     const email = req.body.email;
     const bio = req.body.bio;
-    const password = req.body.password;/*
-    const photoProfil = `${req.protocol}://${req.get("host")}/images/${req.file.filename}`;
+    const password = req.body.password;
 
-    let sql = 'UPDATE Users SET photoProfil = ? WHERE userId = ?';
-    let values = [photoProfil, userId];
-    
-    if (req.file) { // Modification de la photo de profil
-        connection.query(sql, values ,
-            function (error, result) {
-                if (error) {
-                    return res.status(500).json(error.message);
-                }
-                res.status(200).json({ message: "Photo de profil de l'utilisateur modifiée !" });
-            }
-        );
-    } else {
-*/
-        let sql = 'UPDATE Users SET email = ?, bio = ?, password = ? WHERE userId = ?';
-        let values = [email, bio, password, userId];
+    if (req.file) { // Si le changement concerne l'avatar on update directement
+        const photoProfil = `${req.protocol}://${req.get("host")}/images/${req.file.filename}`;
+
+        let sql = 'SELECT photoProfil FROM Users WHERE userId = ?';
+        let values = [userId];
 
         connection.query(sql, values, 
-            function (error, result) {
-                if (error) {
-                    return res.status(500).json(error.message);
+            function (err, result) {
+                if (err) {
+                    return res.status(500).json({ error : 'Erreur serveur photo' });
                 }
-                res.status(200).json({ message: "Informations de l'utilisateur modifiées !" });
+
+                const filename = result[0].photoProfil.split('/images/')[1];
+
+                let sql = 'UPDATE Users SET photoProfil = ? WHERE userId = ?';
+                let values = [photoProfil, userId];
+
+                if (filename !== "photoProfil_default.jpg") {
+                    fs.unlink(`images/${filename}`, () => {// On supprime le fichier image en amont
+                        
+                        connection.query(sql, values, function (err, result) {
+                            if (err) {
+                                return res.status(500).json({ error : 'Erreur serveur supprphoto' });
+                            }
+                            return res.status(200).json({ message: "Utilisateur modifé !" });
+                        });
+                    });
+                } else {
+                    connection.query(sql, values, function (err, result) {
+                        if (err) {
+                            return res.status(500).json(err.message);
+                        }
+                        return res.status(200).json({ message: "Utilisateur modifé !" });
+                    });
+                }
             }
         );
-    //}
+
+    } else {
+
+        let sql = 'SELECT password FROM Users WHERE userId = ?';
+        let values = [userId];
+
+        connection.query(sql, values, 
+            function (err, result) {
+                if (err) {
+                    return res.status(500).json({ error : 'Erreur serveur début' });
+                }
+                if (result.length == 0) {
+                    return res.status(401).json({ error: "Utilisateur non trouvé !" });
+                }
+
+                const newPassword = req.body.newPassword;
+
+                bcrypt.compare(password, result[0].password)
+                .then(valid => {
+                    if (!valid) {
+                        return res.status(401).json({ error: "Mot de passe incorrect !" });
+                    }
+                    if (newPassword) { // Si un nouveau mdp est défini
+                        bcrypt.hash(newPassword, 10)
+                            .then(hash => {
+                                sql = "UPDATE Users SET email = ?, bio = ?, password = ? WHERE userId = ?";
+                                values = [email, bio, hash, userId];
+
+                                connection.query(sql, values, 
+                                    function (err, result) {
+                                        if (err) {
+                                            return res.status(500).json({ error : 'Erreur serveur newmdp' });
+                                        }
+                                        if (result.affectedRows == 0) {
+                                            return res.status(400).json({ message: "Changement échoué !" });
+                                        }
+                                        res.status(200).json({ message: "Changement réussi !" });
+                                    }
+                                );
+                            })
+                            .catch(e => res.status(500).json(e));
+
+                    } else { // Si le mdp reste le même
+                        sql = "UPDATE Users SET email = ?, bio = ? WHERE userId = ?";
+                        values = [email, bio, userId];
+
+                        connection.query(sql, values, 
+                            function (err, result) {
+                                if (err) {
+                                    return res.status(500).json({ error : 'Erreur serveur pasdenewmdp' });
+                                }
+                                if (result.affectedRows == 0) {
+                                    return res.status(400).json({ message: "Changement échoué !" });
+                                }
+                                res.status(200).json({ message: "Changement réussi !" });
+                            }
+                        );
+                    }
+                })
+                .catch(e => res.status(500).json(e));
+            }
+        );
+    }
 };
 
 //Middleware pour afficher le profil d'un utilisateur

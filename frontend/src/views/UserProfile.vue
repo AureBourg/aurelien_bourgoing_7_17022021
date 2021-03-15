@@ -1,6 +1,5 @@
 <template>
   <div class="userProfile">
-    <ConfirmDelete/>
     <div class="profileInfos">
       <router-link :to="{ name: 'userFeed', params: {id: this.$route.params.id } }">
         <div class="backButton">
@@ -18,45 +17,53 @@
     </div>
 
     <div id="updateProfile" class="updateProfile col-7">
+        <div class="updateProfilePhoto col-7">
+            <span>Modifier ma photo de profil</span>
+            <input type="file" accept="image/*" v-on:change="updatePhotoProfil($event)"/>
+        </div>
         <div class="updateProfileInfos col-7">
             <span>Modifier mon profil</span>
-            <input v-model="email" class="email" type="text" id="email" name="email" placeholder="Adresse mail"/>
-            <textarea v-model="bio" class="bio" type="text" id="bio" name="bio" placeholder="Décrivez vous ici"/>
+            <input v-model="user.email" class="email" type="text" id="email" name="email" placeholder="Adresse mail"/>
+            <textarea v-model="user.bio" class="bio" type="text" id="bio" name="bio" placeholder="Décrivez vous ici"/>
         </div>
         <div class="updatePassword col-7">
             <span>Modifier mon mot de passe</span>
-            <input v-model="password" type="password" id="formerPassword" placeholder="Ancien mot de passe"/>
-            <input v-model="newPassword" type="password" id="newPassword" placeholder="Nouveau mot de passe"/>
+            <input v-model="user.newPassword" type="password" id="newPassword" placeholder="Nouveau mot de passe"/>
         </div>
         <div class="confirmUpdate">
-            <button v-on:click="updateUser()">Confirmer les modifications</button>
+            <button v-on:click.prevent="updateUser()">Confirmer les modifications</button>
+            <input v-model="user.password" type="password" id="password" placeholder="Veuillez renseigner votre mot de passe pour confirmer les modifications"/>
         </div>
     </div>
 
     <div class="delete col-7">
-      <button>Supprimer le compte</button>
+      <button v-on:click="showDeleteConfirm()">Supprimer le compte</button>
+    </div>
+    <div id="confirmDelete" class="confirmDelete col-md-6 col-12">
+        <div class="confirmDeleteInfos">
+            <span v-on:click="hideDeleteConfirm()" class="annulDelete">Annuler <i class="fas fa-times"></i></span>
+            <span>Suppression de compte</span>
+            <span>Attention cette action est irrévocable</span>
+        </div>
+        <div>
+            <form>
+                <input v-model="user.password" type="password" placeholder="Mot de passe" id="passwordDelete"/>
+                <button type="submit" v-on:click="deleteUser()">Supprimer le compte</button>
+            </form>
+        </div>
     </div>
   </div>
 </template>
 
 <script>
 // @ is an alias to /src
-import ConfirmDelete from "@/components/ConfirmDelete";
 
 export default {
   name: 'userProfile',
-  components: {
-    ConfirmDelete
-  },
   data: () => {
     return {
       user: {},
-      updates: {
-        bio: "",
-        email: "",
-        password: "",
-        newPassword: ""
-      }
+      componentType: null
     }
   },
   methods: {
@@ -72,18 +79,52 @@ export default {
           console.log(error);
         });
       },
-      updateUser(payload){
-        const userUpdates = this.$data.updates;
+      updatePhotoProfil(event) {
+      
+        const image = event.target.files[0];
+        const formData = new FormData();
+        formData.append("image", image);
 
-        userUpdates.bio = payload.bio;
-        userUpdates.email = payload.email;
-        userUpdates.password = payload.password;
-        userUpdates.newPpassword = payload.newPassword;
+        this.$axios({
+            method: 'put',
+            url: `http://localhost:3000/api/user/${this.$route.params.id}/updateUser`,
+            data: formData
+          })
+          .then(() => {
+            this.getUser();
+          })
+          .catch((e) => {
+            console.log(e);
+          });
+      },
+      updateUser(){
+
+        const email = this.user.email;
+        const bio = this.user.bio;
+        const password = this.user.password;
+        const newPassword = this.user.newPassword;
+
+        let data;
+
+        if (newPassword === "") {
+          data = {
+            email: email,
+            bio: bio,
+            password: password,
+          };
+        } else {
+          data = {
+            email: email,
+            bio: bio,
+            password: password,
+            newPassword: newPassword,
+          };
+        }
 
         this.$axios({
           method: 'put',
           url: `http://localhost:3000/api/user/${this.$route.params.id}/updateUser`,
-          data: userUpdates
+          data: data
         })
         .then((response) => {
             if (response.status === 200) {
@@ -94,18 +135,52 @@ export default {
         .catch((error) => {
             if (error.response.status === 500) {
               alert("Modifications impossibles : Erreur serveur");
+            } if (error.response.status === 401) {
+              alert("Mot de passe invalide");
             }
-          });
+        });
+      },
+      deleteUser(){
+        const password = document.getElementById("passwordDelete").value;
+        let data;
+        data = {
+            password: password
+          };
+        console.log(data);
+
+        this.$axios({
+          method: 'delete',
+          url: `http://localhost:3000/api/user/${this.$route.params.id}/deleteUser`,
+          data: data
+        })
+        .then(() => {
+          console.log();
+            sessionStorage.removeItem("token");
+            delete this.$axios.defaults.headers.common["Authorization"];
+            //this.$router.push({ name: "Home" });
+        })
+        .catch((error) => {
+            if (error.status === 401) {
+              alert("Mot de passe invalide");
+          }
+        });
       },
       showUpdateForm(){
         document.getElementById('updateProfile').style.display = 'block';
       },
       hideUpdateForm(){
         document.getElementById('updateProfile').style.display = 'none';
-      }
+      },
+      showDeleteConfirm(){
+        document.getElementById('confirmDelete').style.display = 'block';
+      },
+      hideDeleteConfirm(){
+        document.getElementById('confirmDelete').style.display = 'none';
+      },
   },
   mounted() {
     this.hideUpdateForm();
+    this.hideDeleteConfirm();
     this.getUser();
     document.title = "Mon profil | Groupomania";
   }
@@ -200,6 +275,22 @@ export default {
 	0%{transform: translateY(-500px); opacity: 0}
 	100%{transform: translateY(0px); opacity: 1}
 }
+.updateProfilePhoto{
+    display: flex;
+    flex-direction: column;
+    margin: auto;
+    margin-bottom: 20px;
+    & span{
+        text-align: center;
+        border-bottom: solid 1px lightgrey;
+    }
+    & input{
+        margin: 10px;
+    }
+    & textarea{
+        margin: 10px;
+    }
+}
 .updateProfileInfos{
     display: flex;
     flex-direction: column;
@@ -230,6 +321,7 @@ export default {
 }
 .confirmUpdate{
     display: flex;
+    flex-direction: column;
     justify-content: center;
     & button{
     color: white;
@@ -238,6 +330,34 @@ export default {
     border: none;
     padding: 5px 20px 5px 20px;
     margin: 20px;
+    }
+}
+.confirmDelete{
+    font-family: "Overpass";
+    position: absolute;
+    margin: auto;
+    left: 0;
+    right: 0;
+    top: 150px;
+    text-align: center;
+    z-index: 9999;
+    background-color: rgb(231,82,70);
+    padding: 80px;
+    border: solid 2px white;
+    border-radius: 20px 
+}
+.confirmDeleteInfos{
+    display: flex;
+    flex-direction: column;
+}
+.annulDelete{
+    position: relative;
+    left: 275px;
+    bottom: 68px;
+    color: white;
+    cursor: pointer;
+    &:hover{
+      color: lightgrey;
     }
 }
 </style>

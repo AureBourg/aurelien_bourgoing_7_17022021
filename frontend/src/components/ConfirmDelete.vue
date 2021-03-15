@@ -36,12 +36,11 @@ export default {
 
 <style>
 .confirmDelete{
-    visibility: hidden;
     position: fixed;
     margin: auto;
     left: 0;
     right: 0;
-    top: 150px;
+    bottom: 200px;
     text-align: center;
     z-index: 9999;
     background-color: rgb(231,82,70);
