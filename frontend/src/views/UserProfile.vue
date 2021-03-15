@@ -40,15 +40,18 @@
       <button v-on:click="showDeleteConfirm()">Supprimer le compte</button>
     </div>
     <div id="confirmDelete" class="confirmDelete col-md-6 col-12">
+        <div class="annulDelete">
+          <span v-on:click="hideDeleteConfirm()">Annuler</span>
+          <i class="fas fa-times"></i>
+        </div>
         <div class="confirmDeleteInfos">
-            <span v-on:click="hideDeleteConfirm()" class="annulDelete">Annuler <i class="fas fa-times"></i></span>
             <span>Suppression de compte</span>
             <span>Attention cette action est irrévocable</span>
         </div>
         <div>
             <form>
                 <input v-model="user.password" type="password" placeholder="Mot de passe" id="passwordDelete"/>
-                <button type="submit" v-on:click="deleteUser()">Supprimer le compte</button>
+                <button type="submit" v-on:click.prevent="deleteUser()">Supprimer le compte</button>
             </form>
         </div>
     </div>
@@ -62,8 +65,7 @@ export default {
   name: 'userProfile',
   data: () => {
     return {
-      user: {},
-      componentType: null
+      user: {}
     }
   },
   methods: {
@@ -141,12 +143,11 @@ export default {
         });
       },
       deleteUser(){
-        const password = document.getElementById("passwordDelete").value;
+        const password = this.user.password;
         let data;
         data = {
             password: password
           };
-        console.log(data);
 
         this.$axios({
           method: 'delete',
@@ -154,10 +155,9 @@ export default {
           data: data
         })
         .then(() => {
-          console.log();
             sessionStorage.removeItem("token");
             delete this.$axios.defaults.headers.common["Authorization"];
-            //this.$router.push({ name: "Home" });
+            this.$router.push("/");
         })
         .catch((error) => {
             if (error.status === 401) {
@@ -334,13 +334,13 @@ export default {
 }
 .confirmDelete{
     font-family: "Overpass";
-    position: absolute;
+    position: fixed;
     margin: auto;
     left: 0;
     right: 0;
     top: 150px;
-    text-align: center;
     z-index: 9999;
+    text-align: center;
     background-color: rgb(231,82,70);
     padding: 80px;
     border: solid 2px white;
@@ -351,11 +351,16 @@ export default {
     flex-direction: column;
 }
 .annulDelete{
-    position: relative;
-    left: 275px;
-    bottom: 68px;
+    display: flex;
+    justify-content: end;
+    align-items: center;
+    margin-top: -70px;
+    margin-right: -70px;
     color: white;
     cursor: pointer;
+    & span{
+      margin-right: 10px;
+    }
     &:hover{
       color: lightgrey;
     }

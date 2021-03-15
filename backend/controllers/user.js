@@ -16,7 +16,7 @@ exports.signup = (req, res, next) => {
         const lastname = req.body.lastname;
         const password = hash;
 
-        let sql = 'INSERT INTO Users VALUES (NULL, ?, ?, ?, ?, NULL, NULL, NULL, NOW())';
+        let sql = 'INSERT INTO Users VALUES (NULL, ?, ?, ?, ?, NULL, NULL, DEFAULT, NOW())';
         let values = [email, firstname, lastname, password];
 
         connection.query(sql, values, 
@@ -97,19 +97,19 @@ exports.deleteUser = (req, res, next) => {
             .then(valid => {
                 if (!valid) {
                 return res.status(401).json({ error: 'Mot de passe incorrect !' });
-                }
+                } else {
+                    let sql = 'DELETE FROM Users WHERE userId = ?';
+                    let values = [userId];
 
-                let sql = 'DELETE FROM Users WHERE userId = ?';
-                let values = [userId];
-
-                connection.query(sql, values, 
-                    function (error, result) {
-                        if (error) {
-                            return res.status(500).json(error.message);
+                    connection.query(sql, values, 
+                        function (error, result) {
+                            if (error) {
+                                return res.status(500).json(error.message);
+                            }
+                            res.status(201).json({ message: "Utilisateur supprimé !" });
                         }
-                        res.status(201).json({ message: "Utilisateur supprimé !" });
-                    }
-                );
+                    );
+                }
             })
             .catch(error => res.status(500).json({ error }));
         }

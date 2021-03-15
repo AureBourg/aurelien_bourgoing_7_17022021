@@ -12,7 +12,7 @@
 
     <a href="">Mot de passe oublié ?</a>
 
-    <button class="SignUpButton"><router-link to="/signup">S'inscrire</router-link></button>
+    <router-link to="/signup" class="SignUpButton">S'inscrire</router-link>
   </div>
 </template>
 
@@ -76,9 +76,9 @@ input{
     color: white;
     background-color:rgb(9,31,67);
     border-radius: 20px;
-    width: 150px;
     padding: 10px;
     text-align: center;
+    line-height: normal;
     border: rgb(255,215,215);
     margin: auto;
     cursor: pointer;
@@ -91,6 +91,7 @@ input{
     width: 200px;
     padding: 10px;
     text-align: center;
+    text-decoration: none;
     border: rgb(255,215,215);
     margin-right: auto;
     margin-left: auto;

@@ -9,11 +9,11 @@
 
     <div class="feed">
 
-      <div class="createArticle col-md-8 col-12">
+      <div class="createArticleCard col-md-8 col-12">
         <div class="createArticleTitle">
             <span>Partagez ce que vous voulez avec vos collègues !</span>
         </div>
-        <div class="createArticleLinks">
+        <div v-on:click="showCreateArticle()" class="createArticleLinks">
             <div class="userLink userPostPhoto col-4">
                 <i class="fas fa-image"></i> Photo
             </div>
@@ -25,6 +25,15 @@
             </div>
         </div>
       </div>
+
+      <CreateArticleForm
+        v-on:article-sent="createPost"
+      >
+        <template v-slot:photoProfil>
+          <img :src="user.photoProfil" class="userPhoto" alt="Photo de profil" />
+        </template>
+        <template v-slot:username>{{ user.firstname }} {{ user.lastname }}</template>
+      </CreateArticleForm>
 
       <UserArticles 
         v-for="article in articles" 
@@ -45,13 +54,15 @@
 <script>
 import Header from "@/components/Header";
 import UserArticles from "@/components/UserArticles";
+import CreateArticleForm from "@/components/CreateArticleForm";
 
 // @ is an alias to /src
 export default {
   name: 'UserFeed',
   components: {
     Header,
-    UserArticles
+    UserArticles,
+    CreateArticleForm
   },
   data: () => {
     return {
@@ -83,11 +94,44 @@ export default {
         .catch(function (error) {
           console.log(error);
         });
-      }
+    },
+    createPost(payload) {
+      const text = payload.text;
+      const mediaUrl = payload.mediaUrl;
+      /*let data = {
+        text: text,
+        mediaUrl: mediaUrl,
+      };*/
+
+      const formData = new FormData();
+      formData.append("text", text);
+      formData.append("mediaUrl", mediaUrl);
+
+      console.log(mediaUrl);
+      console.log(formData);
+
+      this.$axios({
+        method: 'post',
+        url: 'http://localhost:3000/api/articles/',
+        data: formData,
+        headers: { "Content-Type": "multipart/form-data" }
+      })
+      .then(() => {
+        this.getArticles();
+      })
+      .catch((e) => console.log(e));
+    },
+    showCreateArticle(){
+      document.getElementById('createArticle').style.display = 'block';
+    },
+    hideCreateArticle(){
+      document.getElementById('createArticle').style.display = 'none';
+    }
   },
   mounted() {
     this.getArticles();
     this.getUser();
+    this.hideCreateArticle();
     document.title = "Mon fil d'actualité | Groupomania";
   }
 }
@@ -109,7 +153,7 @@ export default {
   border-radius: 20px;
   margin-right: 10px;
 }
-.createArticle{
+.createArticleCard{
     display: flex;
     flex-direction: column;
     font-family: "Overpass";

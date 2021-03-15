@@ -2,16 +2,16 @@
   <div class="form">
     <form id="signupForm" name="signupForm">
         <div>
-          <input v-model="firstname" class="username" type="text" id="firstname" name="firstname" placeholder="Prénom" required>
-        </div>
-        <div>
           <input v-model="lastname" class="username" type="text" id="lastname" name="lastname" placeholder="Nom" required>
         </div>
         <div>
-          <input v-model="password" type="password" id="password" name="password" placeholder="Mot de passe" required>
+          <input v-model="firstname" class="username" type="text" id="firstname" name="firstname" placeholder="Prénom" required>
         </div>
         <div>
           <input v-model="email" type="text" id="email" name="email" placeholder="Adresse mail" required>
+        </div>
+        <div>
+          <input v-model="password" type="password" id="password" name="password" placeholder="Mot de passe" required>
         </div>
         <input v-on:click="sendDataSignup()" class="SignUpButton" type="button" value="Créer un compte">
     </form>
