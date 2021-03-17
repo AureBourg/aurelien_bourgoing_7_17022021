@@ -7,13 +7,13 @@
         </div>
         <form class="createArticleForm" name="createArticleForm">
             <div>
-                <textarea v-model="text" class="articleText" type="text" id="articleText" name="articleText" placeholder="Postez ce que vous voulez !"/>
+                <textarea v-model="text" class="articleText" type="text" id="articleText" name="text" placeholder="Postez ce que vous voulez !"/>
             </div>
             <div>
-                <label class="articleSelectMedia" for="articleMedia">Ajouter une photo</label>
-                <input name="articleMedia" id="articleMedia" class="articleMedia" v-on:change="sendFile($event)" type="file"/>
+                <label class="articleSelectMedia" for="image">Ajouter une photo</label>
+                <input name="image" id="image" class="image" v-on:change="sendFile($event)" type="file"/>
             </div>
-            <input v-on:click.prevent="sendDataCreateArticle()" class="createArticleButton" type="button" value="Publier !">
+            <input v-on:click.prevent="sendDataCreateArticle()" class="createArticleButton" type="submit" value="Publier !">
         </form>
     </div>
 </template>
@@ -24,7 +24,7 @@ export default {
   data: () => {
     return {
       text: "",
-      mediaUrl: ""
+      image: ""
     };
   },
   methods: {
@@ -32,7 +32,7 @@ export default {
         document.getElementById('createArticle').style.display = 'none';
     },
     sendFile(event) {
-        this.$data.mediaUrl = event.target.files[0];
+        this.$data.image = event.target.files[0];
     },
     sendDataCreateArticle() {
         this.$emit("article-sent", this.$data);
@@ -62,7 +62,7 @@ export default {
     top: 150px;
     padding: 20px;
 }
-.articleMedia{
+.image{
     opacity: 0;
 }
 .articleSelectMedia{

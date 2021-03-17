@@ -1,10 +1,10 @@
 <template>
   <div class="userFeed">
-    <Header>
+    <Header :idUserConnected="userConnected.userId">
       <template v-slot:photoProfil>
-        <img :src="user.photoProfil" class="userPhoto" alt="Photo de profil" />
+        <img :src="userConnected.photoProfil" class="userPhoto" alt="Photo de profil" />
       </template>
-      <template v-slot:username>{{ user.firstname }} {{ user.lastname }}</template>
+      <template v-slot:username>{{ userConnected.firstname }} {{ userConnected.lastname }}</template>
     </Header>
 
     <div class="feed">
@@ -30,21 +30,28 @@
         v-on:article-sent="createPost"
       >
         <template v-slot:photoProfil>
-          <img :src="user.photoProfil" class="userPhoto" alt="Photo de profil" />
+          <img :src="userConnected.photoProfil" class="userPhoto" alt="Photo de profil" />
         </template>
-        <template v-slot:username>{{ user.firstname }} {{ user.lastname }}</template>
+        <template v-slot:username>{{ userConnected.firstname }} {{ userConnected.lastname }}</template>
       </CreateArticleForm>
 
-      <UserArticles 
+      <UserArticles
         v-for="article in articles" 
         :key="article.articleId" 
         :idArticle="article.articleId" 
-        :idUser="article.userId"
+        :idUser="article.userId"     
       >
       <template v-slot:articleText>{{ article.text }}</template>
-      <template v-slot:articleUserPhotoProfil>{{ article.photoProfil }}</template>
-      <template v-slot:articleMediaUrl>{{ article.mediaUrl }}</template>
-      <template v-slot:articleUsername>{{ article.firstname }} {{article.lastname}}</template>
+      <template v-slot:photoProfil>
+          <img :src="user.photoProfil" class="userPhoto" alt="Photo de profil" />
+      </template>
+      <template v-slot:articleUserPhotoProfil>
+        <img :src="article.photoProfil" class="userPhoto" alt="Photo de l'utilisateur" />
+      </template>
+      <template v-slot:articleMediaUrl>
+        <img :src="article.mediaUrl" class="articleMediaUrl" alt="Photo du post" />
+      </template>
+      <template v-slot:articleUsername>{{ article.firstname }} {{ article.lastname }}</template>
       <template v-slot:articleDateCreation>{{ article.dateCreation }}</template>
       </UserArticles>
     </div>
@@ -67,7 +74,7 @@ export default {
   data: () => {
     return {
       articles: [],
-      user:{}
+      userConnected:{}
     }
   },
   methods: {
@@ -83,32 +90,24 @@ export default {
         console.log(error);
       });
     },
-    getUser() {
+    getUserConnected() {
         this.$axios({
           method: 'get',
-          url: `http://localhost:3000/api/user/${this.$route.params.id}/profile`
+          url: `http://localhost:3000/api/user/`
         })
         .then((payload) => {
-          this.user = payload.data[0];
+          this.userConnected = payload.data[0];
+          console.log(payload.data[0]);
         })
         .catch(function (error) {
           console.log(error);
         });
     },
     createPost(payload) {
-      const text = payload.text;
-      const mediaUrl = payload.mediaUrl;
-      /*let data = {
-        text: text,
-        mediaUrl: mediaUrl,
-      };*/
 
       const formData = new FormData();
-      formData.append("text", text);
-      formData.append("mediaUrl", mediaUrl);
-
-      console.log(mediaUrl);
-      console.log(formData);
+      formData.append("text", payload.text);
+      formData.append("image", payload.image);
 
       this.$axios({
         method: 'post',
@@ -118,6 +117,7 @@ export default {
       })
       .then(() => {
         this.getArticles();
+        this.hideCreateArticle()
       })
       .catch((e) => console.log(e));
     },
@@ -130,7 +130,7 @@ export default {
   },
   mounted() {
     this.getArticles();
-    this.getUser();
+    this.getUserConnected();
     this.hideCreateArticle();
     document.title = "Mon fil d'actualité | Groupomania";
   }

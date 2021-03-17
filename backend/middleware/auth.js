@@ -9,8 +9,8 @@ module.exports = (req, res, next) => {
     try {
         const token = req.headers.authorization.split(' ')[1];
         const decodedToken = jwt.verify(token, process.env.TOK_SECRET); //Verifier env. ou process.env.
-        const userId = decodedToken.userId;
-        if (req.body.userId && req.body.userId !== userId) {
+        res.locals.userId = decodedToken.userId;
+        if (req.body.userId && req.body.userId !== decodedToken.userId) {
         throw 'User ID non valable !';
         } else {
         next();

@@ -1,18 +1,18 @@
 <template>
   <div class="userProfile">
     <div class="profileInfos">
-      <router-link :to="{ name: 'userFeed', params: {id: this.$route.params.id } }">
+        <router-link :to="{ name: 'userFeed'}">
         <div class="backButton">
           <i class="fas fa-arrow-left"></i> <span>Retourner à mon fil d'actualités</span>
         </div>
-      </router-link>
+        </router-link>
       <img class="logoGroupo" alt="Groupomania logo" src="@/assets/icon-left-font-monochrome-black.svg">
       <img :src="user.photoProfil" class="userPhoto" alt="Photo de profil" />
-      <div>{{ user.firstname }} {{ user.lastname }}</div>
-      <span>Inscrit depuis le {{ user.dateCreation }}</span>
-      <div>{{ user.bio }}</div>
+      <div class="userName">{{ user.firstname }} {{ user.lastname }}</div>
+      <div class="userBio">{{ user.bio }}</div>
       <span>Contact : {{ user.email }}</span>
       <div>{{ user.role }}</div>
+      <span class="userDateCreation">Inscrit depuis le {{ user.dateCreation }}</span>
       <button v-on:click="showUpdateForm()">Modifier les informations de mon profil</button>
     </div>
 
@@ -62,20 +62,21 @@
 // @ is an alias to /src
 
 export default {
-  name: 'userProfile',
+  name: 'userConnectedProfil',
   data: () => {
     return {
       user: {}
     }
   },
   methods: {
-      getUser() {
+      getUserConnected() {
         this.$axios({
           method: 'get',
-          url: `http://localhost:3000/api/user/${this.$route.params.id}/profile`
+          url: `http://localhost:3000/api/user/`
         })
         .then((payload) => {
           this.user = payload.data[0];
+          console.log(payload.data[0]);
         })
         .catch(function (error) {
           console.log(error);
@@ -89,11 +90,11 @@ export default {
 
         this.$axios({
             method: 'put',
-            url: `http://localhost:3000/api/user/${this.$route.params.id}/updateUser`,
+            url: `http://localhost:3000/api/user/updateUser`,
             data: formData
           })
           .then(() => {
-            this.getUser();
+            this.getUserConnected();
           })
           .catch((e) => {
             console.log(e);
@@ -125,7 +126,7 @@ export default {
 
         this.$axios({
           method: 'put',
-          url: `http://localhost:3000/api/user/${this.$route.params.id}/updateUser`,
+          url: `http://localhost:3000/api/user/updateUser`,
           data: data
         })
         .then((response) => {
@@ -151,7 +152,7 @@ export default {
 
         this.$axios({
           method: 'delete',
-          url: `http://localhost:3000/api/user/${this.$route.params.id}/deleteUser`,
+          url: `http://localhost:3000/api/user/deleteUser`,
           data: data
         })
         .then(() => {
@@ -181,7 +182,7 @@ export default {
   mounted() {
     this.hideUpdateForm();
     this.hideDeleteConfirm();
-    this.getUser();
+    this.getUserConnected();
     document.title = "Mon profil | Groupomania";
   }
   
@@ -200,6 +201,21 @@ export default {
   width: 140px;
   height: 140px;
   border-radius: 70px;
+}
+.userName{
+  margin: 10px;
+}
+.userBio{
+  margin: 10px;
+  padding: 10px;
+  border-top: lightgrey solid 1px;
+  border-bottom: lightgrey solid 1px;
+  max-width: 400px;
+  text-align: center;
+}
+.userDateCreation{
+  color: grey;
+  font-size : 0.8em;
 }
 .delete{
     display: flex;
@@ -241,14 +257,6 @@ export default {
 .logoGroupo{
   width: 30%;
   margin: 20px;
-}
-.userPhoto{
-  width: 100px;
-  height: 100px;
-  border-radius: 50px;
-  margin: 10px;
-  background: url(../assets/background.png);
-  background-size: cover;
 }
 .backButton{
   display: flex;

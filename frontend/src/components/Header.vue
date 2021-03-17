@@ -4,7 +4,7 @@
         <img class="logo" alt="Groupomania logo" src="@/assets/icon-left-font-monochrome-black.svg">
     </div>
     <div class="headerNav">
-      <router-link :to="{ name: 'userProfile', params: {id: this.$route.params.id } }">
+      <router-link :to="{ name: 'userConnectedProfil'}">
         <div class="userProfil">
           <slot name="photoProfil"></slot>
           <slot name="username"></slot>
@@ -20,7 +20,8 @@
 
 <script>
 export default {
-  name: "Header"
+  name: "Header",
+  props: ["idUserConnected"],
 };
 </script>
 

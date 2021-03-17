@@ -26,7 +26,7 @@ exports.getOneArticle = (req, res, next) => {
 
     const articleId = req.params.id;
 
-    let sql = 'SELECT userId, text, mediaUrl, dateCreation FROM Articles WHERE articleId = ?';
+    let sql = 'SELECT userId, text, mediaUrl, dateCreation FROM Articles WHERE articleId = ? ';
     let values = [articleId];
 
     connection.query(sql, values, 
@@ -45,6 +45,7 @@ exports.createArticle = (req, res, next) => {
     const userId = res.locals.userId;
     const text = req.body.text;
     const mediaUrl = `${req.protocol}://${req.get("host")}/images/${req.file.filename}`;
+    console.log(req.params.id);
 
     let sql = 'INSERT INTO Articles VALUES (NULL, ?, ?, ?, NOW())';
     let values = [userId, text, mediaUrl];
@@ -128,10 +129,9 @@ exports.createComment = (req, res, next) => {
     const articleId = req.params.id;
     const userId = res.locals.userId;
     const text = req.body.text;
-    const commentId = req.body.commentId;
 
-    let sql = 'INSERT INTO Comments VALUES (?, ?, ?, ?, NOW())';
-    let values = [commentId, userId, articleId, text];
+    let sql = 'INSERT INTO Comments VALUES (NULL, ?, ?, ?, NOW())';
+    let values = [userId, articleId, text];
 
     connection.query(sql, values, 
         function (error, result) {

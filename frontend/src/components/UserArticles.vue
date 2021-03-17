@@ -1,62 +1,40 @@
 <template>
     <div class="articles" :id="idArticle">
         <div class="article col-md-8 col-12">
-            <div class="friendInfo">
+        <router-link :to="{ name: 'article', params: {id: idArticle } }">
+            <router-link :to="{ name: 'userProfil', params: {id: idUser } }"><div class="friendInfo" :id="idUser">
                 <slot name="articleUserPhotoProfil"></slot>
                 <slot name="articleUsername"></slot>
-            </div>
+            </div></router-link>
             <div class="articlePost">
                 <slot name="articleText"></slot>
             </div>
             <div class="articleMedia">
                 <slot name="articleMediaUrl"></slot>
             </div>
-            <div class="articlePlus">
+            <div class="dateCreation">
                 <slot name="articleDateCreation"></slot>
-                <div class="articleLikes">
-                    <i class="fas fa-thumbs-up"></i>
-                    <i class="fas fa-thumbs-down"></i>
-                </div>
-                <div class="articleSettings">
-                    <i class="fas fa-ellipsis-h"></i>
-                </div>
             </div>
-            <div class="commentSection">
-                <div class="addComment">
-                    <div class="friendPhoto col-lg-2 col-2"></div>
-                    <textarea class="col-lg-8 col-7" placeholder="Laissez un commentaire..."/>
-                    <button class="col-lg-2 col-3">Commenter</button>
-                </div>
-                <div class="comments">
-                    <div class="comment">
-                        <div class="commentUser">
-                            <div class="friendPhoto"></div> 
-                            Nom Prénom
-                        </div>
-                        <div class="commentText">
-                            <p>Ahah super photo !</p>
-                        </div>
-                    </div>
-                    <div class="comment">
-                        <div class="commentUser">
-                            <div class="friendPhoto"></div> 
-                            Nom Prénom
-                        </div>
-                        <div class="commentText">
-                            <p>Tres belle photo super !</p>
-                        </div>
-                    </div>
-                </div>
+            <div class="articleFooter">
+                <span class="numberComment">comments.length commentaires</span>
+                <span class="linkComment"><i class="far fa-comment-alt"></i> Commenter</span>
             </div>
+        </router-link>
         </div>
     </div>
 </template>
 
 <script>
 export default {
-  name: "UserArticles",
-  props: ["idArticle", "idUser"],
-};
+    name: "UserArticles",
+    props: ["idArticle", "idUser"],
+    methods: {
+        sendDataUserProfil(){
+            this.$emit("userId-sent", event.target.id);
+            console.log(event.target.id);
+        },
+    }
+}
 </script>
 
 <style lang="scss">
@@ -65,8 +43,6 @@ export default {
   src: url(../font/Overpass/Overpass-Regular.ttf);
 }
 .article{
-    display: flex;
-    flex-direction: column;
     font-family: "Overpass";
     margin: 5px 15px 25px 15px;
     background-color: white;
@@ -77,11 +53,10 @@ export default {
     margin-bottom: 25px;
 }
 .articleMedia{
-    width: 100%;
-    & img{
-      width: 100%; 
-      height: 100%; 
-    }
+        & img{
+        max-width: 100%; 
+        max-height: 400px; 
+        }
 }
 .articlePlus{
     display: flex;
@@ -110,24 +85,15 @@ export default {
     }
 }
 .friendInfo{
-    display: flex;
+    display: inline-block;
     align-items: center;
     padding: 10px;
     margin-bottom: 15px;
+    cursor: pointer;
     & .friendName{
         margin-left: 15px;
         align-items: center;
     }
-}
-.friendPhoto{
-  width: 35px;
-  height: 35px;
-  border-radius: 20px;
-  justify-content: end;
-  align-items: center;
-  margin-right: 10px;
-  background: url(../assets/background.png);
-  background-size: cover;
 }
 .addComment{
     display: flex;
@@ -166,5 +132,29 @@ export default {
         font-size: 0.9em;
         padding: 10px 10px 10px 50px;
     }
+}
+.dateCreation{
+  font-size: 0.7em;
+  color: grey;
+  text-align: right;
+}
+.articleFooter{
+  color: grey;
+  border-top: solid 1px grey;
+  padding-top: 15px;
+  & span{
+      padding: 10px;
+      border-radius: 10px;
+      cursor: pointer;
+    &:hover{
+        box-shadow: 0px 0px 5px lightgrey;
+    }
+  }
+  & a{
+    color: grey;
+    font-size: 0.7em;
+    cursor: pointer;
+    text-decoration: none;
+  }
 }
 </style>

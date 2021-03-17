@@ -17,13 +17,23 @@ export default new VueRouter({
   },
   {
     name: "userFeed",
-    path: "/userfeed/:id",
+    path: "/userfeed",
     component: () => import("@/views/UserFeed.vue")
   },
   {
-    name: "userProfile",
+    name: "userProfil",
     path: "/userprofil/:id",
-    component: () => import("@/views/UserProfile.vue")
+    component: () => import("@/views/UserProfil.vue")
+  },
+  {
+    name: "userConnectedProfil",
+    path: "/userconnectedprofil",
+    component: () => import("@/views/UserConnectedProfil.vue")
+  },
+  {
+    name: "article",
+    path: "/article/:id",
+    component: () => import("@/views/Article.vue")
   }
   ],
   mode: "history"

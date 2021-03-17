@@ -69,7 +69,7 @@ exports.login = (req, res, next) => {
 
 // Middleware pour supprimer un utilisateur
 exports.deleteUser = (req, res, next) => {
-    const userId = req.params.id;
+    const userId = res.locals.userId;
     const password = req.body.password;
 
     let sql = 'SELECT password, photoProfil FROM Users WHERE userId = ?';
@@ -118,7 +118,7 @@ exports.deleteUser = (req, res, next) => {
 
 //Middleware pour modifier un utilisateur et le renvoyer dans la base de donnée
 exports.updateUser = (req, res, next) => {
-    const userId = req.params.id;
+    const userId = res.locals.userId;
     const email = req.body.email;
     const bio = req.body.bio;
     const password = req.body.password;
@@ -245,8 +245,27 @@ exports.displayProfil = (req, res, next) => {
     );
 };
 
+exports.getUserConnected = (req, res, next) => {
+    const userId = res.locals.userId;
+
+    let sql = 'SELECT userId, firstname, lastname, email, bio, photoProfil, dateCreation, role FROM Users WHERE userId = ?';
+    let values = [userId];
+
+    connection.query(sql, values, 
+        function (error, result) {
+            if (error) {
+                return res.status(500).json(error.message);
+            }
+            if (result.length===0) {
+                return res.status(401).json({ error: "L'utilisateur n'existe pas." });
+            }
+            res.status(200).json(result);
+        }
+    );
+}
+
 exports.userRole = (req, res, next) => {
-    const userId = req.params.id;
+    const userId = res.locals.userId;
 
     let sql = 'SELECT role FROM Users WHERE userId = ?';
     let values = [userId];

@@ -17,10 +17,11 @@ const validatePassword = require('../middleware/validatePassword');
 // Création des différentes routes de l'API
 router.post("/signup", userCtrl.signup); //validatePassword, 
 router.post("/login", userCtrl.login);
-router.delete("/:id/deleteUser", auth, userCtrl.deleteUser); 
+router.delete("/deleteUser", auth, userCtrl.deleteUser); 
 router.get("/:id/profile", auth, userCtrl.displayProfil);
-router.put("/:id/updateUser", auth, multer, userCtrl.updateUser);
-router.get("/userRole", auth, userCtrl.userRole); 
+router.put("/updateUser", auth, multer, userCtrl.updateUser);
+router.get("/userRole", auth, userCtrl.userRole);
+router.get("/", auth, userCtrl.getUserConnected);
 
 // Exportation du router
 module.exports = router;

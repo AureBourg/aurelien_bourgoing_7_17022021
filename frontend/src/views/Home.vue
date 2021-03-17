@@ -22,6 +22,7 @@ export default {
       password: ""
     };
   },
+  
   methods: {
     login(payload){
       this.email = payload.email;
@@ -35,8 +36,7 @@ export default {
       .then((response) => {
           sessionStorage.setItem("token", response.data.token);
           this.$axios.defaults.headers.common["Authorization"] = "Bearer " + response.data.token;
-
-          this.$router.push("/userfeed/" + response.data.userId);
+          this.$router.push("/userfeed");
       })
       .catch((error) => {
           if (error.response.status === 500) {
@@ -50,6 +50,8 @@ export default {
     }    
   },
   mounted() {
+    sessionStorage.removeItem("token");
+    delete this.$axios.defaults.headers.common["Authorization"];
     document.title = "Connexion | Groupomania";
   }
 }
