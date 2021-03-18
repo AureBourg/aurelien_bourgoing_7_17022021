@@ -44,13 +44,12 @@ export default {
   display: flex;
   position: absolute;
   left: 10px;
-  top: 0px;
+  top: 7px;
   font-size: 3em;
   margin-left: 10px;
-  & a{
-    text-decoration: none;
-    color: grey;
-  }
+  text-decoration: none;
+  color: grey;
+  cursor: pointer;
 }
 .headerLogo{
   margin: auto;

@@ -5,7 +5,7 @@ const fs = require("fs");
 //Middleware pour afficher tous les articles de la base de donnée
 exports.getAllArticles = (req, res, next) => {
 
-    let sql = 'SELECT articles.articleId, articles.userId, articles.text, articles.mediaUrl, articles.dateCreation, users.userId, users.firstname, users.lastname, users.photoProfil FROM Articles LEFT JOIN Users ON articles.userId = users.userId';
+    let sql = `SELECT articles.articleId, articles.userId, articles.text, articles.mediaUrl, DATE_FORMAT(articles.dateCreation, '%e %M %Y à %kh%i') AS dateCreation, users.userId, users.firstname, users.lastname, users.photoProfil FROM Articles LEFT JOIN Users ON articles.userId = users.userId ORDER BY articles.dateCreation DESC`;
     let values = [];
 
     connection.query(sql, values, 
@@ -26,7 +26,7 @@ exports.getOneArticle = (req, res, next) => {
 
     const articleId = req.params.id;
 
-    let sql = 'SELECT articles.userId, articles.text, articles.mediaUrl, articles.dateCreation, users.firstname, users.lastname, users.photoProfil FROM Articles LEFT JOIN Users ON articles.userId = users.userId WHERE articles.articleId = ? ';
+    let sql = `SELECT articles.userId, articles.text, articles.mediaUrl, DATE_FORMAT(articles.dateCreation, '%e %M %Y à %kh%i') AS dateCreation, users.firstname, users.lastname, users.photoProfil FROM Articles LEFT JOIN Users ON articles.userId = users.userId WHERE articles.articleId = ?`;
     let values = [articleId];
 
     connection.query(sql, values, 
@@ -47,7 +47,7 @@ exports.createArticle = (req, res, next) => {
     const mediaUrl = `${req.protocol}://${req.get("host")}/images/${req.file.filename}`;
     console.log(req.params.id);
 
-    let sql = 'INSERT INTO Articles VALUES (NULL, ?, ?, ?, NOW())';
+    let sql = `INSERT INTO Articles VALUES (NULL, ?, ?, ?, NOW())`;
     let values = [userId, text, mediaUrl];
 
     connection.query(sql, values,
@@ -66,7 +66,7 @@ exports.deleteArticle = (req, res, next) => {
     const userId = res.locals.userId;
     const articleId = req.params.id;
 
-    let sql = 'SELECT mediaUrl FROM Articles WHERE articleId = ?';
+    let sql = `SELECT mediaUrl FROM Articles WHERE articleId = ?`;
     let values = [articleId];
 
     connection.query(sql, values, 
@@ -77,7 +77,7 @@ exports.deleteArticle = (req, res, next) => {
 
                 fs.unlink(`images/${filename}`, () => {
 
-                    let sql = 'DELETE FROM Articles WHERE userId = ? AND articleId = ?';
+                    let sql = `DELETE FROM Articles WHERE userId = ? AND articleId = ?`;
                     let values = [userId, articleId];
 
                     connection.query(sql, values, 
@@ -91,7 +91,7 @@ exports.deleteArticle = (req, res, next) => {
                 });               
             } else {
 
-                let sql = 'DELETE FROM Articles WHERE userId = ? AND articleId = ?';
+                let sql = `DELETE FROM Articles WHERE userId = ? AND articleId = ?`;
                 let values = [userId, articleId];
 
                 connection.query(sql, values, 
@@ -103,7 +103,7 @@ exports.deleteArticle = (req, res, next) => {
                     }
                 );
 
-                let sql2 = 'DELETE FROM Comments WHERE userId = ? AND articleId = ?';
+                let sql2 = `DELETE FROM Comments WHERE userId = ? AND articleId = ?`;
                 let values2 = [userId, articleId];
 
                 connection.query(sql2, values2, 
@@ -129,7 +129,7 @@ exports.createComment = (req, res, next) => {
     const userId = res.locals.userId;
     const text = req.body.text;
 
-    let sql = 'INSERT INTO Comments VALUES (NULL, ?, ?, ?, NOW())';
+    let sql = `INSERT INTO Comments VALUES (NULL, ?, ?, ?, NOW())`;
     let values = [userId, articleId, text];
 
     connection.query(sql, values, 
@@ -146,7 +146,7 @@ exports.getAllComments = (req, res, next) => {
 
     const articleId = req.params.id;
 
-    let sql = 'SELECT comments.userId, comments.text, comments.dateCreation, users.userId, users.firstname, users.lastname, users.photoProfil FROM Comments LEFT JOIN Users ON comments.userId = users.userId WHERE comments.articleId = ?';
+    let sql = `SELECT comments.userId, comments.text, DATE_FORMAT(comments.dateCreation, '%e %M %Y à %kh%i') AS dateCreation, users.userId, users.firstname, users.lastname, users.photoProfil FROM Comments LEFT JOIN Users ON comments.userId = users.userId WHERE comments.articleId = ?`;
     let values = [articleId];
 
     connection.query(sql, values, 

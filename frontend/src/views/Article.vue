@@ -2,7 +2,7 @@
 <div class="userFeed">
     <Header>
       <template v-slot:back>
-        <router-link :to="{ name: 'userFeed'}"><i class="fas fa-times back"></i></router-link>
+        <i class="fas fa-times back" @click="$router.go(-1)"></i>
       </template>
       <template v-slot:photoProfil>
         <img :src="user.photoProfil" class="userPhoto" alt="Photo de profil" />
@@ -12,7 +12,7 @@
 
     <div class="feed">
 
-      <UserArticles 
+      <OneArticle 
           :key="article.articleId" 
           :idArticle="article.articleId" 
           :idUser="article.userId"     
@@ -29,10 +29,17 @@
         </template>
         <template v-slot:articleUsername>{{ article.firstname }} {{ article.lastname }}</template>
         <template v-slot:articleDateCreation>{{ article.dateCreation }}</template>
-      </UserArticles>
+      </OneArticle>
+
+      <CreateCommentForm
+        v-on:comment-sent="createComment"
+      >
+      <template v-slot:photoProfil>
+            <img :src="user.photoProfil" class="userPhotoComment" alt="Photo de profil" />
+      </template>
+      </CreateCommentForm>
 
       <Comment
-        v-on:comment-sent="createComment"
         v-for="comment in comments" 
         :key="comment.commentId" 
         :idComment="comment.commentId" 
@@ -55,8 +62,9 @@
 
 <script>
 import Header from "@/components/Header";
-import UserArticles from "@/components/UserArticles";
+import OneArticle from "@/components/OneArticle";
 import Comment from "@/components/Comment";
+import CreateCommentForm from "@/components/CreateCommentForm";
 
 export default {
     name: 'Article',
@@ -69,8 +77,9 @@ export default {
     },
     components: {
         Header,
-        UserArticles,
-        Comment
+        OneArticle,
+        Comment,
+        CreateCommentForm
     },
     methods: {
       getUserConnected() {
@@ -104,7 +113,6 @@ export default {
         })
         .then((payload) => {
           this.comments = payload.data;
-          console.log(this.comments);
         })
         .catch(function (error) {
           console.log(error);
@@ -118,7 +126,7 @@ export default {
         })
         .then(() => {
           alert("Commentaire crée");
-          console.log(payload);
+          this.getComments();
         })
         .catch(function (error) {
             console.log(error);
@@ -126,10 +134,10 @@ export default {
       }
     },
     mounted() {
-    this.getArticle();
-    this.getComments();
-    this.getUserConnected();
-  }
+      this.getArticle();
+      this.getComments();
+      this.getUserConnected();
+    }
 }
 </script>
 

@@ -1,11 +1,9 @@
 <template>
   <div class="userProfile">
-    <div class="profileInfos">
-        <router-link :to="{ name: 'userFeed'}">
-        <div class="backButton">
+    <div class="profileInfos">       
+        <div class="backButton" @click="$router.go(-1)">
           <i class="fas fa-arrow-left"></i> <span>Retourner à mon fil d'actualités</span>
-        </div>
-        </router-link>
+        </div>       
         <img class="logoGroupo" alt="Groupomania logo" src="@/assets/icon-left-font-monochrome-black.svg">
         <img :src="user.photoProfil" class="userPhoto" alt="Photo de profil" />
         <div class="userName">{{ user.firstname }} {{ user.lastname }}</div>

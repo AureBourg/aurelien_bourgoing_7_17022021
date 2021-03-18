@@ -56,6 +56,10 @@ export default {
     padding: 12px;
     margin: auto;
     margin-bottom: 25px;
+    & a{
+        text-decoration: none;
+        color: black;
+    }
 }
 .articleMedia{
         & img{

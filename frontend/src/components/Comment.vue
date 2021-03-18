@@ -1,17 +1,15 @@
 <template>
     <div class="commentSection col-md-8 col-12">
-        <div class="addComment"> <!--A envoyer dans la view Article-->
-            <slot name="photoProfil" class="col-1"></slot>
-            <form class="createCommentForm col-11" name="createCommentForm">
-                <textarea v-model="text" class="col-10" placeholder="Laissez un commentaire..."/>
-                <input v-on:click.prevent="sendDataCreateComment()" class="createCommentButton col-2" type="submit" value="Commenter">
-            </form>
-        </div> <!--A envoyer dans la view Article-->
-
-        <div class="comment">
+        <router-link :to="{ name: 'userProfil', params: {id: idUser } }">
+        <div class="commentUserName">
           <slot name="commentUserPhotoProfil"></slot>
           <slot name="commentUsername"></slot>
+        </div>
+        </router-link>
+        <div class="commentText">
           <slot name="commentText"></slot>
+        </div>
+        <div class="commentDateCreation">  
           <slot name="commentDateCreation"></slot>
         </div>
     </div> 
@@ -19,7 +17,8 @@
 
 <script>
 export default {
-  name: "CreateComment",
+  name: "Comment",
+  props: ["idUser"],
   data: () => {
     return {
       text: ""
@@ -35,6 +34,8 @@ export default {
 
 <style lang="scss">
 .commentSection{
+    display: flex;
+    flex-direction: column;
     font-family: "Overpass";
     margin: 5px 15px 25px 15px;
     background-color: white;
@@ -42,20 +43,24 @@ export default {
     border-radius: 5px;
     padding: 12px;
     margin: auto;
-    margin-bottom: 25px;
-}
-.addComment{
-    display: flex;
-    & form{
-        display: flex;
-        & input{
-        border: none;
-        border-radius: 10px;
-        padding: 5px 10px 5px 10px;
-        background-color: rgb(231,82,70);
-        color: white;
-        font-size: 0.95em;
-    }
+    margin-bottom: 3px;
+    & a{
+      text-decoration: none;
+      color: black;
     }
 }
+.commentUserName{
+  margin-bottom: 15px;
+  padding: 0px 0px 10px 10px;
+  border-bottom: solid 1px lightgrey;
+}
+.commentText{
+  padding: 15px;
+}
+.commentDateCreation{
+    font-size: 0.7em;
+    color: grey;
+    text-align: end;
+}
+
 </style>

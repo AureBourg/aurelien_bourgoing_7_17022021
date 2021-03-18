@@ -16,7 +16,7 @@ exports.signup = (req, res, next) => {
         const lastname = req.body.lastname;
         const password = hash;
 
-        let sql = 'INSERT INTO Users VALUES (NULL, ?, ?, ?, ?, NULL, NULL, DEFAULT, NOW())';
+        let sql = `INSERT INTO Users VALUES (NULL, ?, ?, ?, ?, NULL, NULL, DEFAULT, NOW())`;
         let values = [email, firstname, lastname, password];
 
         connection.query(sql, values, 
@@ -36,7 +36,7 @@ exports.login = (req, res, next) => {
     const email = req.body.email;
     const password = req.body.password;
 
-    let sql = 'SELECT userId, password FROM Users WHERE email = ?';
+    let sql = `SELECT userId, password FROM Users WHERE email = ?`;
     let values = [email];
 
     connection.query(sql, values, 
@@ -72,7 +72,7 @@ exports.deleteUser = (req, res, next) => {
     const userId = res.locals.userId;
     const password = req.body.password;
 
-    let sql = 'SELECT password, photoProfil FROM Users WHERE userId = ?';
+    let sql = `SELECT password, photoProfil FROM Users WHERE userId = ?`;
     let values = [userId];
 
     connection.query(sql, values, 
@@ -98,7 +98,7 @@ exports.deleteUser = (req, res, next) => {
                 if (!valid) {
                 return res.status(401).json({ error: 'Mot de passe incorrect !' });
                 } else {
-                    let sql = 'DELETE FROM Users WHERE userId = ?';
+                    let sql = `DELETE FROM Users WHERE userId = ?`;
                     let values = [userId];
 
                     connection.query(sql, values, 
@@ -126,7 +126,7 @@ exports.updateUser = (req, res, next) => {
     if (req.file) { // Si le changement concerne l'avatar on update directement
         const photoProfil = `${req.protocol}://${req.get("host")}/images/${req.file.filename}`;
 
-        let sql = 'SELECT photoProfil FROM Users WHERE userId = ?';
+        let sql = `SELECT photoProfil FROM Users WHERE userId = ?`;
         let values = [userId];
 
         connection.query(sql, values, 
@@ -137,7 +137,7 @@ exports.updateUser = (req, res, next) => {
 
                 const filename = result[0].photoProfil.split('/images/')[1];
 
-                let sql = 'UPDATE Users SET photoProfil = ? WHERE userId = ?';
+                let sql = `UPDATE Users SET photoProfil = ? WHERE userId = ?`;
                 let values = [photoProfil, userId];
 
                 if (filename !== "photoProfil_default.jpg") {
@@ -163,7 +163,7 @@ exports.updateUser = (req, res, next) => {
 
     } else {
 
-        let sql = 'SELECT password FROM Users WHERE userId = ?';
+        let sql = `SELECT password FROM Users WHERE userId = ?`;
         let values = [userId];
 
         connection.query(sql, values, 
@@ -185,7 +185,7 @@ exports.updateUser = (req, res, next) => {
                     if (newPassword) { // Si un nouveau mdp est défini
                         bcrypt.hash(newPassword, 10)
                             .then(hash => {
-                                sql = "UPDATE Users SET email = ?, bio = ?, password = ? WHERE userId = ?";
+                                sql = `UPDATE Users SET email = ?, bio = ?, password = ? WHERE userId = ?`;
                                 values = [email, bio, hash, userId];
 
                                 connection.query(sql, values, 
@@ -203,7 +203,7 @@ exports.updateUser = (req, res, next) => {
                             .catch(e => res.status(500).json(e));
 
                     } else { // Si le mdp reste le même
-                        sql = "UPDATE Users SET email = ?, bio = ? WHERE userId = ?";
+                        sql = `UPDATE Users SET email = ?, bio = ? WHERE userId = ?`;
                         values = [email, bio, userId];
 
                         connection.query(sql, values, 
@@ -229,7 +229,7 @@ exports.updateUser = (req, res, next) => {
 exports.displayProfil = (req, res, next) => {
     const userId = req.params.id;
 
-    let sql = 'SELECT userId, firstname, lastname, email, bio, photoProfil, dateCreation, role FROM Users WHERE userId = ?';
+    let sql = `SELECT userId, firstname, lastname, email, bio, photoProfil, DATE_FORMAT(users.dateCreation, '%e %M %Y à %kh%i') AS dateCreation, role FROM Users WHERE userId = ?`;
     let values = [userId];
 
     connection.query(sql, values, 
@@ -249,7 +249,7 @@ exports.displayProfil = (req, res, next) => {
 exports.getUserConnected = (req, res, next) => {
     const userId = res.locals.userId;
 
-    let sql = 'SELECT userId, firstname, lastname, email, bio, photoProfil, dateCreation, role FROM Users WHERE userId = ?';
+    let sql = `SELECT userId, firstname, lastname, email, bio, photoProfil, DATE_FORMAT(users.dateCreation, '%e %M %Y à %kh%i') AS dateCreation, role FROM Users WHERE userId = ?`;
     let values = [userId];
 
     connection.query(sql, values, 
@@ -268,7 +268,7 @@ exports.getUserConnected = (req, res, next) => {
 exports.userRole = (req, res, next) => {
     const userId = res.locals.userId;
 
-    let sql = 'SELECT role FROM Users WHERE userId = ?';
+    let sql = `SELECT role FROM Users WHERE userId = ?`;
     let values = [userId];
 
     connection.query(sql, values, 
