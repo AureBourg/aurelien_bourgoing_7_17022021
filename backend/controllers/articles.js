@@ -5,7 +5,7 @@ const fs = require("fs");
 //Middleware pour afficher tous les articles de la base de donnée
 exports.getAllArticles = (req, res, next) => {
 
-    let sql = 'SELECT * FROM Articles LEFT JOIN Users ON articles.userId = users.userId';
+    let sql = 'SELECT articles.articleId, articles.userId, articles.text, articles.mediaUrl, articles.dateCreation, users.userId, users.firstname, users.lastname, users.photoProfil FROM Articles LEFT JOIN Users ON articles.userId = users.userId';
     let values = [];
 
     connection.query(sql, values, 
@@ -26,7 +26,7 @@ exports.getOneArticle = (req, res, next) => {
 
     const articleId = req.params.id;
 
-    let sql = 'SELECT userId, text, mediaUrl, dateCreation FROM Articles WHERE articleId = ? ';
+    let sql = 'SELECT articles.userId, articles.text, articles.mediaUrl, articles.dateCreation, users.firstname, users.lastname, users.photoProfil FROM Articles LEFT JOIN Users ON articles.userId = users.userId WHERE articles.articleId = ? ';
     let values = [articleId];
 
     connection.query(sql, values, 
@@ -59,7 +59,6 @@ exports.createArticle = (req, res, next) => {
         }
     );
 };
-
 
 // Middleware pour supprimer un article
 exports.deleteArticle = (req, res, next) => {
@@ -139,6 +138,26 @@ exports.createComment = (req, res, next) => {
                 return res.status(500).json(error.message);
             }
             res.status(201).json({ message: "Commentaire crée !" });
+        }
+    );
+};
+
+exports.getAllComments = (req, res, next) => {
+
+    const articleId = req.params.id;
+
+    let sql = 'SELECT comments.userId, comments.text, comments.dateCreation, users.userId, users.firstname, users.lastname, users.photoProfil FROM Comments LEFT JOIN Users ON comments.userId = users.userId WHERE comments.articleId = ?';
+    let values = [articleId];
+
+    connection.query(sql, values, 
+        function (error, result) {
+            if (error) {
+                return res.status(500).json(error.message);
+            }
+            if (result.length == 0) {
+                return res.status(400).json({ message: "Aucun article à afficher !" });
+            }
+            res.status(200).json(result);
         }
     );
 };

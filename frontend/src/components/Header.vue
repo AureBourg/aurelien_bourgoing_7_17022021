@@ -1,5 +1,8 @@
 <template>
   <div class="header">
+    <div class="headerBack">
+      <slot name="back"></slot>
+    </div>
     <div class="headerLogo">
         <img class="logo" alt="Groupomania logo" src="@/assets/icon-left-font-monochrome-black.svg">
     </div>
@@ -36,6 +39,18 @@ export default {
   padding: 10px 40px 10px 0px;
   font-family: "Overpass";
   font-size: 0.93em;
+}
+.headerBack{
+  display: flex;
+  position: absolute;
+  left: 10px;
+  top: 0px;
+  font-size: 3em;
+  margin-left: 10px;
+  & a{
+    text-decoration: none;
+    color: grey;
+  }
 }
 .headerLogo{
   margin: auto;

@@ -44,8 +44,6 @@ export default {
             data: this.$data
           })
           .then((response) => {
-              console.log(response);
-
               sessionStorage.setItem("token", response.data.token);
               this.$axios.defaults.headers.common["Authorization"] = "Bearer " + response.data.token;
 

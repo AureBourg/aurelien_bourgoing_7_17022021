@@ -42,9 +42,6 @@
         :idUser="article.userId"     
       >
       <template v-slot:articleText>{{ article.text }}</template>
-      <template v-slot:photoProfil>
-          <img :src="user.photoProfil" class="userPhoto" alt="Photo de profil" />
-      </template>
       <template v-slot:articleUserPhotoProfil>
         <img :src="article.photoProfil" class="userPhoto" alt="Photo de l'utilisateur" />
       </template>
@@ -97,7 +94,6 @@ export default {
         })
         .then((payload) => {
           this.userConnected = payload.data[0];
-          console.log(payload.data[0]);
         })
         .catch(function (error) {
           console.log(error);

@@ -245,6 +245,7 @@ exports.displayProfil = (req, res, next) => {
     );
 };
 
+//Middleware pour afficher le profil de l'utilisateur connecté
 exports.getUserConnected = (req, res, next) => {
     const userId = res.locals.userId;
 
