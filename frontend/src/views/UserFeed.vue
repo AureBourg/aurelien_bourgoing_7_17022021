@@ -2,7 +2,7 @@
   <div class="userFeed">
     <Header :idUserConnected="userConnected.userId">
       <template v-slot:photoProfil>
-        <img :src="userConnected.photoProfil" class="userPhoto" alt="Photo de profil" />
+        <img :src="userConnected.photoProfil" id="userPhoto" class="userPhoto" alt="Photo de profil" />
       </template>
       <template v-slot:username>{{ userConnected.firstname }} {{ userConnected.lastname }}</template>
     </Header>
@@ -30,7 +30,7 @@
         v-on:article-sent="createPost"
       >
         <template v-slot:photoProfil>
-          <img :src="userConnected.photoProfil" class="userPhoto" alt="Photo de profil" />
+          <img :src="userConnected.photoProfil" id="userPhoto" class="userPhoto" alt="Photo de profil" />
         </template>
         <template v-slot:username>{{ userConnected.firstname }} {{ userConnected.lastname }}</template>
       </CreateArticleForm>
@@ -39,7 +39,9 @@
         v-for="article in articles" 
         :key="article.articleId" 
         :idArticle="article.articleId" 
-        :idUser="article.userId"     
+        :idUser="article.userId"
+        :idUserConnected="userConnected.userId"
+        :roleUser="userConnected.role"    
       >
       <template v-slot:articleText>{{ article.text }}</template>
       <template v-slot:articleUserPhotoProfil>
@@ -81,7 +83,7 @@ export default {
         url: 'http://localhost:3000/api/articles/'
       })
       .then((payload) => {
-        this.articles = payload.data;
+        this.articles = payload.data;        
       })
       .catch(function (error) {
         console.log(error);
@@ -94,6 +96,9 @@ export default {
         })
         .then((payload) => {
           this.userConnected = payload.data[0];
+          if (this.userConnected.role=="Administrateur"){
+            document.getElementById('userPhoto').style.border="solid 2px yellow";
+          }
         })
         .catch(function (error) {
           console.log(error);

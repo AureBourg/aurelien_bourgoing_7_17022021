@@ -5,11 +5,11 @@
           <i class="fas fa-arrow-left"></i> <span>Retourner à mon fil d'actualités</span>
         </div>       
         <img class="logoGroupo" alt="Groupomania logo" src="@/assets/icon-left-font-monochrome-black.svg">
-        <img :src="user.photoProfil" class="userPhoto" alt="Photo de profil" />
+        <img :src="user.photoProfil" id="userPhoto" class="userPhoto" alt="Photo de profil" />
         <div class="userName">{{ user.firstname }} {{ user.lastname }}</div>
+        <div>{{ user.role }}</div>
         <div class="userBio">{{ user.bio }}</div>
         <span>Contact : {{ user.email }}</span>
-        <div>{{ user.role }}</div>
         <span class="userDateCreation">Inscrit depuis le {{ user.dateCreation }}</span>
     </div>  
   </div>
@@ -33,6 +33,9 @@ export default {
         })
         .then((payload) => {
           this.user = payload.data[0];
+          if (this.user.role=="Administrateur"){
+            document.getElementById('userPhoto').style.border="solid 2px yellow";
+          } 
         })
         .catch(function (error) {
           console.log(error);

@@ -47,7 +47,7 @@ export default {
               sessionStorage.setItem("token", response.data.token);
               this.$axios.defaults.headers.common["Authorization"] = "Bearer " + response.data.token;
 
-              this.$router.push("/userfeed/" + response.data.userId);
+              this.$router.push("/userfeed");
           })
           .catch((error) => {
               if (error.response.status === 500) {

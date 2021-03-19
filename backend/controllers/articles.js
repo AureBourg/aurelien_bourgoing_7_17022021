@@ -45,7 +45,6 @@ exports.createArticle = (req, res, next) => {
     const userId = res.locals.userId;
     const text = req.body.text;
     const mediaUrl = `${req.protocol}://${req.get("host")}/images/${req.file.filename}`;
-    console.log(req.params.id);
 
     let sql = `INSERT INTO Articles VALUES (NULL, ?, ?, ?, NOW())`;
     let values = [userId, text, mediaUrl];

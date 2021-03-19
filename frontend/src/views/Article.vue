@@ -44,6 +44,8 @@
         :key="comment.commentId" 
         :idComment="comment.commentId" 
         :idUser="comment.userId"
+        :idUserConnected="user.userId"
+        :roleUser="user.role"
       >
         <template v-slot:commentText>{{ comment.text }}</template>
         <template v-slot:commentUsername>{{ comment.firstname }} {{ comment.lastname }}</template>

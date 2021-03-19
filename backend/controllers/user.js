@@ -265,10 +265,10 @@ exports.getUserConnected = (req, res, next) => {
     );
 }
 
-exports.userRole = (req, res, next) => {
-    const userId = res.locals.userId;
+/*exports.userRole = (req, res, next) => {
+    const userId = req.params.id;
 
-    let sql = `SELECT role FROM Users WHERE userId = ?`;
+    let sql = `INSERT INTO Users VALUES (NULL, NULL, NULL, NULL, NULL, NULL, admin, DEFAULT, NOW()) WHERE userId = ?`;
     let values = [userId];
 
     connection.query(sql, values, 
@@ -276,10 +276,7 @@ exports.userRole = (req, res, next) => {
             if (err) {
                 return res.status(500).json(err.message);
             }
-            if (result.length == 0) {
-                return res.status(401).json({ error: "Utilisateur non trouvé !" });
-            }
-            return res.status(200).json(result);
+            res.status(201).json({ message: "Role ajouté !" });
         }
     );
-};
+};*/

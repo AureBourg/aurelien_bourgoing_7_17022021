@@ -20,9 +20,8 @@
             <div class="articleFooter">
                 <span class="numberComment">comments.length commentaires</span>
                 <span class="linkComment"><i class="far fa-comment-alt"></i> Commenter</span>
-                <i class="fas fa-thumbs-up"></i>
-                <i class="fas fa-thumbs-down"></i>
-                <i class="fas fa-ellipsis-h"></i>
+                <span class="numberLikes"><i class="fas fa-thumbs-up"></i>likes.length</span>
+                <span v-if="roleUser == 'Administrateur' || idUser == idUserConnected" class="options"><i class="fas fa-ellipsis-h"></i></span>
             </div>
         </router-link>
         </div>
@@ -32,13 +31,7 @@
 <script>
 export default {
     name: "UserArticles",
-    props: ["idArticle", "idUser"],
-    methods: {
-        sendDataUserProfil(){
-            this.$emit("userId-sent", event.target.id);
-            console.log(event.target.id);
-        },
-    }
+    props: ["idArticle", "idUser", "idUserConnected","roleUser"]
 }
 </script>
 
@@ -62,34 +55,39 @@ export default {
     }
 }
 .articleMedia{
-        & img{
-        max-width: 100%; 
-        max-height: 400px; 
-        }
+    & img{
+    max-width: 100%; 
+    max-height: 400px; 
+    }
 }
-.articlePlus{
+.articleFooter{
     display: flex;
     justify-content: space-between;
-    padding-top: 5px;
-    margin-bottom: 10px;
-    & .fas{
+    color: grey;
+    border-top: solid 1px grey;
+    padding-top: 10px;
+    & span{
         padding: 10px;
-        cursor: pointer
-    }
-    & .fa-thumbs-up{
+        border-radius: 10px;
+        cursor: pointer;
         &:hover{
-            
-            color: rgb(203,238,98)
+            box-shadow: 0px 0px 5px lightgrey;
         }
     }
-    & .fa-thumbs-down{
-        &:hover{
-            color: rgb(231,82,70);
+    & a{
+        color: grey;
+        font-size: 0.7em;
+        cursor: pointer;
+        text-decoration: none;
+    }
+    & .fa-thumbs-up{
+        &:hover{      
+            color: rgb(203,238,98)
         }
     }
     & .fa-ellipsis-h{
         &:hover{
-            color: grey;
+            color: lightgrey;
         }
     }
 }
@@ -108,24 +106,5 @@ export default {
   font-size: 0.7em;
   color: grey;
   text-align: right;
-}
-.articleFooter{
-  color: grey;
-  border-top: solid 1px grey;
-  padding-top: 15px;
-  & span{
-      padding: 10px;
-      border-radius: 10px;
-      cursor: pointer;
-    &:hover{
-        box-shadow: 0px 0px 5px lightgrey;
-    }
-  }
-  & a{
-    color: grey;
-    font-size: 0.7em;
-    cursor: pointer;
-    text-decoration: none;
-  }
 }
 </style>

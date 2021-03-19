@@ -4,6 +4,7 @@
         <div class="commentUserName">
           <slot name="commentUserPhotoProfil"></slot>
           <slot name="commentUsername"></slot>
+          <span v-if="roleUser == 'Administrateur' || idUser == idUserConnected" class="options"><i class="fas fa-ellipsis-h"></i></span>
         </div>
         </router-link>
         <div class="commentText">
@@ -18,7 +19,7 @@
 <script>
 export default {
   name: "Comment",
-  props: ["idUser"],
+  props: ["idUser","idUserConnected","roleUser"],
   data: () => {
     return {
       text: ""
@@ -50,9 +51,12 @@ export default {
     }
 }
 .commentUserName{
-  margin-bottom: 15px;
   padding: 0px 0px 10px 10px;
   border-bottom: solid 1px lightgrey;
+  & .options{
+    position: relative;
+    left: 10px;
+  }
 }
 .commentText{
   padding: 15px;

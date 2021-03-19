@@ -41,7 +41,7 @@ export default {
     border-radius: 5px;
     padding: 12px;
     margin: auto;
-    margin-bottom: 25px;
+    margin-bottom: 5px;
 }
 .articleMedia{
         & img{
