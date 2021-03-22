@@ -1,5 +1,9 @@
 <template>
   <div class="register">
+    <Alert
+      :alertType="alert.type"
+      :alertMessage="alert.message"
+    />
     <div class="groupo">
       <img class="logoGroupo" alt="Groupomania logo" src="@/assets/icon-left-font.png" width="50%" height="auto">
       <p>Créez un compte pour pouvoir partager avec vos collègues !</p>
@@ -10,12 +14,14 @@
 
 <script>
 // @ is an alias to /src
-import SignupForm from '../components/SignupForm.vue'
+import SignupForm from '../components/SignupForm.vue';
+import Alert from "@/components/Alert.vue";
 
 export default {
   name: 'Signup',
   components: {
-    SignupForm
+    SignupForm,
+    Alert
   },
   data: () => {
     return {
@@ -23,6 +29,10 @@ export default {
       password: "",
       firstname: "",
       lastname: "",
+      alert:{
+        type:"",
+        message:""
+      }
     };
   },
   methods: {
@@ -51,17 +61,30 @@ export default {
           })
           .catch((error) => {
               if (error.response.status === 500) {
-                alert("Connexion impossible : Erreur serveur");
+                this.alertActive("info", "Connexion impossible : Erreur serveur !");
               }
           });
       })
       .catch((error) => {
           if (error.response.status === 500) {
-            alert("Inscription impossible : Erreur serveur");
+            this.alertActive("info", "Inscription impossible : Erreur serveur !");
           }
           sessionStorage.removeItem("token");
       });
-    }    
+    },
+    alertActive(type, message) {
+      document.getElementById('alert').style.display = 'flex';
+
+      const dataAlert = this.$data.alert;
+      dataAlert.type = type;
+      dataAlert.message = message;
+
+      setTimeout(function () {
+        document.getElementById('alert').style.display = 'none';
+        dataAlert.type = "";
+        dataAlert.message = "";
+      }, 2000);
+    }   
   },
   mounted() {
     document.title = "Inscription | Groupomania";

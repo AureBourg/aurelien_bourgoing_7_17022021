@@ -264,19 +264,3 @@ exports.getUserConnected = (req, res, next) => {
         }
     );
 }
-
-/*exports.userRole = (req, res, next) => {
-    const userId = req.params.id;
-
-    let sql = `INSERT INTO Users VALUES (NULL, NULL, NULL, NULL, NULL, NULL, admin, DEFAULT, NOW()) WHERE userId = ?`;
-    let values = [userId];
-
-    connection.query(sql, values, 
-        function (err, result) {
-            if (err) {
-                return res.status(500).json(err.message);
-            }
-            res.status(201).json({ message: "Role ajouté !" });
-        }
-    );
-};*/

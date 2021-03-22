@@ -1,5 +1,9 @@
 <template>
   <div class="home">
+    <Alert
+      :alertType="alert.type"
+      :alertMessage="alert.message"
+    />
     <div class="groupo">
       <img class="logo" alt="Groupomania logo" src="@/assets/icon-left-font-monochrome-white.png" width="50%" height="auto">
       <p>Votre réseau social <br/>d'entreprise pour <br/>partager et <br/>rester en contact <br/>avec vos collègues !</p>
@@ -9,17 +13,23 @@
 </template>
 
 <script>
-import LoginForm from '../components/LoginForm.vue'
+import LoginForm from '../components/LoginForm.vue';
+import Alert from "@/components/Alert.vue";
 
 export default {
   name: 'Home',
   components: {
-    LoginForm
+    LoginForm,
+    Alert
   },
   data: () => {
     return {
       email: "",
-      password: ""
+      password: "",
+      alert:{
+        type:"",
+        message:""
+      }
     };
   },
   
@@ -40,14 +50,27 @@ export default {
       })
       .catch((error) => {
           if (error.response.status === 500) {
-            alert(error);
+            this.alertActive("info", "Connexion impossible : Erreur serveur !");
           }
           if (error.response.status === 401) {
-            alert(error);
+            this.alertActive("warning", "Mot de passe invalide !");
           }
           sessionStorage.removeItem("token");
       });
-    }    
+    },
+    alertActive(type, message) {
+      document.getElementById('alert').style.display = 'flex';
+
+      const dataAlert = this.$data.alert;
+      dataAlert.type = type;
+      dataAlert.message = message;
+
+      setTimeout(function () {
+        document.getElementById('alert').style.display = 'none';
+        dataAlert.type = "";
+        dataAlert.message = "";
+      }, 2000);
+    }   
   },
   mounted() {
     sessionStorage.removeItem("token");

@@ -1,12 +1,12 @@
 <template>
-    <div class="commentSection col-md-8 col-12">
-        <router-link :to="{ name: 'userProfil', params: {id: idUser } }">
-        <div class="commentUserName">
-          <slot name="commentUserPhotoProfil"></slot>
-          <slot name="commentUsername"></slot>
-          <span v-if="roleUser == 'Administrateur' || idUser == idUserConnected" class="options"><i class="fas fa-ellipsis-h"></i></span>
+    <div class="commentSection col-md-8 col-12" :id="idComment">  
+        <div class="commentHeader">
+          <router-link :to="{ name: 'userProfil', params: {id: idUser } }">
+            <slot name="commentUserPhotoProfil"></slot>
+            <slot name="commentUsername"></slot>
+          </router-link>
+          <span v-if="roleUser == 'Administrateur' || idUser == idUserConnected" class="options"><i class="fas fa-times back" v-on:click="sendDataDeleteComment(idComment)"></i></span>
         </div>
-        </router-link>
         <div class="commentText">
           <slot name="commentText"></slot>
         </div>
@@ -19,7 +19,7 @@
 <script>
 export default {
   name: "Comment",
-  props: ["idUser","idUserConnected","roleUser"],
+  props: ["idUser","idUserConnected","idComment","roleUser"],
   data: () => {
     return {
       text: ""
@@ -29,6 +29,9 @@ export default {
     sendDataCreateComment() {
         this.$emit("comment-sent", this.$data);
     },
+    sendDataDeleteComment(idComment) {
+        this.$emit("comment-delete", idComment);
+    }
   }
 };
 </script>
@@ -50,12 +53,14 @@ export default {
       color: black;
     }
 }
-.commentUserName{
+.commentHeader{
+  display: flex;
   padding: 0px 0px 10px 10px;
   border-bottom: solid 1px lightgrey;
+  justify-content: space-between;
   & .options{
-    position: relative;
-    left: 10px;
+    align-items: center;
+    cursor: pointer;
   }
 }
 .commentText{

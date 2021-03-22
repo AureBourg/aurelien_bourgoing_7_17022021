@@ -56,10 +56,8 @@ export default {
     border-radius: 10px;
     margin: auto;
     position: fixed;
-    margin: auto;
-    left: 0;
-    right: 0;
-    top: 150px;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
     padding: 20px;
 }
 .image{

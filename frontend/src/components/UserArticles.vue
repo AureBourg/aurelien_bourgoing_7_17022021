@@ -21,7 +21,7 @@
                 <span class="numberComment">comments.length commentaires</span>
                 <span class="linkComment"><i class="far fa-comment-alt"></i> Commenter</span>
                 <span class="numberLikes"><i class="fas fa-thumbs-up"></i>likes.length</span>
-                <span v-if="roleUser == 'Administrateur' || idUser == idUserConnected" class="options"><i class="fas fa-ellipsis-h"></i></span>
+                <span v-on:click.prevent="sendDataDeleteArticle(idArticle)" v-if="roleUser == 'Administrateur' || idUser == idUserConnected" class="options">Supprimer</span><!--<i class="fas fa-ellipsis-h"></i>-->
             </div>
         </router-link>
         </div>
@@ -31,7 +31,12 @@
 <script>
 export default {
     name: "UserArticles",
-    props: ["idArticle", "idUser", "idUserConnected","roleUser"]
+    props: ["idArticle", "idUser", "idUserConnected", "roleUser"],
+    methods:{
+        sendDataDeleteArticle(idArticle) {
+        this.$emit("article-delete", idArticle);
+        }
+    }
 }
 </script>
 

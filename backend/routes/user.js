@@ -20,7 +20,6 @@ router.post("/login", userCtrl.login);
 router.delete("/deleteUser", auth, userCtrl.deleteUser); 
 router.get("/:id/profile", auth, userCtrl.displayProfil);
 router.put("/updateUser", auth, multer, userCtrl.updateUser);
-//router.post("/userRole", userCtrl.userRole);
 router.get("/", auth, userCtrl.getUserConnected);
 
 // Exportation du router

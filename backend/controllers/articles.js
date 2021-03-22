@@ -62,7 +62,6 @@ exports.createArticle = (req, res, next) => {
 // Middleware pour supprimer un article
 exports.deleteArticle = (req, res, next) => {
 
-    const userId = res.locals.userId;
     const articleId = req.params.id;
 
     let sql = `SELECT mediaUrl FROM Articles WHERE articleId = ?`;
@@ -73,11 +72,12 @@ exports.deleteArticle = (req, res, next) => {
             if (result > 0) {
 
                 const filename = result.mediaUrl.split("/images/")[1];
-
+                console.log(filename);
+                
                 fs.unlink(`images/${filename}`, () => {
 
-                    let sql = `DELETE FROM Articles WHERE userId = ? AND articleId = ?`;
-                    let values = [userId, articleId];
+                    let sql = `DELETE FROM Articles WHERE articleId = ?`;
+                    let values = [articleId];
 
                     connection.query(sql, values, 
                         function (error, result) {
@@ -90,8 +90,8 @@ exports.deleteArticle = (req, res, next) => {
                 });               
             } else {
 
-                let sql = `DELETE FROM Articles WHERE userId = ? AND articleId = ?`;
-                let values = [userId, articleId];
+                let sql = `DELETE FROM Articles WHERE articleId = ?`;
+                let values = [articleId];
 
                 connection.query(sql, values, 
                     function (error, result) {
@@ -102,8 +102,8 @@ exports.deleteArticle = (req, res, next) => {
                     }
                 );
 
-                let sql2 = `DELETE FROM Comments WHERE userId = ? AND articleId = ?`;
-                let values2 = [userId, articleId];
+                let sql2 = `DELETE FROM Comments WHERE articleId = ?`;
+                let values2 = [articleId];
 
                 connection.query(sql2, values2, 
                     function (error, result) {
@@ -141,11 +141,29 @@ exports.createComment = (req, res, next) => {
     );
 };
 
+// Middleware pour supprimer un commentaire
+exports.deleteComment = (req, res, next) => {
+
+    const commentId = req.params.id;
+
+    let sql = `DELETE FROM Comments WHERE commentId = ?`;
+    let values = [commentId];
+
+    connection.query(sql, values, 
+        function (error, result) {
+            if (error) {
+                return res.status(500).json(error.message);
+            }
+            res.status(201).json({ message: "Commentaire supprimé !" });
+        }
+    );
+};
+
 exports.getAllComments = (req, res, next) => {
 
     const articleId = req.params.id;
 
-    let sql = `SELECT comments.userId, comments.text, DATE_FORMAT(comments.dateCreation, '%e %M %Y à %kh%i') AS dateCreation, users.userId, users.firstname, users.lastname, users.photoProfil FROM Comments LEFT JOIN Users ON comments.userId = users.userId WHERE comments.articleId = ?`;
+    let sql = `SELECT comments.commentId, comments.userId, comments.text, DATE_FORMAT(comments.dateCreation, '%e %M %Y à %kh%i') AS dateCreation, users.userId, users.firstname, users.lastname, users.photoProfil FROM Comments LEFT JOIN Users ON comments.userId = users.userId WHERE comments.articleId = ?`;
     let values = [articleId];
 
     connection.query(sql, values, 

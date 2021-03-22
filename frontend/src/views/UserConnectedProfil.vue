@@ -1,5 +1,9 @@
 <template>
   <div class="userProfile">
+    <Alert
+        :alertType="alert.type"
+        :alertMessage="alert.message"
+      />
     <div class="profileInfos">  
         <div class="backButton" @click="$router.go(-1)">
           <i class="fas fa-arrow-left"></i> <span>Retourner à mon fil d'actualités</span>
@@ -58,12 +62,20 @@
 
 <script>
 // @ is an alias to /src
+import Alert from "@/components/Alert.vue";
 
 export default {
   name: 'userConnectedProfil',
+  components: {
+    Alert
+  },
   data: () => {
     return {
-      user: {}
+      user: {},
+      alert:{
+        type:"",
+        message:""
+      }
     }
   },
   methods: {
@@ -131,15 +143,15 @@ export default {
         })
         .then((response) => {
             if (response.status === 200) {
-            alert("Modifications bien enregistrées !");
+            this.alertActive("success", "Modifications enregistrées !")
             this.$router.go();
           }
         })
         .catch((error) => {
             if (error.response.status === 500) {
-              alert("Modifications impossibles : Erreur serveur");
+              this.alertActive("info", "Modifications impossibles : Erreur serveur !")
             } if (error.response.status === 401) {
-              alert("Mot de passe invalide");
+              this.alertActive("warning", "Mot de passe invalide !")
             }
         });
       },
@@ -162,7 +174,7 @@ export default {
         })
         .catch((error) => {
             if (error.status === 401) {
-              alert("Mot de passe invalide");
+              this.alertActive("warning", "Mot de passe invalide !")
           }
         });
       },
@@ -178,6 +190,19 @@ export default {
       hideDeleteConfirm(){
         document.getElementById('confirmDelete').style.display = 'none';
       },
+      alertActive(type, message) {
+        document.getElementById('alert').style.display = 'flex';
+
+        const dataAlert = this.$data.alert;
+        dataAlert.type = type;
+        dataAlert.message = message;
+
+        setTimeout(function () {
+          document.getElementById('alert').style.display = 'none';
+          dataAlert.type = "";
+          dataAlert.message = "";
+        }, 2000);
+      } 
   },
   mounted() {
     this.hideUpdateForm();
@@ -343,10 +368,8 @@ export default {
 .confirmDelete{
     font-family: "Overpass";
     position: fixed;
-    margin: auto;
-    left: 0;
-    right: 0;
-    top: 150px;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
     z-index: 9999;
     text-align: center;
     background-color: rgb(231,82,70);

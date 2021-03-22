@@ -8,7 +8,10 @@
     </Header>
 
     <div class="feed">
-
+      <Alert
+        :alertType="alert.type"
+        :alertMessage="alert.message"
+      />
       <div class="createArticleCard col-md-8 col-12">
         <div class="createArticleTitle">
             <span>Partagez ce que vous voulez avec vos collègues !</span>
@@ -41,7 +44,8 @@
         :idArticle="article.articleId" 
         :idUser="article.userId"
         :idUserConnected="userConnected.userId"
-        :roleUser="userConnected.role"    
+        :roleUser="userConnected.role"
+        v-on:article-delete="deletePost"   
       >
       <template v-slot:articleText>{{ article.text }}</template>
       <template v-slot:articleUserPhotoProfil>
@@ -61,6 +65,7 @@
 import Header from "@/components/Header";
 import UserArticles from "@/components/UserArticles";
 import CreateArticleForm from "@/components/CreateArticleForm";
+import Alert from "@/components/Alert.vue";
 
 // @ is an alias to /src
 export default {
@@ -68,12 +73,17 @@ export default {
   components: {
     Header,
     UserArticles,
-    CreateArticleForm
+    CreateArticleForm,
+    Alert
   },
   data: () => {
     return {
       articles: [],
-      userConnected:{}
+      userConnected:{},
+      alert:{
+        type:"",
+        message:""
+      }
     }
   },
   methods: {
@@ -117,8 +127,9 @@ export default {
         headers: { "Content-Type": "multipart/form-data" }
       })
       .then(() => {
+        this.alertActive("success", "Post crée avec succès !");
         this.getArticles();
-        this.hideCreateArticle()
+        this.hideCreateArticle();
       })
       .catch((e) => console.log(e));
     },
@@ -127,6 +138,29 @@ export default {
     },
     hideCreateArticle(){
       document.getElementById('createArticle').style.display = 'none';
+    },
+    alertActive(type, message) {
+      document.getElementById('alert').style.display = 'flex';
+
+      const dataAlert = this.$data.alert;
+      dataAlert.type = type;
+      dataAlert.message = message;
+
+      setTimeout(function () {
+        document.getElementById('alert').style.display = 'none';
+        dataAlert.type = "";
+        dataAlert.message = "";
+      }, 2000);
+    },
+    deletePost(payload){
+      this.$axios
+      .delete(`http://localhost:3000/api/articles/${payload}`)
+      .then(() => {
+        this.alertActive("success", "Post supprimé avec succès !")
+        this.$router.go();
+      })
+      .catch((e) => console.log(e));
+    
     }
   },
   mounted() {
@@ -135,6 +169,7 @@ export default {
     this.hideCreateArticle();
     document.title = "Mon fil d'actualité | Groupomania";
   }
+  
 }
 </script>
 
