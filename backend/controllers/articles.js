@@ -5,7 +5,9 @@ const fs = require("fs");
 //Middleware pour afficher tous les articles de la base de donnée
 exports.getAllArticles = (req, res, next) => {
 
-    let sql = `SELECT articles.articleId, articles.userId, articles.text, articles.mediaUrl, DATE_FORMAT(articles.dateCreation, '%e %M %Y à %kh%i') AS dateCreation, users.userId, users.firstname, users.lastname, users.photoProfil FROM Articles LEFT JOIN Users ON articles.userId = users.userId ORDER BY articles.dateCreation DESC`;
+    let sql = `SELECT articles.articleId, articles.userId, articles.text, articles.mediaUrl, DATE_FORMAT(articles.dateCreation, '%e %M %Y à %kh%i') AS dateCreation, users.userId, users.firstname, users.lastname, users.photoProfil, likes.like 
+    FROM Articles LEFT JOIN Likes ON articles.articleId = likes.articleId 
+    LEFT JOIN Users ON articles.userId = users.userId ORDER BY articles.dateCreation DESC`;
     let values = [];
 
     connection.query(sql, values, 
@@ -178,19 +180,22 @@ exports.getAllComments = (req, res, next) => {
         }
     );
 };
-/*
+
 // Middleware pour liker ou disliker les articles
-exports.likeDislikeArticle = (req, res, next) => {
+exports.likeArticle = (req, res, next) => {
     const userId = res.locals.userId;
-    const like = req.body.like;
     const articleId = req.params.id;
-    mysql.query({
-        sql: 'INSERT INTO Likes VALUES (?, ?, ?, NOW())',
-        values: [userId, articleId, like]
-        }, function (error, result) {
+    const like = req.body.like;
+
+    let sql = `INSERT INTO Likes VALUES (?, ?, ?, NOW()) ON DUPLICATE KEY UPDATE like = ?`;
+    let values = [userId, articleId, like, like];
+
+    connection.query(sql, values, 
+        function (error, result) {
             if (error) {
                 return res.status(500).json(error.message);
             }
-            res.status(201).json({ message: "Like ou dislike ajouté !" });
-    });
-};*/
+            res.status(201).json({ message: "Like ajouté !" });
+        }
+    );
+};

@@ -16,11 +16,12 @@ router.get("/", auth, articlesCtrl.getAllArticles);
 router.get("/:id", auth, articlesCtrl.getOneArticle);
 router.post("/", auth, multer, articlesCtrl.createArticle);
 router.delete("/:id", auth, articlesCtrl.deleteArticle);
+router.post("/:id/like", auth, articlesCtrl.likeArticle);
 
 router.post("/:id/comments/create", auth, articlesCtrl.createComment);
 router.get("/:id/comments", auth, articlesCtrl.getAllComments);
 router.delete(":id/comments/delete", auth, articlesCtrl.deleteComment);
-//router.post("/:id/likeDislike", auth, articlesCtrl.likeDislikeArticle);
+
 
 // Exportation du router
 module.exports = router;

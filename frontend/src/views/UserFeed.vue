@@ -45,7 +45,10 @@
         :idUser="article.userId"
         :idUserConnected="userConnected.userId"
         :roleUser="userConnected.role"
-        v-on:article-delete="deletePost"   
+        :like="article.like"
+        v-on:article-delete="deleteArticle"
+        v-on:article-like="likeArticle(article.articleId, 1)"
+        v-on:article-like-cancel="likeArticle(article.articleId, 0)"  
       >
       <template v-slot:articleText>{{ article.text }}</template>
       <template v-slot:articleUserPhotoProfil>
@@ -152,12 +155,27 @@ export default {
         dataAlert.message = "";
       }, 2000);
     },
-    deletePost(payload){
-      this.$axios
-      .delete(`http://localhost:3000/api/articles/${payload}`)
+    deleteArticle(payload){
+      this.$axios({
+            method: 'delete',
+            url: `http://localhost:3000/api/articles/${payload}`
+      })
       .then(() => {
         this.alertActive("success", "Post supprimé avec succès !")
         this.$router.go();
+      })
+      .catch((e) => console.log(e));
+    
+    },
+    likeArticle(articleId, like){
+      this.$axios({
+            method: 'post',
+            url: `http://localhost:3000/api/articles/${articleId}/like`,
+            data: like
+      })
+      .then(() => {
+        this.alertActive("success", "Vous avez liké cette publication !");
+        this.getArticles();
       })
       .catch((e) => console.log(e));
     
