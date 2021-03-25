@@ -12,7 +12,7 @@
         :alertType="alert.type"
         :alertMessage="alert.message"
       />
-      <div class="createArticleCard col-md-8 col-12">
+      <div class="createArticleCard col-lg-8 col-12">
         <div class="createArticleTitle">
             <span>Partagez ce que vous voulez avec vos collègues !</span>
         </div>
@@ -222,6 +222,7 @@ export default {
     display: flex;
     justify-content: center;
     padding: 12px;
+    text-align: center;
 }
 .createArticleLinks{
     display: flex;

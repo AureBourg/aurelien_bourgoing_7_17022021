@@ -1,6 +1,6 @@
 <template>
     <div class="articles" :id="idArticle">
-        <div class="article col-md-8 col-12">
+        <div class="article col-lg-8 col-12">
             <div class="articleHeader">      
                 <router-link :to="{ name: 'userProfil', params: {id: idUser } }">
                     <div class="friendInfo" :id="idUser">
@@ -143,7 +143,7 @@ export default {
     background: radial-gradient(#6d94c9, #204e8a);
     border-radius: 50%;
     padding: 5px;
-    font-size: 0.7em;
+    font-size: 0.65em;
     color: white;
 }
 .likeArticle{

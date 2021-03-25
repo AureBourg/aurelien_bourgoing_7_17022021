@@ -6,7 +6,7 @@
     <div class="headerLogo">
         <img class="logo" alt="Groupomania logo" src="@/assets/icon-left-font-monochrome-black.svg">
     </div>
-    <div class="headerNav">
+    <div class="headerNav d-none d-lg-flex">
       <router-link :to="{ name: 'userConnectedProfil'}">
         <div class="userProfil">
           <slot name="photoProfil"></slot>
@@ -17,7 +17,26 @@
         <span class="userLogout">Se déconnecter</span>
       </router-link>
     </div>
-    
+    <b-navbar-nav class="ml-auto d-lg-none btn-lg" right>
+      <b-nav-item-dropdown right>
+          <template slot="button-content">
+            <i class="fas fa-bars"></i>
+          </template>
+          <b-dropdown-item>
+            <router-link :to="{ name: 'userConnectedProfil'}">
+              <div class="userProfil">
+                <slot name="photoProfil"></slot>
+                <slot name="username"></slot>
+              </div>
+            </router-link>
+          </b-dropdown-item>
+          <b-dropdown-item>
+            <router-link to="/">
+              <span class="userLogout">Se déconnecter</span>
+            </router-link>
+          </b-dropdown-item>
+      </b-nav-item-dropdown>
+    </b-navbar-nav>
   </div>
 </template>
 
@@ -36,7 +55,7 @@ export default {
 .header{
   display: flex;
   border-bottom: lightgrey 1px solid;
-  padding: 10px 40px 10px 0px;
+  padding: 10px 10px 10px 0px;
   font-family: "Overpass";
   font-size: 0.93em;
 }
