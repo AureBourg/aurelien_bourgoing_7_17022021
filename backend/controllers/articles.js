@@ -5,9 +5,12 @@ const fs = require("fs");
 //Middleware pour afficher tous les articles de la base de donnée
 exports.getAllArticles = (req, res, next) => {
 
-    let sql = `SELECT articles.articleId, articles.userId, articles.text, articles.mediaUrl, DATE_FORMAT(articles.dateCreation, '%e %M %Y à %kh%i') AS dateCreation, users.userId, users.firstname, users.lastname, users.photoProfil, likes.like 
-    FROM Articles LEFT JOIN Likes ON articles.articleId = likes.articleId 
-    LEFT JOIN Users ON articles.userId = users.userId ORDER BY articles.dateCreation DESC`;
+    let sql = `SELECT articles.articleId, articles.userId, articles.text, articles.mediaUrl, DATE_FORMAT(articles.dateCreation, '%e %M %Y à %kh%i') AS dateCreation, users.userId, users.firstname, users.lastname, users.photoProfil, COUNT(comments.commentId) AS numberOfComments, COUNT(likes.likeId) AS numberOfLikes 
+    FROM Articles 
+    LEFT JOIN Users ON articles.userId = users.userId 
+    LEFT JOIN Comments ON articles.articleId = comments.articleId
+    LEFT JOIN Likes ON articles.articleId = likes.articleId GROUP BY articles.articleId ORDER BY articles.dateCreation DESC`;
+     
     let values = [];
 
     connection.query(sql, values, 
@@ -161,6 +164,7 @@ exports.deleteComment = (req, res, next) => {
     );
 };
 
+//Middleware pour récupérer tous les commentaires d'un article
 exports.getAllComments = (req, res, next) => {
 
     const articleId = req.params.id;
@@ -181,21 +185,45 @@ exports.getAllComments = (req, res, next) => {
     );
 };
 
-// Middleware pour liker ou disliker les articles
+// Middleware pour liker les articles
 exports.likeArticle = (req, res, next) => {
     const userId = res.locals.userId;
     const articleId = req.params.id;
-    const like = req.body.like;
 
-    let sql = `INSERT INTO Likes VALUES (?, ?, ?, NOW()) ON DUPLICATE KEY UPDATE like = ?`;
-    let values = [userId, articleId, like, like];
+    let sql = `SELECT likeId FROM Likes WHERE userId = ? && articleId = ?`;
+    let values = [userId, articleId];
 
     connection.query(sql, values, 
         function (error, result) {
+            if (result == 0) {
+                let sql = `INSERT INTO Likes VALUES (?, ?, NULL, NOW())`;
+                let values = [userId, articleId];
+
+                connection.query(sql, values, 
+                    function (error, result) {
+                        if (error) {
+                            return res.status(500).json(error.message);
+                        }
+                        res.status(200).json({ message: "Like ajouté !" });
+                    }
+                );
+            } else {
+                let sql = `DELETE FROM Likes WHERE userId = ? && articleId = ?`;
+                let values = [userId, articleId];
+
+                connection.query(sql, values, 
+                    function (error, result) {
+                        if (error) {
+                            return res.status(500).json(error.message);
+                        }
+                        res.status(200).json({ message: "Like supprimé !" });
+                    }
+                );
+            }
             if (error) {
                 return res.status(500).json(error.message);
             }
-            res.status(201).json({ message: "Like ajouté !" });
+            res.status(201).json({ message: "Like ajouté/supprimé !" });
         }
     );
 };

@@ -148,7 +148,7 @@ export default {
       },
       deleteComment(payload){
         this.$axios({
-            method: 'delete',
+            method: 'post',
             url: `http://localhost:3000/api/articles/${payload}/comments/delete`
         })
         .then(() => {

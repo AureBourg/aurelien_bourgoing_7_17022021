@@ -47,8 +47,7 @@
         :roleUser="userConnected.role"
         :like="article.like"
         v-on:article-delete="deleteArticle"
-        v-on:article-like="likeArticle(article.articleId, 1)"
-        v-on:article-like-cancel="likeArticle(article.articleId, 0)"  
+        v-on:article-like="likeArticle"
       >
       <template v-slot:articleText>{{ article.text }}</template>
       <template v-slot:articleUserPhotoProfil>
@@ -59,6 +58,8 @@
       </template>
       <template v-slot:articleUsername>{{ article.firstname }} {{ article.lastname }}</template>
       <template v-slot:articleDateCreation>{{ article.dateCreation }}</template>
+      <template v-slot:numberOfComments>{{ article.numberOfComments }}</template>
+      <template v-slot:numberOfLikes>{{ article.numberOfLikes }}</template>
       </UserArticles>
     </div>
   </div>
@@ -96,7 +97,7 @@ export default {
         url: 'http://localhost:3000/api/articles/'
       })
       .then((payload) => {
-        this.articles = payload.data;        
+        this.articles = payload.data;
       })
       .catch(function (error) {
         console.log(error);
@@ -157,21 +158,21 @@ export default {
     },
     deleteArticle(payload){
       this.$axios({
-            method: 'delete',
+            method: 'post',
             url: `http://localhost:3000/api/articles/${payload}`
       })
       .then(() => {
-        this.alertActive("success", "Post supprimé avec succès !")
-        this.$router.go();
+        this.alertActive("success", "Post supprimé avec succès !");
       })
       .catch((e) => console.log(e));
     
     },
-    likeArticle(articleId, like){
+    likeArticle(payload){
+      console.log(payload);
+
       this.$axios({
             method: 'post',
-            url: `http://localhost:3000/api/articles/${articleId}/like`,
-            data: like
+            url: `http://localhost:3000/api/articles/${payload}/like`
       })
       .then(() => {
         this.alertActive("success", "Vous avez liké cette publication !");
