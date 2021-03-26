@@ -59,6 +59,7 @@ export default {
     top: 50%; left: 50%;
     transform: translate(-50%, -50%);
     padding: 20px;
+    z-index: 99;
 }
 .image{
     opacity: 0;

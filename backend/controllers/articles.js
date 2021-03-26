@@ -5,10 +5,10 @@ const fs = require("fs");
 //Middleware pour afficher tous les articles de la base de donnée
 exports.getAllArticles = (req, res, next) => {
 
-    let sql = `SELECT articles.articleId, articles.userId, articles.text, articles.mediaUrl, DATE_FORMAT(articles.dateCreation, '%e %M %Y à %kh%i') AS dateCreation, users.userId, users.firstname, users.lastname, users.photoProfil, COUNT(comments.commentId) AS numberOfComments, COUNT(likes.likeId) AS numberOfLikes 
-    FROM Articles 
-    LEFT JOIN Users ON articles.userId = users.userId 
+    let sql = `SELECT articles.articleId, articles.userId, articles.text, articles.mediaUrl, DATE_FORMAT(articles.dateCreation, '%e %M %Y à %kh%i') AS dateCreation, users.firstname, users.lastname, users.photoProfil, COUNT(DISTINCT comments.commentId) AS numberOfComments, COUNT(DISTINCT likes.userId) AS numberOfLikes 
+    FROM Articles
     LEFT JOIN Comments ON articles.articleId = comments.articleId
+    LEFT JOIN Users ON articles.userId = users.userId
     LEFT JOIN Likes ON articles.articleId = likes.articleId GROUP BY articles.articleId ORDER BY articles.dateCreation DESC`;
      
     let values = [];
@@ -66,25 +66,22 @@ exports.createArticle = (req, res, next) => {
 
 // Middleware pour supprimer un article
 exports.deleteArticle = (req, res, next) => {
-
     const articleId = req.params.id;
 
-    let sql = `SELECT mediaUrl FROM Articles WHERE articleId = ?`;
+    let sqlSelect;
+    let sqlDelete;
     let values = [articleId];
 
-    connection.query(sql, values, 
+    sqlSelect = `SELECT mediaUrl FROM Articles WHERE articleId = ?`;
+    connection.query(sqlSelect, values, 
         function (error, result) {
             if (result > 0) {
-
                 const filename = result.mediaUrl.split("/images/")[1];
-                console.log(filename);
                 
                 fs.unlink(`images/${filename}`, () => {
 
-                    let sql = `DELETE FROM Articles WHERE articleId = ?`;
-                    let values = [articleId];
-
-                    connection.query(sql, values, 
+                    sqlDelete = `DELETE FROM Articles WHERE articleId = ?`;
+                    connection.query(sqlDelete, values, 
                         function (error, result) {
                             if (error) {
                                 return res.status(500).json(error.message);
@@ -94,11 +91,8 @@ exports.deleteArticle = (req, res, next) => {
                     );
                 });               
             } else {
-
-                let sql = `DELETE FROM Articles WHERE articleId = ?`;
-                let values = [articleId];
-
-                connection.query(sql, values, 
+                sqlDelete = `DELETE FROM Articles WHERE articleId = ?`;
+                connection.query(sqlDelete, values, 
                     function (error, result) {
                         if (error) {
                             return res.status(500).json(error.message);
@@ -106,22 +100,75 @@ exports.deleteArticle = (req, res, next) => {
                         res.status(200).json({ message: "Article supprimé !" });
                     }
                 );
+            }
+            if (error) {
+                return res.status(500).json(error.message);
+            }
+        }
+    );
+};
 
-                let sql2 = `DELETE FROM Comments WHERE articleId = ?`;
-                let values2 = [articleId];
+// Middleware pour liker les articles
+exports.likeArticle = (req, res, next) => {
+    const userId = res.locals.userId;
+    const articleId = req.params.id;
 
-                connection.query(sql2, values2, 
+    let sqlCount;
+    let sqlDelete;
+    let sqlInsert;
+
+    sqlCount = `SELECT COUNT(*) AS likeId FROM Likes WHERE userId = ? && articleId = ?`;
+    let values = [userId, articleId];
+
+    connection.query(sqlCount, values, 
+        function (error, result) {
+            if (result[0].likeId > 0) {
+                sqlDelete = `DELETE FROM Likes WHERE userId = ? && articleId = ?`;
+
+                connection.query(sqlDelete, values, 
                     function (error, result) {
                         if (error) {
                             return res.status(500).json(error.message);
                         }
-                        res.status(200).json({ message: "Article et Commentaires supprimés !" });
+                        res.status(200).json();
+                    }
+                );
+            } else {
+                sqlInsert = `INSERT INTO Likes VALUES (?, ?, DEFAULT, NOW())`;
+
+                connection.query(sqlInsert, values, 
+                    function (error, result) {
+                        if (error) {
+                            return res.status(500).json(error.message);
+                        }
+                        res.status(200).json();
                     }
                 );
             }
             if (error) {
                 return res.status(500).json(error.message);
             }
+        }
+    );
+};
+
+//Middleware pour récupérer tous les commentaires d'un article
+exports.getAllComments = (req, res, next) => {
+
+    const articleId = req.params.id;
+
+    let sql = `SELECT comments.commentId, comments.userId, comments.text, DATE_FORMAT(comments.dateCreation, '%e %M %Y à %kh%i') AS dateCreation, users.userId, users.firstname, users.lastname, users.photoProfil FROM Comments LEFT JOIN Users ON comments.userId = users.userId WHERE comments.articleId = ?`;
+    let values = [articleId];
+
+    connection.query(sql, values, 
+        function (error, result) {
+            if (error) {
+                return res.status(500).json(error.message);
+            }
+            if (result.length == 0) {
+                return res.status(400).json({ message: "Aucun article à afficher !" });
+            }
+            res.status(200).json(result);
         }
     );
 };
@@ -160,70 +207,6 @@ exports.deleteComment = (req, res, next) => {
                 return res.status(500).json(error.message);
             }
             res.status(201).json({ message: "Commentaire supprimé !" });
-        }
-    );
-};
-
-//Middleware pour récupérer tous les commentaires d'un article
-exports.getAllComments = (req, res, next) => {
-
-    const articleId = req.params.id;
-
-    let sql = `SELECT comments.commentId, comments.userId, comments.text, DATE_FORMAT(comments.dateCreation, '%e %M %Y à %kh%i') AS dateCreation, users.userId, users.firstname, users.lastname, users.photoProfil FROM Comments LEFT JOIN Users ON comments.userId = users.userId WHERE comments.articleId = ?`;
-    let values = [articleId];
-
-    connection.query(sql, values, 
-        function (error, result) {
-            if (error) {
-                return res.status(500).json(error.message);
-            }
-            if (result.length == 0) {
-                return res.status(400).json({ message: "Aucun article à afficher !" });
-            }
-            res.status(200).json(result);
-        }
-    );
-};
-
-// Middleware pour liker les articles
-exports.likeArticle = (req, res, next) => {
-    const userId = res.locals.userId;
-    const articleId = req.params.id;
-
-    let sql = `SELECT likeId FROM Likes WHERE userId = ? && articleId = ?`;
-    let values = [userId, articleId];
-
-    connection.query(sql, values, 
-        function (error, result) {
-            if (result == 0) {
-                let sql = `INSERT INTO Likes VALUES (?, ?, NULL, NOW())`;
-                let values = [userId, articleId];
-
-                connection.query(sql, values, 
-                    function (error, result) {
-                        if (error) {
-                            return res.status(500).json(error.message);
-                        }
-                        res.status(200).json({ message: "Like ajouté !" });
-                    }
-                );
-            } else {
-                let sql = `DELETE FROM Likes WHERE userId = ? && articleId = ?`;
-                let values = [userId, articleId];
-
-                connection.query(sql, values, 
-                    function (error, result) {
-                        if (error) {
-                            return res.status(500).json(error.message);
-                        }
-                        res.status(200).json({ message: "Like supprimé !" });
-                    }
-                );
-            }
-            if (error) {
-                return res.status(500).json(error.message);
-            }
-            res.status(201).json({ message: "Like ajouté/supprimé !" });
         }
     );
 };

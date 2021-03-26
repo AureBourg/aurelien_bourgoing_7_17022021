@@ -147,6 +147,7 @@ export default {
         });
       },
       deleteComment(payload){
+        console.log(payload);
         this.$axios({
             method: 'post',
             url: `http://localhost:3000/api/articles/${payload}/comments/delete`

@@ -5,7 +5,7 @@
             <slot name="commentUserPhotoProfil"></slot>
             <slot name="commentUsername"></slot>
           </router-link>
-          <span v-if="roleUser == 'Administrateur' || idUser == idUserConnected" class="options"><i class="fas fa-times back" v-on:click="sendDataDeleteComment(idComment)"></i></span>
+          <span v-if="roleUser == 'Administrateur' || idUser == idUserConnected" class="options"><i class="fas fa-times back" v-on:click.prevent="sendDataDeleteComment(idComment)"></i></span>
         </div>
         <div class="commentText">
           <slot name="commentText"></slot>

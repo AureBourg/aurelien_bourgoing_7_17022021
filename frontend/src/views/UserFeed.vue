@@ -45,7 +45,6 @@
         :idUser="article.userId"
         :idUserConnected="userConnected.userId"
         :roleUser="userConnected.role"
-        :like="article.like"
         v-on:article-delete="deleteArticle"
         v-on:article-like="likeArticle"
       >
@@ -163,19 +162,18 @@ export default {
       })
       .then(() => {
         this.alertActive("success", "Post supprimé avec succès !");
+        this.getArticles();
       })
       .catch((e) => console.log(e));
     
     },
     likeArticle(payload){
-      console.log(payload);
-
       this.$axios({
             method: 'post',
-            url: `http://localhost:3000/api/articles/${payload}/like`
+            url: `http://localhost:3000/api/articles/${payload}/like/`
       })
       .then(() => {
-        this.alertActive("success", "Vous avez liké cette publication !");
+        //this.alertActive("success", "Vous avez liké cette publication !");
         this.getArticles();
       })
       .catch((e) => console.log(e));
