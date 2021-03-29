@@ -88,6 +88,10 @@ export default {
     max-width: 100%; 
     max-height: 400px; 
     }
+    & video{
+    max-width: 100%; 
+    max-height: 400px; 
+    }
 }
 .articleFooter{
     display: flex;

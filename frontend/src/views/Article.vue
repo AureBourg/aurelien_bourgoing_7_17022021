@@ -153,8 +153,8 @@ export default {
             url: `http://localhost:3000/api/articles/${payload}/comments/delete`
         })
         .then(() => {
-          this.alertActive("success", "Commentaire supprimé avec succès !")
-          this.getComments();
+          this.alertActive("success", "Commentaire supprimé avec succès !");
+          this.$router.go();
         })
         .catch(function (error) {
             console.log(error);

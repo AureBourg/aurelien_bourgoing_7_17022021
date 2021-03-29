@@ -85,10 +85,10 @@ exports.deleteUser = (req, res, next) => {
             }
             
             const filename = result[0].photoProfil.split('/images/')[1];
-            if (filename !== "photoProfil_default.jpg") {
-                fs.unlink(`images/${filename}`, (e) => {
-                    if (e) {
-                        console.log(e);
+            if (filename != "photoProfil_default.jpg") {
+                fs.unlink(`images/${filename}`, () => {
+                    if (error) {
+                        return res.status(500).json(error.message);
                     }
                 });
             }
@@ -96,7 +96,7 @@ exports.deleteUser = (req, res, next) => {
             bcrypt.compare(password, result[0].password)
             .then(valid => {
                 if (!valid) {
-                return res.status(401).json({ error: 'Mot de passe incorrect !' });
+                    return res.status(401).json({ error: 'Mot de passe incorrect !' });
                 } else {
                     let sql = `DELETE FROM Users WHERE userId = ?`;
                     let values = [userId];

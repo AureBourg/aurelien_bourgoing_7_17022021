@@ -38,6 +38,10 @@
         <template v-slot:username>{{ userConnected.firstname }} {{ userConnected.lastname }}</template>
       </CreateArticleForm>
 
+      <div class="noPost" v-if="articles.length==0">
+        <span>Aucun post à afficher...</span>
+      </div>
+
       <UserArticles
         v-for="article in articles" 
         :key="article.articleId" 
@@ -49,16 +53,30 @@
         v-on:article-like="likeArticle"
       >
       <template v-slot:articleText>{{ article.text }}</template>
+
       <template v-slot:articleUserPhotoProfil>
         <img :src="article.photoProfil" class="userPhoto" alt="Photo de l'utilisateur" />
       </template>
-      <template v-slot:articleMediaUrl>
+
+      <template v-slot:articleMediaUrl v-if="article.mediaUrl.includes('.gif') || article.mediaUrl.includes('.jpg') || article.mediaUrl.includes('.png')">
         <img :src="article.mediaUrl" class="articleMediaUrl" alt="Photo du post" />
       </template>
+
+      <template v-slot:articleMediaUrl v-else-if="article.mediaUrl.includes('.mp4')">
+        <video width="100%" class="articleMediaUrl" alt="Vidéo du post" controls>
+        <source :src="article.mediaUrl" type="video/mp4">
+        Votre navigateur ne peut pas lire les vidéos HTML.
+        </video>
+      </template>
+
       <template v-slot:articleUsername>{{ article.firstname }} {{ article.lastname }}</template>
+
       <template v-slot:articleDateCreation>{{ article.dateCreation }}</template>
+
       <template v-slot:numberOfComments>{{ article.numberOfComments }}</template>
+
       <template v-slot:numberOfLikes>{{ article.numberOfLikes }}</template>
+      
       </UserArticles>
     </div>
   </div>
@@ -162,7 +180,7 @@ export default {
       })
       .then(() => {
         this.alertActive("success", "Post supprimé avec succès !");
-        this.getArticles();
+        this.$router.go();
       })
       .catch((e) => console.log(e));
     
@@ -173,7 +191,6 @@ export default {
             url: `http://localhost:3000/api/articles/${payload}/like/`
       })
       .then(() => {
-        //this.alertActive("success", "Vous avez liké cette publication !");
         this.getArticles();
       })
       .catch((e) => console.log(e));
@@ -254,5 +271,12 @@ export default {
         color: rgb(248,244,60);
         margin-right: 10px;
     }
+}
+.noPost{
+  margin: auto;
+  padding: 150px 0px 150px 0px;
+  font-size: 2em;
+  color: grey;
+  font-family: "Overpass";
 }
 </style>

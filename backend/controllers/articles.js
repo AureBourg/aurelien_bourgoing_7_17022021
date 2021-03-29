@@ -75,8 +75,8 @@ exports.deleteArticle = (req, res, next) => {
     sqlSelect = `SELECT mediaUrl FROM Articles WHERE articleId = ?`;
     connection.query(sqlSelect, values, 
         function (error, result) {
-            if (result > 0) {
-                const filename = result.mediaUrl.split("/images/")[1];
+            if (result.length > 0) {
+                const filename = result[0].mediaUrl.split("/images/")[1];
                 
                 fs.unlink(`images/${filename}`, () => {
 
@@ -166,7 +166,7 @@ exports.getAllComments = (req, res, next) => {
                 return res.status(500).json(error.message);
             }
             if (result.length == 0) {
-                return res.status(400).json({ message: "Aucun article à afficher !" });
+                return res.status(400).json({ message: "Aucun commentaire à afficher !" });
             }
             res.status(200).json(result);
         }

@@ -21,7 +21,8 @@
     <div id="updateProfile" class="updateProfile col-7">
         <div class="updateProfilePhoto col-7">
             <span>Modifier ma photo de profil</span>
-            <input type="file" accept="image/*" v-on:change="updatePhotoProfil($event)"/>
+            <input type="file" id="image" accept="image/*" v-on:change="updatePhotoProfil($event)"/>
+            <img id="preview">
         </div>
         <div class="updateProfileInfos col-7">
             <span>Modifier mon profil</span>
@@ -95,6 +96,17 @@ export default {
         });
       },
       updatePhotoProfil(event) {
+
+        var file = document.getElementById("image").files;
+        if (file.length > 0) {
+            var fileReader = new FileReader();
+ 
+            fileReader.onload = function (event) {
+                document.getElementById("preview").setAttribute("src", event.target.result);
+            };
+ 
+            fileReader.readAsDataURL(file[0]);
+        }
       
         const image = event.target.files[0];
         const formData = new FormData();
@@ -313,6 +325,7 @@ export default {
     flex-direction: column;
     margin: auto;
     margin-bottom: 20px;
+    align-items: center;
     & span{
         text-align: center;
         border-bottom: solid 1px lightgrey;
@@ -395,5 +408,10 @@ export default {
     &:hover{
       color: lightgrey;
     }
+}
+#preview{
+    max-height:100px; 
+    max-width:100px;
+    margin-bottom: 10px;
 }
 </style>

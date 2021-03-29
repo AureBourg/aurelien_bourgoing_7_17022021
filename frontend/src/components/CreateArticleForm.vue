@@ -10,9 +10,10 @@
                 <textarea v-model="text" class="articleText" type="text" id="articleText" name="text" placeholder="Postez ce que vous voulez !"/>
             </div>
             <div>
-                <label class="articleSelectMedia" for="image">Ajouter une photo</label>
+                <label class="articleSelectMedia" for="image">Choisir un fichier multimédia</label>
                 <input name="image" id="image" class="image" v-on:change="sendFile($event)" type="file"/>
             </div>
+            <img id="preview">
             <input v-on:click.prevent="sendDataCreateArticle()" class="createArticleButton" type="submit" value="Publier !">
         </form>
     </div>
@@ -30,13 +31,27 @@ export default {
   methods: {
     hideCreateArticle(){
         document.getElementById('createArticle').style.display = 'none';
+        document.getElementsByName("text")[0].value = null;
+        document.getElementsByName("image")[0].value = null;
+        document.getElementById("preview").removeAttribute("src");
     },
     sendFile(event) {
         this.$data.image = event.target.files[0];
+
+        var file = document.getElementById("image").files;
+        if (file.length > 0) {
+            var fileReader = new FileReader();
+ 
+            fileReader.onload = function (event) {
+                document.getElementById("preview").setAttribute("src", event.target.result);
+            };
+ 
+            fileReader.readAsDataURL(file[0]);
+        }
     },
     sendDataCreateArticle() {
         this.$emit("article-sent", this.$data);
-    },
+    }
   }
 };
 </script>
@@ -104,5 +119,10 @@ export default {
 .createArticleForm{
     display: flex;
     flex-direction: column;
+}
+#preview{
+    max-height:200px; 
+    max-width:200px;
+    margin-bottom: 10px;
 }
 </style>

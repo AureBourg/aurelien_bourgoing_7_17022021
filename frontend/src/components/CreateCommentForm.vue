@@ -2,8 +2,8 @@
 <div class="addComment col-md-8 col-12">
     <slot name="photoProfil" class="col-1"></slot>
     <form class="createCommentForm col-11" name="createCommentForm">
-        <textarea v-model="text" class="col-10" placeholder="Laissez un commentaire..." required/>
-        <input v-on:click.prevent="sendDataCreateComment()" class="createCommentButton col-2" type="submit" value="Commenter">
+        <textarea v-model="text" name="text" class="col-10" placeholder="Laissez un commentaire..." required/>
+        <input v-on:click.prevent="sendDataCreateComment()" class="createCommentButton" type="submit" value="Commenter">
     </form>
 </div>
 </template>
@@ -19,6 +19,7 @@ export default {
   methods: {
     sendDataCreateComment() {
         this.$emit("comment-sent", this.$data);
+        document.getElementsByName("text")[0].value = null;
     },
   }
 };
@@ -36,6 +37,7 @@ export default {
     margin-bottom: 25px;
     & form{
         display: flex;
+        justify-content: space-between;
         & input{
         border: none;
         border-radius: 10px;
