@@ -105,7 +105,12 @@ export default {
           }
         })
         .catch(function (error) {
-          console.log(error);
+          if (error.response.status === 500) {
+            this.alertActive("info", error.response.data.error);
+          }
+          if (error.response.status === 401) {
+            this.alertActive("warning", error.response.data.error);
+          }
         });
       },
       getArticle() {
@@ -117,7 +122,9 @@ export default {
           this.article = payload.data[0];
         })
         .catch(function (error) {
-            console.log(error);
+          if (error.response.status === 500) {
+            this.alertActive("info", error.response.data.error);
+          }
         });
       },
       getComments() {
@@ -129,7 +136,12 @@ export default {
           this.comments = payload.data;
         })
         .catch(function (error) {
-          console.log(error);
+          if (error.response.status === 500) {
+            this.alertActive("info", error.response.data.error);
+          }
+          if (error.response.status === 401) {
+            this.alertActive("warning", error.response.data.error);
+          }
         });
       },
       createComment(payload){
@@ -143,7 +155,12 @@ export default {
           this.getComments();
         })
         .catch(function (error) {
-            this.alertActive("info", error);
+          if (error.response.status === 500) {
+            this.alertActive("info", error.response.data.error);
+          }
+          if (error.response.status === 401) {
+            this.alertActive("warning", error.response.data.error);
+          }
         });
       },
       deleteComment(payload){
@@ -157,7 +174,12 @@ export default {
           this.$router.go();
         })
         .catch(function (error) {
-            console.log(error);
+          if (error.response.status === 500) {
+            this.alertActive("info", error.response.data.error);
+          }
+          if (error.response.status === 401) {
+            this.alertActive("warning", error.response.data.error);
+          }
         });
       },
       alertActive(type, message) {

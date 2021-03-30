@@ -33,7 +33,8 @@
                     <router-link :to="{ name: 'article', params: {id: idArticle } }">
                         <span class="linkComment"><i class="far fa-comment-alt"></i> Commenter</span>
                     </router-link>
-                    <span class="likeArticle" v-on:click.prevent="sendDataLikeArticle()"><i class="far fa-thumbs-up"></i>J'aime</span>
+                    <span class="likeArticleNo" v-if="isLiked == 0" v-on:click.prevent="sendDataLikeArticle()"><i class="far fa-thumbs-up"></i>J'aime</span>
+                    <span class="likeArticleYes" v-else-if="isLiked != 0" v-on:click.prevent="sendDataLikeArticle()"><i class="fas fa-thumbs-up"></i>J'aime</span>                   
                 </div>
             </div>      
         </div>
@@ -43,7 +44,7 @@
 <script>
 export default {
     name: "UserArticles",
-    props: ["idArticle", "idUser", "idUserConnected", "roleUser", "like"],
+    props: ["idArticle", "idUser", "idUserConnected", "roleUser", "like", "isLiked"],
     data () {
         return {
             isHidden: true
@@ -150,7 +151,11 @@ export default {
     font-size: 0.65em;
     color: white;
 }
-.likeArticle{
+.likeArticleNo{
     cursor: pointer;
+}
+.likeArticleYes{
+    cursor: pointer;
+    color: #204e8a;
 }
 </style>

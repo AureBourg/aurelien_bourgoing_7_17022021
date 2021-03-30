@@ -5,21 +5,23 @@ const fs = require("fs");
 //Middleware pour afficher tous les articles de la base de donnée
 exports.getAllArticles = (req, res, next) => {
 
-    let sql = `SELECT articles.articleId, articles.userId, articles.text, articles.mediaUrl, DATE_FORMAT(articles.dateCreation, '%e %M %Y à %kh%i') AS dateCreation, users.firstname, users.lastname, users.photoProfil, COUNT(DISTINCT comments.commentId) AS numberOfComments, COUNT(DISTINCT likes.userId) AS numberOfLikes 
+    const userId = res.locals.userId;
+
+    let sql = `SELECT articles.articleId, articles.userId, articles.text, articles.mediaUrl, DATE_FORMAT(articles.dateCreation, '%e %M %Y à %kh%i') AS dateCreation, users.firstname, users.lastname, users.photoProfil, COUNT(DISTINCT comments.commentId) AS numberOfComments, COUNT(DISTINCT likes.userId) AS numberOfLikes, COUNT(CASE WHEN likes.userId = ? THEN 1 ELSE null END) AS isLiked 
     FROM Articles
     LEFT JOIN Comments ON articles.articleId = comments.articleId
     LEFT JOIN Users ON articles.userId = users.userId
     LEFT JOIN Likes ON articles.articleId = likes.articleId GROUP BY articles.articleId ORDER BY articles.dateCreation DESC`;
      
-    let values = [];
+    let values = [userId];
 
     connection.query(sql, values, 
         function (error, result) {
             if (error) {
-                return res.status(500).json(error.message);
+                return res.status(500).json({ error: "Erreur serveur !" });
             }
             if (result.length == 0) {
-                return res.status(400).json({ message: "Aucun article à afficher !" });
+                return res.status(400).json({ error: "Aucun article à afficher !" });
             }
             res.status(200).json(result);
         }
@@ -37,7 +39,7 @@ exports.getOneArticle = (req, res, next) => {
     connection.query(sql, values, 
         function (err, result) {
             if (err) {
-                return res.status(500).json(err.message);
+                return res.status(500).json({ error: "Erreur serveur !" });
             }
             res.status(200).json(result);
         }
@@ -57,7 +59,7 @@ exports.createArticle = (req, res, next) => {
     connection.query(sql, values,
         function (error, result) {
             if (error) {
-                return res.status(500).json(error.message);
+                return res.status(500).json({ error: "Erreur serveur !" });
             }
             res.status(201).json({ message: "Article crée !"});
         }
@@ -84,7 +86,7 @@ exports.deleteArticle = (req, res, next) => {
                     connection.query(sqlDelete, values, 
                         function (error, result) {
                             if (error) {
-                                return res.status(500).json(error.message);
+                                return res.status(500).json({ error: "Erreur serveur !" });
                             }
                             res.status(200).json({ message: "Article supprimé !" });
                         }
@@ -128,9 +130,9 @@ exports.likeArticle = (req, res, next) => {
                 connection.query(sqlDelete, values, 
                     function (error, result) {
                         if (error) {
-                            return res.status(500).json(error.message);
+                            return res.status(500).json({ error: "Erreur serveur !" });
                         }
-                        res.status(200).json();
+                        res.status(200).json(result);
                     }
                 );
             } else {
@@ -139,14 +141,14 @@ exports.likeArticle = (req, res, next) => {
                 connection.query(sqlInsert, values, 
                     function (error, result) {
                         if (error) {
-                            return res.status(500).json(error.message);
+                            return res.status(500).json({ error: "Erreur serveur !" });
                         }
-                        res.status(200).json();
+                        res.status(200).json(result);
                     }
                 );
             }
             if (error) {
-                return res.status(500).json(error.message);
+                return res.status(500).json({ error: "Erreur serveur !" });
             }
         }
     );
@@ -163,7 +165,7 @@ exports.getAllComments = (req, res, next) => {
     connection.query(sql, values, 
         function (error, result) {
             if (error) {
-                return res.status(500).json(error.message);
+                return res.status(500).json({ error: "Erreur serveur !" });
             }
             if (result.length == 0) {
                 return res.status(400).json({ message: "Aucun commentaire à afficher !" });
@@ -186,7 +188,7 @@ exports.createComment = (req, res, next) => {
     connection.query(sql, values, 
         function (error, result) {
             if (error) {
-                return res.status(500).json(error.message);
+                return res.status(500).json({ error: "Erreur serveur !" });
             }
             res.status(201).json({ message: "Commentaire crée !" });
         }
@@ -204,7 +206,7 @@ exports.deleteComment = (req, res, next) => {
     connection.query(sql, values, 
         function (error, result) {
             if (error) {
-                return res.status(500).json(error.message);
+                return res.status(500).json({ error: "Erreur serveur !" });
             }
             res.status(201).json({ message: "Commentaire supprimé !" });
         }

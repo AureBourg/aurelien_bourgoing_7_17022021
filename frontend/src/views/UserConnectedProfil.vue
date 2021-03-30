@@ -120,8 +120,13 @@ export default {
           .then(() => {
             this.getUserConnected();
           })
-          .catch((e) => {
-            console.log(e);
+          .catch((error) => {
+            if (error.response.status === 500) {
+              this.alertActive("info", error.response.data.error);
+            }
+            if (error.response.status === 401) {
+              this.alertActive("warning", error.response.data.error);
+            }
           });
       },
       updateUser(){
@@ -160,11 +165,12 @@ export default {
           }
         })
         .catch((error) => {
-            if (error.response.status === 500) {
-              this.alertActive("info", "Modifications impossibles : Erreur serveur !")
-            } if (error.response.status === 401) {
-              this.alertActive("warning", "Mot de passe invalide !")
-            }
+          if (error.response.status === 500) {
+            this.alertActive("info", error.response.data.error);
+          }
+          if (error.response.status === 401) {
+            this.alertActive("warning", error.response.data.error);
+          }
         });
       },
       deleteUser(){
@@ -185,8 +191,11 @@ export default {
             this.$router.push("/");
         })
         .catch((error) => {
-            if (error.status === 401) {
-              this.alertActive("warning", "Mot de passe invalide !")
+          if (error.response.status === 500) {
+            this.alertActive("info", error.response.data.error);
+          }
+          if (error.response.status === 401) {
+            this.alertActive("warning", error.response.data.error);
           }
         });
       },

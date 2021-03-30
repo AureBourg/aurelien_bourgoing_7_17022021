@@ -56,12 +56,14 @@ export default {
           .then((response) => {
               sessionStorage.setItem("token", response.data.token);
               this.$axios.defaults.headers.common["Authorization"] = "Bearer " + response.data.token;
-
               this.$router.push("/userfeed");
           })
           .catch((error) => {
               if (error.response.status === 500) {
-                this.alertActive("info", "Connexion impossible : Erreur serveur !");
+                this.alertActive("info", error.response.data.error);
+              }
+              if (error.response.status === 401) {
+                this.alertActive("warning", error.response.data.error);
               }
           });
       })

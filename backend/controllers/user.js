@@ -22,7 +22,7 @@ exports.signup = (req, res, next) => {
         connection.query(sql, values, 
             function (err, result) {
                 if (err) {
-                    return res.status(500).json(err.message);
+                    return res.status(500).json({ error: "Erreur serveur !" });
                 }
                 res.status(201).json({ message: "Utilisateur créé !" });
             }
@@ -42,7 +42,7 @@ exports.login = (req, res, next) => {
     connection.query(sql, values, 
         function (error, result) {
             if (error) {
-                return res.status(500).json(error.message);
+                return res.status(500).json({ error: "Erreur serveur !" });
             }
             if (result.length===0) {
                 return res.status(401).json({ error: "L'utilisateur n'existe pas. Veuillez vous inscrire d'abord !" });
@@ -62,7 +62,7 @@ exports.login = (req, res, next) => {
                     )
                 });
             })
-            .catch(error => res.status(500).json({ error : 'Erreur serveur' }));
+            .catch(error => res.status(500).json({ error: "Erreur serveur !" }));
         }
     );
 };
@@ -78,17 +78,17 @@ exports.deleteUser = (req, res, next) => {
     connection.query(sql, values, 
         function (error, result) {
             if (error) {
-                return res.status(500).json(error.message);
+                return res.status(500).json({ error: "Erreur serveur !" });
             }
             if (result.length===0) {
-                return res.status(401).json({ error: "Utilisateur non trouvé" });
+                return res.status(401).json({ error: "Utilisateur non trouvé !" });
             }
             
             const filename = result[0].photoProfil.split('/images/')[1];
             if (filename != "photoProfil_default.jpg") {
                 fs.unlink(`images/${filename}`, () => {
                     if (error) {
-                        return res.status(500).json(error.message);
+                        return res.status(500).json({ error: "Erreur serveur !" });
                     }
                 });
             }
@@ -111,7 +111,7 @@ exports.deleteUser = (req, res, next) => {
                     );
                 }
             })
-            .catch(error => res.status(500).json({ error }));
+            .catch(error => res.status(500).json({ error: "Erreur serveur !" }));
         }
     );
 };
@@ -132,7 +132,7 @@ exports.updateUser = (req, res, next) => {
         connection.query(sql, values, 
             function (err, result) {
                 if (err) {
-                    return res.status(500).json({ error : 'Erreur serveur photo' });
+                    return res.status(500).json({ error: "Erreur serveur !" });
                 }
 
                 const filename = result[0].photoProfil.split('/images/')[1];
@@ -145,7 +145,7 @@ exports.updateUser = (req, res, next) => {
                         
                         connection.query(sql, values, function (err, result) {
                             if (err) {
-                                return res.status(500).json({ error : 'Erreur serveur supprphoto' });
+                                return res.status(500).json({ error: "Erreur serveur !" });
                             }
                             return res.status(200).json({ message: "Utilisateur modifé !" });
                         });
@@ -153,7 +153,7 @@ exports.updateUser = (req, res, next) => {
                 } else {
                     connection.query(sql, values, function (err, result) {
                         if (err) {
-                            return res.status(500).json(err.message);
+                            return res.status(500).json({ error: "Erreur serveur !" });
                         }
                         return res.status(200).json({ message: "Utilisateur modifé !" });
                     });
@@ -169,7 +169,7 @@ exports.updateUser = (req, res, next) => {
         connection.query(sql, values, 
             function (err, result) {
                 if (err) {
-                    return res.status(500).json({ error : 'Erreur serveur début' });
+                    return res.status(500).json({ error: "Erreur serveur !" });
                 }
                 if (result.length == 0) {
                     return res.status(401).json({ error: "Utilisateur non trouvé !" });
@@ -191,16 +191,16 @@ exports.updateUser = (req, res, next) => {
                                 connection.query(sql, values, 
                                     function (err, result) {
                                         if (err) {
-                                            return res.status(500).json({ error : 'Erreur serveur newmdp' });
+                                            return res.status(500).json({ error: "Erreur serveur !" });
                                         }
                                         if (result.affectedRows == 0) {
-                                            return res.status(400).json({ message: "Changement échoué !" });
+                                            return res.status(400).json({ error: "Erreur serveur : Impossible de modifier cet utilisateur !" });
                                         }
-                                        res.status(200).json({ message: "Changement réussi !" });
+                                        res.status(200).json({ message: "Modifications bien prises en compte !" });
                                     }
                                 );
                             })
-                            .catch(e => res.status(500).json(e));
+                            .catch(e => res.status(500).json({ error: "Erreur serveur !" }));
 
                     } else { // Si le mdp reste le même
                         sql = `UPDATE Users SET email = ?, bio = ? WHERE userId = ?`;
@@ -209,17 +209,17 @@ exports.updateUser = (req, res, next) => {
                         connection.query(sql, values, 
                             function (err, result) {
                                 if (err) {
-                                    return res.status(500).json({ error : 'Erreur serveur pasdenewmdp' });
+                                    return res.status(500).json({ error: "Erreur serveur !" });
                                 }
                                 if (result.affectedRows == 0) {
-                                    return res.status(400).json({ message: "Changement échoué !" });
+                                    return res.status(400).json({ error: "Erreur serveur : Impossible de modifier cet utilisateur !" });
                                 }
-                                res.status(200).json({ message: "Changement réussi !" });
+                                res.status(200).json({ message: "Modifications bien prises en compte !" });
                             }
                         );
                     }
                 })
-                .catch(e => res.status(500).json(e));
+                .catch(error => res.status(500).json({ error: "Erreur serveur !" }));
             }
         );
     }
@@ -235,10 +235,10 @@ exports.displayProfil = (req, res, next) => {
     connection.query(sql, values, 
         function (error, result) {
             if (error) {
-                return res.status(500).json(error.message);
+                return res.status(500).json({ error: "Erreur serveur !" });
             }
             if (result.length===0) {
-                return res.status(401).json({ error: "L'utilisateur n'existe pas." });
+                return res.status(401).json({ error: "L'utilisateur n'existe pas !" });
             }
             res.status(200).json(result);
         }
@@ -255,10 +255,10 @@ exports.getUserConnected = (req, res, next) => {
     connection.query(sql, values, 
         function (error, result) {
             if (error) {
-                return res.status(500).json(error.message);
+                return res.status(500).json({ error: "Erreur serveur !" });
             }
             if (result.length===0) {
-                return res.status(401).json({ error: "L'utilisateur n'existe pas." });
+                return res.status(401).json({ error: "L'utilisateur n'existe pas !" });
             }
             res.status(200).json(result);
         }

@@ -49,6 +49,7 @@
         :idUser="article.userId"
         :idUserConnected="userConnected.userId"
         :roleUser="userConnected.role"
+        :isLiked="article.isLiked"
         v-on:article-delete="deleteArticle"
         v-on:article-like="likeArticle"
       >
@@ -58,11 +59,11 @@
         <img :src="article.photoProfil" class="userPhoto" alt="Photo de l'utilisateur" />
       </template>
 
-      <template v-slot:articleMediaUrl v-if="article.mediaUrl.includes('.gif') || article.mediaUrl.includes('.jpg') || article.mediaUrl.includes('.png')">
+      <template v-slot:articleMediaUrl v-if="article.mediaUrl != null && (article.mediaUrl.includes('.gif') || article.mediaUrl.includes('.jpg') || article.mediaUrl.includes('.png'))">
         <img :src="article.mediaUrl" class="articleMediaUrl" alt="Photo du post" />
       </template>
 
-      <template v-slot:articleMediaUrl v-else-if="article.mediaUrl.includes('.mp4')">
+      <template v-slot:articleMediaUrl v-else-if="article.mediaUrl != null && (article.mediaUrl.includes('.mp4'))">
         <video width="100%" class="articleMediaUrl" alt="Vidéo du post" controls>
         <source :src="article.mediaUrl" type="video/mp4">
         Votre navigateur ne peut pas lire les vidéos HTML.
@@ -117,7 +118,12 @@ export default {
         this.articles = payload.data;
       })
       .catch(function (error) {
-        console.log(error);
+        if (error.response.status === 500) {
+          this.alertActive("info", error.response.data.error);
+        }
+        if (error.response.status === 401) {
+          this.alertActive("warning", error.response.data.error);
+        }
       });
     },
     getUserConnected() {
@@ -132,7 +138,12 @@ export default {
           }
         })
         .catch(function (error) {
-          console.log(error);
+          if (error.response.status === 500) {
+            this.alertActive("info", error.response.data.error);
+          }
+          if (error.response.status === 401) {
+            this.alertActive("warning", error.response.data.error);
+          }
         });
     },
     createPost(payload) {
@@ -147,12 +158,19 @@ export default {
         data: formData,
         headers: { "Content-Type": "multipart/form-data" }
       })
-      .then(() => {
-        this.alertActive("success", "Post crée avec succès !");
+      .then((result) => {
+        this.alertActive("success", result.data.message);
         this.getArticles();
         this.hideCreateArticle();
       })
-      .catch((e) => console.log(e));
+      .catch((error) => {
+        if (error.response.status === 500) {
+          this.alertActive("info", error.response.data.error);
+        }
+        if (error.response.status === 401) {
+          this.alertActive("warning", error.response.data.error);
+        }
+      })
     },
     showCreateArticle(){
       document.getElementById('createArticle').style.display = 'block';
@@ -182,7 +200,14 @@ export default {
         this.alertActive("success", "Post supprimé avec succès !");
         this.$router.go();
       })
-      .catch((e) => console.log(e));
+      .catch((error) => {
+        if (error.response.status === 500) {
+          this.alertActive("info", error.response.data.error);
+        }
+        if (error.response.status === 401) {
+          this.alertActive("warning", error.response.data.error);
+        }
+      })
     
     },
     likeArticle(payload){
@@ -193,7 +218,14 @@ export default {
       .then(() => {
         this.getArticles();
       })
-      .catch((e) => console.log(e));
+      .catch((error) => {
+        if (error.response.status === 500) {
+          this.alertActive("info", error.response.data.error);
+        }
+        if (error.response.status === 401) {
+          this.alertActive("warning", error.response.data.error);
+        }
+      })
     
     }
   },

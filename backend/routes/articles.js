@@ -16,7 +16,7 @@ router.get("/", auth, articlesCtrl.getAllArticles);
 router.get("/:id", auth, articlesCtrl.getOneArticle);
 router.post("/", auth, multer, articlesCtrl.createArticle);
 router.post("/:id", auth, articlesCtrl.deleteArticle);
-router.post("/:id/like", auth, articlesCtrl.likeArticle); 
+router.post("/:id/like", auth, articlesCtrl.likeArticle);
 
 router.post("/:id/comments/create", auth, articlesCtrl.createComment);
 router.get("/:id/comments", auth, articlesCtrl.getAllComments);

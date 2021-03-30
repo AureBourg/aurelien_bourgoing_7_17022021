@@ -49,13 +49,13 @@ export default {
           this.$router.push("/userfeed");
       })
       .catch((error) => {
-          if (error.response.status === 500) {
-            this.alertActive("info", "Connexion impossible : Erreur serveur !");
-          }
-          if (error.response.status === 401) {
-            this.alertActive("warning", "Mot de passe invalide !");
-          }
-          sessionStorage.removeItem("token");
+        if (error.response.status === 500) {
+          this.alertActive("info", error.response.data.error);
+        }
+        if (error.response.status === 401) {
+          this.alertActive("warning", error.response.data.error);
+        }
+        sessionStorage.removeItem("token");
       });
     },
     alertActive(type, message) {

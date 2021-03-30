@@ -37,8 +37,13 @@ export default {
             document.getElementById('userPhoto').style.border="solid 2px yellow";
           } 
         })
-        .catch(function (error) {
-          console.log(error);
+        .catch((error) => {
+          if (error.response.status === 500) {
+            this.alertActive("info", error.response.data.error);
+          }
+          if (error.response.status === 401) {
+            this.alertActive("warning", error.response.data.error);
+          }
         });
       }
   },
