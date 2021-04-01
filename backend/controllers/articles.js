@@ -51,17 +51,21 @@ exports.createArticle = (req, res, next) => {
 
     const userId = res.locals.userId;
     const text = req.body.text;
+
+    var sqlInsert;
+    var values;
+
     const mediaUrl = `${req.protocol}://${req.get("host")}/images/${req.file.filename}`;
 
-    let sql = `INSERT INTO Articles VALUES (NULL, ?, ?, ?, NOW())`;
-    let values = [userId, text, mediaUrl];
+    sqlInsert = `INSERT INTO Articles VALUES (NULL, ?, ?, ?, NOW())`;
+    values = [userId, text, mediaUrl];    
 
-    connection.query(sql, values,
+    connection.query(sqlInsert, values,
         function (error, result) {
             if (error) {
                 return res.status(500).json({ error: "Erreur serveur !" });
             }
-            res.status(201).json({ message: "Article crée !"});
+            res.status(201).json({ message: "Article créé !"});
         }
     );
 };

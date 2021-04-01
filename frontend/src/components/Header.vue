@@ -1,5 +1,5 @@
 <template>
-  <div class="header">
+  <header class="header">
     <div class="headerBack">
       <slot name="back"></slot>
     </div>
@@ -17,8 +17,8 @@
         <span class="userLogout">Se déconnecter</span>
       </router-link>
     </div>
-    <b-navbar-nav class="ml-auto d-lg-none btn-lg" right>
-      <b-nav-item-dropdown right>
+    <b-navbar-nav class="d-lg-none btn-lg" right>
+      <b-nav-item-dropdown right no-caret>
           <template slot="button-content">
             <i class="fas fa-bars"></i>
           </template>
@@ -30,6 +30,7 @@
               </div>
             </router-link>
           </b-dropdown-item>
+          <b-dropdown-divider></b-dropdown-divider>
           <b-dropdown-item>
             <router-link to="/">
               <span class="userLogout">Se déconnecter</span>
@@ -37,7 +38,7 @@
           </b-dropdown-item>
       </b-nav-item-dropdown>
     </b-navbar-nav>
-  </div>
+  </header>
 </template>
 
 <script>
@@ -58,20 +59,23 @@ export default {
   padding: 10px 10px 10px 0px;
   font-family: "Overpass";
   font-size: 0.93em;
+  justify-content: center;
+  & .fa-bars{
+    color: black;
+  }
 }
 .headerBack{
   display: flex;
   position: absolute;
   left: 10px;
-  top: 7px;
-  font-size: 3em;
+  top: 10px;
+  font-size: 2.5em;
   margin-left: 10px;
   text-decoration: none;
   color: grey;
   cursor: pointer;
 }
 .headerLogo{
-  margin: auto;
   height: 40px;
 }
 .logo{
@@ -90,11 +94,15 @@ export default {
     color: black;
   }
 }
+.navbar-nav{
+  position: absolute;
+  right: 0px;
+  top: 0px;
+}
 .userProfil{
   display: flex;
   align-items: center;
   padding: 10px;
-  border-right: solid 1px lightgrey;
   border-radius: 2px;
   color: black;
   cursor: pointer;

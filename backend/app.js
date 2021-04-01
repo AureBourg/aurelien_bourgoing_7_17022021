@@ -2,6 +2,7 @@
 const express = require('express');
 //const bodyParser = require('body-parser');
 const path = require('path');
+const cors = require('cors');
 
 // Importation des modules de sécurité
 //const helmet
@@ -19,12 +20,14 @@ const app = express();
 require('dotenv').config();
 
 // Middleware Header pour éviter les erreurs CORS
-app.use((req, res, next) => {
+/*app.use((req, res, next) => {
     res.setHeader('Access-Control-Allow-Origin', '*');
     res.setHeader('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content, Accept, Content-Type, Authorization');
     res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, PATCH, OPTIONS');
     next();
-  });
+  });*/
+
+app.use(cors());
 
 // Middleware qui permet de sécurisé l'utilisation des cookies
 /* const expiryDate = new Date( Date.now() + 60 * 60 * 1000 );

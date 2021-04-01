@@ -6,7 +6,7 @@
       />
     <div class="profileInfos">  
         <div class="backButton" @click="$router.go(-1)">
-          <i class="fas fa-arrow-left"></i> <span>Retourner à mon fil d'actualités</span>
+          <i class="fas fa-arrow-left"></i>
         </div>      
       <img class="logoGroupo" alt="Groupomania logo" src="@/assets/icon-left-font-monochrome-black.svg">
       <img :src="user.photoProfil" id="userPhoto" class="userPhoto" alt="Photo de profil" />

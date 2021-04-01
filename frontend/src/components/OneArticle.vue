@@ -1,6 +1,6 @@
 <template>
     <div class="articles" :id="idArticle">
-        <div class="article col-md-8 col-12">
+        <div class="article col-lg-8 col-12">
             <router-link :to="{ name: 'userProfil', params: {id: idUser } }">
                 <div class="friendInfo" :id="idUser">
                     <slot name="articleUserPhotoProfil"></slot>

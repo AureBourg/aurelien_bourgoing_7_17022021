@@ -1,5 +1,6 @@
 <template>
-    <div id="createArticle" class="createArticle col-7">
+    <div id="createArticle">
+    <div class="createArticle col-11 col-md-8">
         <span v-on:click="hideCreateArticle()" class="annulCreateArticle">Annuler<i class="fas fa-times"></i></span>
         <div class="userInfos">
             <slot name="photoProfil"></slot>
@@ -16,6 +17,7 @@
             <img id="preview">
             <input v-on:click.prevent="sendDataCreateArticle()" class="createArticleButton" type="submit" value="Publier !">
         </form>
+    </div>
     </div>
 </template>
 
@@ -61,7 +63,15 @@ export default {
   font-family: "Overpass";
   src: url(../font/Overpass/Overpass-Regular.ttf);
 }
-
+#createArticle{
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 99;
+}
 .createArticle{
     display: flex;
     flex-direction: column;
@@ -71,7 +81,7 @@ export default {
     border-radius: 10px;
     margin: auto;
     position: fixed;
-    top: 50%; left: 50%;
+    top: 40%; left: 50%;
     transform: translate(-50%, -50%);
     padding: 20px;
     z-index: 99;

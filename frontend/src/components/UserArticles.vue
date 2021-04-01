@@ -22,14 +22,14 @@
             <div class="dateCreation">
                 <slot name="articleDateCreation"></slot>
             </div>
-            <div class="articleFooter">
-                <div class="commentsLikes">
+            <div class="articleFooter row">
+                <div class="commentsLikes col-sm-6 col-12">
                     <router-link :to="{ name: 'article', params: {id: idArticle } }">
                         <span class="numberComment"><slot name="numberOfComments"></slot> commentaires</span>
                     </router-link>
                     <span class="numberLikes"><i class="fas fa-thumbs-up likeThumb"></i> <slot name="numberOfLikes"></slot></span>
                 </div>
-                <div>
+                <div class="col-sm-6 col-12 mt-3 mt-sm-1 text-center text-sm-right d-flex justify-content-around justify-content-sm-end">
                     <router-link :to="{ name: 'article', params: {id: idArticle } }">
                         <span class="linkComment"><i class="far fa-comment-alt"></i> Commenter</span>
                     </router-link>
@@ -130,6 +130,8 @@ export default {
 }
 #deleteArticle{
     position: absolute;
+    right: 40px;
+    top: 10px;
     padding: 5px;
     background-color: white;
     border: 1px solid black;

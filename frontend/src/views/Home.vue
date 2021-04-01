@@ -4,9 +4,8 @@
       :alertType="alert.type"
       :alertMessage="alert.message"
     />
-    <div class="groupo">
-      <img class="logo" alt="Groupomania logo" src="@/assets/icon-left-font-monochrome-white.png" width="50%" height="auto">
-      <p>Votre réseau social <br/>d'entreprise pour <br/>partager et <br/>rester en contact <br/>avec vos collègues !</p>
+    <div class="groupo d-none d-md-flex">
+      <img class="logo" alt="Groupomania logo" src="@/assets/icon-left-font-monochrome-white.png" height="250px" width="250px">
     </div>
     <LoginForm v-on:login-form="login"/>
   </div>
@@ -87,32 +86,18 @@ export default {
 }
 .home{
   display: flex;
-  width:100%;
+  height: auto;
 }
 .groupo{
-  display:flex;
-  flex-direction: column;
   width: 50%;
-  height: 100%;
+  min-height: 650px;
   background-image: url(../assets/back.png);
-  background-repeat: no-repeat;
   background-size: cover;
+  background-repeat: no-repeat;
 }
 .logo{
   margin: auto;
-  width: 100%;
-  box-sizing: border-box;
   background-color: rgba(9,31,67,0.7);
-  padding-right: 150px;
-  padding-left: 150px;
-}
-p{
-  font-family: "Overpass";
-  font-size: 2.5em;
-  text-align: left;
-  color: white;
-  padding-left: 25%;
-  position: relative;
-  bottom: 140px;
+  padding: 20px;
 }
 </style>

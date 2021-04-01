@@ -1,5 +1,5 @@
 <template>
-    <div class="commentSection col-md-8 col-12" :id="idComment">  
+    <div class="commentSection col-lg-8 col-12" :id="idComment">  
         <div class="commentHeader">
           <router-link :to="{ name: 'userProfil', params: {id: idUser } }">
             <slot name="commentUserPhotoProfil"></slot>
@@ -47,7 +47,7 @@ export default {
     border-radius: 5px;
     padding: 12px;
     margin: auto;
-    margin-bottom: 3px;
+    margin-bottom: 5px;
     & a{
       text-decoration: none;
       color: black;

@@ -4,8 +4,8 @@
       :alertType="alert.type"
       :alertMessage="alert.message"
     />
-    <div class="groupo">
-      <img class="logoGroupo" alt="Groupomania logo" src="@/assets/icon-left-font.png" width="50%" height="auto">
+    <div class="groupo d-none d-md-flex">
+      <img class="logoGroupo" alt="Groupomania logo" src="@/assets/icon-left-font.png" height="250px" width="250px">
       <p>Créez un compte pour pouvoir partager avec vos collègues !</p>
     </div>
     <SignupForm v-on:signup-form="signup"/>
@@ -101,20 +101,16 @@ export default {
 }
 .register{
   display: flex;
-  width:100%;
 }
 .groupo{
   display:flex;
   flex-direction: column;
   width: 50%;
-  height: 100%;
+  min-height: 650px;
 }
 .logoGroupo{
   margin: auto;
-  width: 100%;
   box-sizing: border-box;
-  padding-right: 150px;
-  padding-left: 150px;
 }
 p{
   font-family: "Overpass";

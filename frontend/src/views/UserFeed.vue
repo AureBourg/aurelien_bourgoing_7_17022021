@@ -240,9 +240,6 @@ export default {
 </script>
 
 <style scoped lang="scss">
-.userFeed{
-  width:100%;
-}
 .feed{
   display: flex;
   flex-direction: column;

@@ -1,5 +1,6 @@
 <template>
-  <div class="form">
+  <div class="form my-4 my-0-sm">
+    <img class="logoSmall d-md-none" alt="Groupomania logo" src="@/assets/icon-left-font-monochrome-black.svg">
     <form id="loginForm" name="loginForm">
       <div>
         <input v-model="email" type="text" id="email" name="email" placeholder="Adresse mail" required>
@@ -57,7 +58,7 @@ export default {
     flex-direction: column;
     text-align: center;
     justify-content: center;
-    width:50%;
+    align-items: center;
     margin: auto;
 }
 input{
@@ -65,20 +66,14 @@ input{
     margin-bottom: 20px;
     height: 40px;
     border-radius: 4px;
-    width: 50%;
-    justify-content: center;
-    align-items: center;
-    margin-left: auto;
-    margin-right: auto;
 }
 .LoginButton{
     font-size: 1.1em;
     color: white;
     background-color:rgb(9,31,67);
     border-radius: 20px;
-    padding: 10px;
-    text-align: center;
-    line-height: normal;
+    padding-left: 20px;
+    padding-right: 20px;
     border: rgb(255,215,215);
     margin: auto;
     cursor: pointer;
@@ -88,8 +83,7 @@ input{
     color: white;
     background-color:rgb(66,183,42);
     border-radius: 12px;
-    width: 200px;
-    padding: 10px;
+    padding: 10px 30px 10px 30px;
     text-align: center;
     text-decoration: none;
     border: rgb(255,215,215);
@@ -103,5 +97,9 @@ a{
     font-size: 0.8em;
     color: black;
     margin-top: 10px;
+}
+.logoSmall{
+  width: 80%;
+  margin-bottom: 50px;
 }
 </style>

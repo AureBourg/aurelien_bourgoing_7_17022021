@@ -41,6 +41,10 @@
       </template>
       </CreateCommentForm>
 
+      <div class="noComment" v-if="comments.length==0">
+        <span>Aucun commentaire ici...</span>
+      </div>
+
       <Comment
         v-for="comment in comments" 
         :key="comment.commentId" 
@@ -222,5 +226,12 @@ export default {
   height: 46px;
   border-radius: 23px;
   margin-right: 10px;
+}
+.noComment{
+  margin: auto;
+  padding: 30px 0px 30px 0px;
+  font-size: 1.5em;
+  color: grey;
+  font-family: "Overpass";
 }
 </style>

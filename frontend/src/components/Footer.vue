@@ -1,14 +1,14 @@
 <template>
   <footer>
-    <div class="footer">
-      <ul class="footerLinks">
-        <li>Conditions générales</li>
-        <li>Contact</li>
-        <li>A propos</li>
-        <li>Services</li>
-        <li>Aide</li>
-        <li>Confidentialité</li>
-      </ul>
+    <div class="footer container-fluid">
+      <div class="footerLinks row">
+        <li class="col-md-2 col-lg-2">Conditions générales</li>
+        <li class="col-md-2 col-lg-2">Contact</li>
+        <li class="col-md-2 col-lg-2">A propos</li>
+        <li class="col-md-2 col-lg-2">Services</li>
+        <li class="col-md-2 col-lg-2">Aide</li>
+        <li class="col-md-2 col-lg-2">Confidentialité</li>
+      </div>
     </div>
   </footer>
 </template>
@@ -19,22 +19,27 @@ export default {
 };
 </script>
 
-<style scoped lang="scss">
-.footer{
+<style lang="scss">
+footer{
   border-top: lightgrey 1px solid;
-  padding: 10px 40px 15px 0px;
+  height: auto;
+}
+.footer{
+  text-align: center;
+  padding: 10px;
   color: rgb(163, 163, 163);
   font-size: 0.9em;
+  max-width: 1000px;
 }
 .footerLinks{
-  display: flex;
-  justify-content: space-evenly;
-}
-li{
-  list-style-type: none;
-  cursor: pointer;
-  &:hover{
-    text-decoration: underline;
+  & li{
+    padding-top: 5px;
+    padding-bottom: 5px;
+    list-style-type: none;
+    cursor: pointer;
+    &:hover{
+      text-decoration: underline;
+    }
   }
 }
 </style>
