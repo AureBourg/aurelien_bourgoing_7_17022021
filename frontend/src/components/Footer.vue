@@ -1,3 +1,5 @@
+<!-- COMPONENT FOOTER - Footer du site -->
+
 <template>
   <footer>
     <div class="footer container-fluid">

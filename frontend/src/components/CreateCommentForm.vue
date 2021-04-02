@@ -1,12 +1,14 @@
+<!-- COMPONENT CREATECOMMENT - Form pour créer un commentaire -->
+
 <template>
-<div class="addComment col-lg-8 col-12">
-    <slot name="photoProfil" class="col"></slot>
-    <form class="createCommentForm col" name="createCommentForm">
-        <textarea v-model="text" name="text" class="col" placeholder="Laissez un commentaire..." required/>
-        <button v-on:click.prevent="sendDataCreateComment()" class="createCommentButton d-none d-sm-block" type="submit">Commenter</button>
-        <button v-on:click.prevent="sendDataCreateComment()" class="createCommentButton d-sm-none p-3" type="submit"><i class="fas fa-paper-plane"></i></button>
-    </form>
-</div>
+  <div class="addComment col-lg-8 col-12">
+      <slot name="photoProfil" class="col"></slot>
+      <form class="createCommentForm col" name="createCommentForm">
+          <textarea v-model="text" name="text" class="col" placeholder="Laissez un commentaire..." required/>
+          <button v-on:click.prevent="sendDataCreateComment()" class="createCommentButton d-none d-sm-block" type="submit">Commenter</button>
+          <button v-on:click.prevent="sendDataCreateComment()" class="createCommentButton d-sm-none p-3" type="submit"><i class="fas fa-paper-plane"></i></button>
+      </form>
+  </div>
 </template>
 
 <script>

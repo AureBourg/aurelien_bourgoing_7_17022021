@@ -46,7 +46,7 @@ exports.getOneArticle = (req, res, next) => {
     );
 };
 
-// Middleware pour créer les articles
+// Middleware pour créer un article
 exports.createArticle = (req, res, next) => {
 
     const userId = res.locals.userId;
@@ -114,7 +114,7 @@ exports.deleteArticle = (req, res, next) => {
     );
 };
 
-// Middleware pour liker les articles
+// Middleware pour liker un article
 exports.likeArticle = (req, res, next) => {
     const userId = res.locals.userId;
     const articleId = req.params.id;

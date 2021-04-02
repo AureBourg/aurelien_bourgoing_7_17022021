@@ -28,7 +28,7 @@ exports.signup = (req, res, next) => {
             }
         );
     })
-    .catch(e => res.status(500).json({ e }));
+    .catch(e => res.status(500).json({ error: "Le mot de passe doit contenir au moins 6 caractères dont un chiffre" }));
 };
 
 // Middleware pour la connexion d'un utilisateur existant
@@ -116,7 +116,7 @@ exports.deleteUser = (req, res, next) => {
     );
 };
 
-//Middleware pour modifier un utilisateur et le renvoyer dans la base de donnée
+//Middleware pour modifier un utilisateur
 exports.updateUser = (req, res, next) => {
     const userId = res.locals.userId;
     const email = req.body.email;

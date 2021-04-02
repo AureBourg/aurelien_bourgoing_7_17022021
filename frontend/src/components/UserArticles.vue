@@ -1,3 +1,5 @@
+<!-- COMPONENT USERARTICLES - Affichage des posts dans le feed -->
+
 <template>
     <div class="articles" :id="idArticle">
         <div class="article col-lg-8 col-12">

@@ -69,7 +69,7 @@ export default {
       })
       .catch((error) => {
           if (error.response.status === 500) {
-            this.alertActive("info", "Inscription impossible : Erreur serveur !");
+            this.alertActive("info", error.response.data.error);
           }
           sessionStorage.removeItem("token");
       });

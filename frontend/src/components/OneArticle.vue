@@ -1,3 +1,5 @@
+<!-- COMPONENT ONEARTICLE - Affichage d'un seul post -->
+
 <template>
     <div class="articles" :id="idArticle">
         <div class="article col-lg-8 col-12">

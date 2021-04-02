@@ -1,3 +1,5 @@
+<!-- COMPONENT COMMENT - Affichage des commentaires -->
+
 <template>
     <div class="commentSection col-lg-8 col-12" :id="idComment">  
         <div class="commentHeader">

@@ -1,72 +1,72 @@
 <template>
-<div class="userFeed">
-    <Header>
-      <template v-slot:back>
-        <i class="fas fa-times back" @click="$router.go(-1)"></i>
-      </template>
-      <template v-slot:photoProfil>
-        <img :src="userConnected.photoProfil" id="userPhoto" class="userPhoto" alt="Photo de profil" />
-      </template>
-      <template v-slot:username>{{ userConnected.firstname }} {{ userConnected.lastname }}</template>
-    </Header>
-
-    <div class="feed">
-
-      <Alert
-        :alertType="alert.type"
-        :alertMessage="alert.message"
-      />
-
-      <OneArticle 
-          :key="article.articleId" 
-          :idArticle="article.articleId" 
-          :idUser="article.userId"     
-        >
-        <template v-slot:articleText>{{ article.text }}</template>
-        <template v-slot:articleUserPhotoProfil>
-          <img :src="article.photoProfil" class="userPhoto" alt="Photo de l'utilisateur" />
+  <div class="userFeed">
+      <Header>
+        <template v-slot:back>
+          <i class="fas fa-times back" @click="$router.go(-1)"></i>
         </template>
-        <template v-slot:articleMediaUrl>
-          <img :src="article.mediaUrl" class="articleMediaUrl" alt="Photo du post" />
-        </template>
-        <template v-slot:articleUsername>{{ article.firstname }} {{ article.lastname }}</template>
-        <template v-slot:articleDateCreation>{{ article.dateCreation }}</template>
-      </OneArticle>
-
-      <CreateCommentForm
-        v-on:comment-sent="createComment"
-      >
-      <template v-slot:photoProfil>
-            <img :src="userConnected.photoProfil" class="userPhotoComment" alt="Photo de profil" />
-      </template>
-      </CreateCommentForm>
-
-      <div class="noComment" v-if="comments.length==0">
-        <span>Aucun commentaire ici...</span>
-      </div>
-
-      <Comment
-        v-for="comment in comments" 
-        :key="comment.commentId" 
-        :idComment="comment.commentId" 
-        :idUser="comment.userId"
-        :idUserConnected="userConnected.userId"
-        :roleUser="userConnected.role"
-        v-on:comment-delete="deleteComment"
-      >
-        <template v-slot:commentText>{{ comment.text }}</template>
-        <template v-slot:commentUsername>{{ comment.firstname }} {{ comment.lastname }}</template>
-        <template v-slot:commentUserPhotoProfil>
-          <img :src="comment.photoProfil" class="userPhoto" alt="Photo de l'utilisateur" />
-        </template>
-        <template v-slot:commentDateCreation>{{ comment.dateCreation }}</template>
         <template v-slot:photoProfil>
-            <img :src="userConnected.photoProfil" class="userPhotoComment" alt="Photo de profil" />
+          <img :src="userConnected.photoProfil" id="userPhoto" class="userPhoto" alt="Photo de profil" />
         </template>
-      </Comment>
-      
-    </div>
-</div>
+        <template v-slot:username>{{ userConnected.firstname }} {{ userConnected.lastname }}</template>
+      </Header>
+
+      <div class="feed">
+
+        <Alert
+          :alertType="alert.type"
+          :alertMessage="alert.message"
+        />
+
+        <OneArticle 
+            :key="article.articleId" 
+            :idArticle="article.articleId" 
+            :idUser="article.userId"     
+          >
+          <template v-slot:articleText>{{ article.text }}</template>
+          <template v-slot:articleUserPhotoProfil>
+            <img :src="article.photoProfil" class="userPhoto" alt="Photo de l'utilisateur" />
+          </template>
+          <template v-slot:articleMediaUrl>
+            <img :src="article.mediaUrl" class="articleMediaUrl" alt="Photo du post" />
+          </template>
+          <template v-slot:articleUsername>{{ article.firstname }} {{ article.lastname }}</template>
+          <template v-slot:articleDateCreation>{{ article.dateCreation }}</template>
+        </OneArticle>
+
+        <CreateCommentForm
+          v-on:comment-sent="createComment"
+        >
+        <template v-slot:photoProfil>
+              <img :src="userConnected.photoProfil" class="userPhotoComment" alt="Photo de profil" />
+        </template>
+        </CreateCommentForm>
+
+        <div class="noComment" v-if="comments.length==0">
+          <span>Aucun commentaire ici...</span>
+        </div>
+
+        <Comment
+          v-for="comment in comments" 
+          :key="comment.commentId" 
+          :idComment="comment.commentId" 
+          :idUser="comment.userId"
+          :idUserConnected="userConnected.userId"
+          :roleUser="userConnected.role"
+          v-on:comment-delete="deleteComment"
+        >
+          <template v-slot:commentText>{{ comment.text }}</template>
+          <template v-slot:commentUsername>{{ comment.firstname }} {{ comment.lastname }}</template>
+          <template v-slot:commentUserPhotoProfil>
+            <img :src="comment.photoProfil" class="userPhoto" alt="Photo de l'utilisateur" />
+          </template>
+          <template v-slot:commentDateCreation>{{ comment.dateCreation }}</template>
+          <template v-slot:photoProfil>
+              <img :src="userConnected.photoProfil" class="userPhotoComment" alt="Photo de profil" />
+          </template>
+        </Comment>
+        
+      </div>
+  </div>
 </template>
 
 <script>

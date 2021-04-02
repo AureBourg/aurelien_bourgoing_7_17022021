@@ -6,9 +6,9 @@ require('dotenv').config();
 
 // Connection à la base de donnée
 exports.connection = mysql.createPool({
-    host     : 'localhost', //DB_HOST
-    user     : 'root', //DB_USER
-    password : 'aurelien95370', //DB_PW
-    database : 'GroupomaniaDB', //DB_DATABASE
+    host     : process.env.DB_HOST, //DB_HOST
+    user     : process.env.DB_USER, //DB_USER
+    password : process.env.DB_PW, //DB_PW
+    database : process.env.DB_DATABASE, //DB_DATABASE
     port     : 3306
 });

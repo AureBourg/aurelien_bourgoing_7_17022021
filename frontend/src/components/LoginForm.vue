@@ -1,3 +1,5 @@
+<!-- COMPONENT LOGINFORM - Form pour s'identifier -->
+
 <template>
   <div class="form my-4 my-0-sm">
     <img class="logoSmall d-md-none" alt="Groupomania logo" src="@/assets/icon-left-font-monochrome-black.svg">
@@ -10,9 +12,7 @@
       </div>
       <input v-on:click="sendDataLogin()" class="LoginButton" type="button" value="Connexion">
     </form>
-
     <a href="">Mot de passe oublié ?</a>
-
     <router-link to="/signup" class="SignUpButton">S'inscrire</router-link>
   </div>
 </template>

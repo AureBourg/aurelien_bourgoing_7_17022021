@@ -1,3 +1,5 @@
+<!-- COMPONENT ALERT - Messages d'alerte, d'erreur ou de confirmation -->
+
 <template>
   <div id="alert" class="alert" :class="alertType" role="alert">{{ alertMessage }}</div>
 </template>
@@ -19,6 +21,7 @@ export default {
   top: 50%; left: 50%;
   transform: translate(-50%, -50%);
   z-index: 9999;
+  text-align: center;
 }
 .success{
   background-color: lightcyan;

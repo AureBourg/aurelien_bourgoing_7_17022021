@@ -1,23 +1,25 @@
+<!-- COMPONENT CREATEARTICLE - Form pour créer le corps du post et sa photo/vidéo/gif -->
+
 <template>
     <div id="createArticle">
-    <div class="createArticle col-11 col-md-8">
-        <span v-on:click="hideCreateArticle()" class="annulCreateArticle">Annuler<i class="fas fa-times"></i></span>
-        <div class="userInfos">
-            <slot name="photoProfil"></slot>
-            <slot name="username"></slot>
+        <div class="createArticle col-11 col-md-8">
+            <span v-on:click="hideCreateArticle()" class="annulCreateArticle">Annuler<i class="fas fa-times"></i></span>
+            <div class="userInfos">
+                <slot name="photoProfil"></slot>
+                <slot name="username"></slot>
+            </div>
+            <form class="createArticleForm" name="createArticleForm">
+                <div>
+                    <textarea v-model="text" class="articleText" type="text" id="articleText" name="text" placeholder="Postez ce que vous voulez !"/>
+                </div>
+                <div>
+                    <label class="articleSelectMedia" for="image">Choisir un fichier multimédia</label>
+                    <input name="image" id="image" class="image" v-on:change="sendFile($event)" type="file"/>
+                </div>
+                <img id="preview">
+                <input v-on:click.prevent="sendDataCreateArticle()" class="createArticleButton" type="submit" value="Publier !">
+            </form>
         </div>
-        <form class="createArticleForm" name="createArticleForm">
-            <div>
-                <textarea v-model="text" class="articleText" type="text" id="articleText" name="text" placeholder="Postez ce que vous voulez !"/>
-            </div>
-            <div>
-                <label class="articleSelectMedia" for="image">Choisir un fichier multimédia</label>
-                <input name="image" id="image" class="image" v-on:change="sendFile($event)" type="file"/>
-            </div>
-            <img id="preview">
-            <input v-on:click.prevent="sendDataCreateArticle()" class="createArticleButton" type="submit" value="Publier !">
-        </form>
-    </div>
     </div>
 </template>
 

@@ -1,3 +1,5 @@
+<!-- COMPONENT HEADER - Header du site -->
+
 <template>
   <header class="header">
     <div class="headerBack">
@@ -19,23 +21,23 @@
     </div>
     <b-navbar-nav class="d-lg-none btn-lg" right>
       <b-nav-item-dropdown right no-caret>
-          <template slot="button-content">
-            <i class="fas fa-bars"></i>
-          </template>
-          <b-dropdown-item>
-            <router-link :to="{ name: 'userConnectedProfil'}">
-              <div class="userProfil">
-                <slot name="photoProfil"></slot>
-                <slot name="username"></slot>
-              </div>
-            </router-link>
-          </b-dropdown-item>
-          <b-dropdown-divider></b-dropdown-divider>
-          <b-dropdown-item>
-            <router-link to="/">
-              <span class="userLogout">Se déconnecter</span>
-            </router-link>
-          </b-dropdown-item>
+        <template slot="button-content">
+          <i class="fas fa-bars"></i>
+        </template>
+        <b-dropdown-item>
+          <router-link :to="{ name: 'userConnectedProfil'}">
+            <div class="userProfil">
+              <slot name="photoProfil"></slot>
+              <slot name="username"></slot>
+            </div>
+          </router-link>
+        </b-dropdown-item>
+        <b-dropdown-divider></b-dropdown-divider>
+        <b-dropdown-item>
+          <router-link to="/">
+            <span class="userLogout">Se déconnecter</span>
+          </router-link>
+        </b-dropdown-item>
       </b-nav-item-dropdown>
     </b-navbar-nav>
   </header>
