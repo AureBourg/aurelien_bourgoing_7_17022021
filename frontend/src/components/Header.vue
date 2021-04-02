@@ -56,7 +56,7 @@ export default {
 .header{
   display: flex;
   border-bottom: lightgrey 1px solid;
-  padding: 10px 10px 10px 0px;
+  padding: 10px;
   font-family: "Overpass";
   font-size: 0.93em;
   justify-content: center;

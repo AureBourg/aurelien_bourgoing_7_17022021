@@ -40,14 +40,23 @@ export default {
         display: flex;
         justify-content: space-between;
         & .createCommentButton{
-        border: none;
-        border-radius: 15px;
-        padding: 5px 10px 5px 10px;
-        margin-left: 15px;
-        background-color: rgb(231,82,70);
-        color: white;
-        font-size: 0.95em;
+          border: none;
+          border-radius: 15px;
+          padding: 5px 10px 5px 10px;
+          margin-left: 15px;
+          background-color: rgb(231,82,70);
+          color: white;
+          font-size: 0.95em;
         }
+    }
+    & textarea{
+      border-radius: 15px;
+      background-color: rgb(230, 230, 230);
+      border: none;
+      color: grey;
+      &::placeholder {
+        font-size: 0.8em;
+      }
     }
 }
 </style>

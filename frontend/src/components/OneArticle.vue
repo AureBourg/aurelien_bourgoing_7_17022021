@@ -44,10 +44,10 @@ export default {
     margin-bottom: 5px;
 }
 .articleMedia{
-        & img{
+    & img{
         max-width: 100%; 
         max-height: 400px; 
-        }
+    }
 }
 .friendInfo{
     display: inline-block;
@@ -58,6 +58,7 @@ export default {
     & .friendName{
         margin-left: 15px;
         align-items: center;
+        color: black;
     }
 }
 .dateCreation{

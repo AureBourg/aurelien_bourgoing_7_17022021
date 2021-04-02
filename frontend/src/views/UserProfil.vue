@@ -1,10 +1,12 @@
 <template>
   <div class="userProfile">
-    <div class="profileInfos">       
+    <div class="headerProfil">       
         <div class="backButton" @click="$router.go(-1)">
-          <i class="fas fa-arrow-left"></i> <span>Retourner à mon fil d'actualités</span>
+          <i class="fas fa-arrow-left"></i>
         </div>       
         <img class="logoGroupo" alt="Groupomania logo" src="@/assets/icon-left-font-monochrome-black.svg">
+    </div>
+    <div class="profileInfos">    
         <img :src="user.photoProfil" id="userPhoto" class="userPhoto" alt="Photo de profil" />
         <div class="userName">{{ user.firstname }} {{ user.lastname }}</div>
         <div>{{ user.role }}</div>
@@ -109,6 +111,7 @@ export default {
   position: relative;
   z-index: 10;
   background: white;
+  margin-top: 20px;
   & button{
     color: white;
     background-color: rgb(32,78,138);
@@ -121,22 +124,22 @@ export default {
     margin: 12px;
   }
 }
+.headerProfil{
+  display: flex;
+  justify-content: center;
+  border-bottom: 1px solid lightgrey;
+  padding: 10px;
+}
 .logoGroupo{
-  width: 30%;
-  margin: 20px;
+  height: 40px;
 }
 .backButton{
-  display: flex;
-  align-items: center;
   position: absolute;
   left: 20px;
-  top: 20px;
+  top: 10px;
   cursor: pointer;
-  text-decoration: none;
   color: black;
-  & span{
-    margin-left: 10px;
-  }
+  font-size: 1.5em;
 }
 .updateProfile{
     margin: auto;
